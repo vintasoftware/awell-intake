@@ -1,6 +1,6 @@
 {
-  "name": "medplum-hello-world",
-  "version": "4.0.3",
+  "name": "awell-intake",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "scripts": {
