@@ -1,6 +1,5 @@
 import { Container, Title, Grid, Card, Text, Group, ThemeIcon, Stack, Button } from '@mantine/core';
 import {
-  IconUserPlus,
   IconBrain,
   IconHeartPlus,
   IconBabyCarriage,

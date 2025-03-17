@@ -1,6 +1,6 @@
 import { AppShell } from '@mantine/core';
-import { ErrorBoundary, Loading, Logo, useMedplum, useMedplumProfile } from '@medplum/react';
-import { IconUser, IconUsers, IconHome, IconLogout } from '@tabler/icons-react';
+import { ErrorBoundary, Loading, useMedplum, useMedplumProfile } from '@medplum/react';
+import { IconUsers, IconHome, IconLogout } from '@tabler/icons-react';
 import { Suspense } from 'react';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { PatientList } from './components/PatientList';
@@ -12,6 +12,7 @@ import { MantineProvider, Text } from '@mantine/core';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { MedplumProvider } from '@medplum/react';
 import { theme } from './theme';
+import { CalendarPage } from './pages/CalendarPage';
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
@@ -124,6 +125,7 @@ export function App(): JSX.Element | null {
                         <Route path="/" element={profile ? <HomePage /> : <LandingPage />} />
                         <Route path="/patients" element={<PatientList />} />
                         <Route path="/patients/:id" element={<PatientDetail />} />
+                        <Route path="/calendar" element={<CalendarPage />} />
                       </Routes>
                     </MainLayout>
                   }
