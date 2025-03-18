@@ -5,6 +5,7 @@ import { Suspense } from 'react';
 import { Route, BrowserRouter as Router, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { PatientDetail } from './components/PatientDetail';
 import { PatientList } from './components/PatientList';
+import { AppointmentPage } from './pages/AppointmentPage';
 import { CalendarPage } from './pages/CalendarPage';
 import { HomePage } from './pages/HomePage';
 import { LandingPage } from './pages/LandingPage';
@@ -121,6 +122,7 @@ export function App(): JSX.Element | null {
                     <Route path="/patients" element={<PatientList />} />
                     <Route path="/patients/:id" element={<PatientDetail />} />
                     <Route path="/calendar" element={<CalendarPage />} />
+                    <Route path="/appointment/:id" element={<AppointmentPage />} />
                   </Routes>
                 </MainLayout>
               }

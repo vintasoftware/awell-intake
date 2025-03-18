@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { Calendar, ToolbarProps, View, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { createFakeAppointments } from '../utils/createFakeAppointments';
+import { useNavigate } from 'react-router-dom';
 
 // Setup the localizer for react-big-calendar
 const localizer = momentLocalizer(moment);
@@ -49,6 +50,7 @@ export function CalendarPage(): JSX.Element {
   const medplum = useMedplum();
   const profile = useMedplumProfile() as Practitioner;
   const theme = useMantineTheme();
+  const navigate = useNavigate();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [events, setEvents] = useState<AppointmentEvent[]>([]);
   const [viewType, setViewType] = useState<'day' | 'week' | 'month'>('week');
@@ -134,7 +136,7 @@ export function CalendarPage(): JSX.Element {
 
   const handleSelectEvent = (event: AppointmentEvent) => {
     if (event.resource.id) {
-      window.open(`/Appointment/${event.resource.id}`, '_blank');
+      navigate(`/appointment/${event.resource.id}`);
     }
   };
 
@@ -221,7 +223,7 @@ export function CalendarPage(): JSX.Element {
     <Container size="xl" mt="xl">
       <Stack gap="xl">
         <Group justify="space-between">
-          <Title order={1} c="blue.9">Appointments Calendar</Title>
+          <Title order={2} c="blue.9">Appointments Calendar</Title>
           <Group>
             <Button
               leftSection={<IconPlus size={16} />}
