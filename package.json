@@ -44,6 +44,7 @@
     "@mantine/dates": "^7.17.2",
     "@mantine/form": "^7.17.2",
     "dayjs": "^1.11.13",
-    "react-router-dom": "^7.3.0"
+    "react-router-dom": "^7.3.0",
+    "@mantine/notifications": "^7.17.2"
   }
 }
