@@ -1,19 +1,19 @@
-import { useMedplum } from '@medplum/react';
-import { Patient } from '@medplum/fhirtypes';
 import {
-  Table,
-  Card,
-  Text,
-  Group,
-  TextInput,
   ActionIcon,
+  Badge,
+  Card,
   Container,
-  Title,
+  Group,
   Stack,
-  Badge
+  Table,
+  Text,
+  TextInput,
+  Title
 } from '@mantine/core';
-import { IconSearch, IconChevronRight } from '@tabler/icons-react';
-import { useState, useEffect } from 'react';
+import { Patient } from '@medplum/fhirtypes';
+import { useMedplum } from '@medplum/react';
+import { IconChevronRight, IconSearch } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export function PatientList() {
@@ -46,15 +46,15 @@ export function PatientList() {
 
   return (
     <Container size="xl" mt="xl">
-      <Stack spacing="md">
+      <Stack gap="md">
         <Group justify="space-between">
-          <Title order={2} color="blue.9">Patients</Title>
+          <Title order={2} c="blue.9">Patients</Title>
           <TextInput
             placeholder="Search patients..."
-            icon={<IconSearch size={16} />}
+            leftSection={<IconSearch size={16} />}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            sx={{ width: 300 }}
+            style={{ width: 300 }}
           />
         </Group>
 
@@ -87,9 +87,9 @@ export function PatientList() {
                   onClick={() => navigate(`/patients/${patient.id}`)}
                 >
                   <td>
-                    <Group spacing="sm">
+                    <Group gap="sm">
                       <div>
-                        <Text weight={500}>
+                        <Text fw={500}>
                           {patient.name?.[0]?.given?.[0]} {patient.name?.[0]?.family}
                         </Text>
                         {patient.telecom?.[0]?.value && (
@@ -108,11 +108,11 @@ export function PatientList() {
                       color={patient.gender === 'male' ? 'blue' : 'pink'}
                       variant="light"
                     >
-                      {patient.gender?.charAt(0).toUpperCase() + patient.gender?.slice(1)}
+                      {patient.gender?.charAt(0).toUpperCase() ?? '' + patient.gender?.slice(1)}
                     </Badge>
                   </td>
                   <td>
-                    <Text color="dimmed" size="sm">
+                    <Text c="dimmed" size="sm">
                       {patient.id?.slice(0, 8)}
                     </Text>
                   </td>

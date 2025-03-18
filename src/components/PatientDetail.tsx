@@ -1,24 +1,23 @@
-import { useMedplum } from '@medplum/react';
-import { Patient, Appointment, Observation } from '@medplum/fhirtypes';
 import {
+  Button,
+  Card,
   Container,
-  Title,
-  Text,
+  Divider,
   Group,
   Stack,
   Tabs,
-  Card,
-  Button,
-  ActionIcon,
+  Text,
   TextInput,
-  Divider
+  Title
 } from '@mantine/core';
-import { IconCalendarEvent, IconUpload, IconMessage, IconPlus } from '@tabler/icons-react';
-import { useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { useForm } from '@mantine/form';
 import { DateTimePicker } from '@mantine/dates';
+import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
+import { Appointment, Patient } from '@medplum/fhirtypes';
+import { useMedplum } from '@medplum/react';
+import { IconCalendarEvent, IconMessage, IconUpload } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 interface ChartNoteForm {
   content: string;
@@ -118,10 +117,10 @@ export function PatientDetail() {
 
   return (
     <Container size="xl" mt="xl">
-      <Stack spacing="xl">
+      <Stack gap="xl">
         <Group justify="space-between">
           <div>
-            <Group spacing="xs">
+            <Group gap="xs">
               <Title order={1}>
                 {patient.name?.[0]?.given?.[0]} {patient.name?.[0]?.family}
               </Title>
@@ -146,17 +145,17 @@ export function PatientDetail() {
           </Group>
         </Group>
 
-        <Group align="flex-start" spacing="xl">
-          <Stack spacing="md" style={{ flex: 1 }}>
+        <Group align="flex-start" gap="xl">
+          <Stack gap="md" style={{ flex: 1 }}>
             <Tabs defaultValue="overview">
               <Tabs.List>
                 <Tabs.Tab value="overview">Overview</Tabs.Tab>
               </Tabs.List>
 
               <Card mt="md" p="lg" radius="md" withBorder>
-                <Stack spacing="xl">
+                <Stack gap="xl">
                   <form onSubmit={form.onSubmit(handleSubmitNote)}>
-                    <Stack spacing="sm">
+                    <Stack gap="sm">
                       <TextInput
                         placeholder="Add Chart Note: include notes from a call with a client or copy & paste contents..."
                         {...form.getInputProps('content')}
@@ -185,13 +184,13 @@ export function PatientDetail() {
                   {appointments.map((appointment, index) => (
                     <div key={index}>
                       <Group justify="space-between" mb="xs">
-                        <Text weight={500}>APPOINTMENT #{index + 1}</Text>
-                        <Text size="sm" color="dimmed">
+                        <Text fw={500}>APPOINTMENT #{index + 1}</Text>
+                        <Text size="sm" c="dimmed">
                           {appointment.start && formatDate(appointment.start)} {' '}
                           {new Date(appointment.start || '').toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
                         </Text>
                       </Group>
-                      <Text size="sm" color="dimmed">BILLING CODE: {appointment.serviceType?.[0]?.coding?.[0]?.code}</Text>
+                      <Text size="sm" c="dimmed">BILLING CODE: {appointment.serviceType?.[0]?.coding?.[0]?.code}</Text>
                       {appointment.description && (
                         <Text size="sm" mt="xs">{appointment.description}</Text>
                       )}
@@ -203,10 +202,10 @@ export function PatientDetail() {
             </Tabs>
           </Stack>
 
-          <Stack spacing="md" w={300}>
+          <Stack gap="md" w={300}>
             <Card withBorder radius="md" p="md">
-              <Text weight={500} size="sm" mb="xs">Client Info</Text>
-              <Stack spacing="xs">
+              <Text fw={500} size="sm" mb="xs">Client Info</Text>
+              <Stack gap="xs">
                 <Text size="sm">Phone: {patient.telecom?.[0]?.value}</Text>
                 <Text size="sm">Email: {patient.telecom?.[1]?.value}</Text>
                 <Text size="sm">
@@ -216,8 +215,8 @@ export function PatientDetail() {
             </Card>
 
             <Card withBorder radius="md" p="md">
-              <Text weight={500} size="sm" mb="xs">Upcoming Appointments</Text>
-              <Stack spacing="xs">
+              <Text fw={500} size="sm" mb="xs">Upcoming Appointments</Text>
+              <Stack gap="xs">
                 {appointments.slice(0, 3).map((appointment, index) => (
                   <Group key={index} justify="space-between">
                     <Text size="sm">{appointment.start && formatDate(appointment.start)}</Text>

@@ -1,15 +1,15 @@
-import { Box, Button, Group, MantineColor, Modal, Paper, Select, Text, TextInput, Title, useMantineTheme } from '@mantine/core';
+import { Box, Button, Card, Container, Group, MantineColor, Modal, Select, Stack, Text, TextInput, Title, useMantineTheme } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
+import { getReferenceString } from '@medplum/core';
 import { Appointment, Patient, Practitioner } from '@medplum/fhirtypes';
-import { Document, ResourceInput, useMedplum, useMedplumProfile } from '@medplum/react';
-import { IconDatabase, IconPlus } from '@tabler/icons-react';
+import { ResourceInput, useMedplum, useMedplumProfile } from '@medplum/react';
+import { IconCalendarEvent, IconDatabase, IconPlus } from '@tabler/icons-react';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { Calendar, View, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { createFakeAppointments } from '../utils/createFakeAppointments';
-import { getReferenceString } from '@medplum/core';
 
 // Setup the localizer for react-big-calendar
 const localizer = momentLocalizer(moment);
@@ -32,7 +32,7 @@ interface NewAppointmentFormData {
 }
 
 // Map of status values to colors, with a catch-all for unhandled statuses
-const statusColorMap: Partial<Record<Appointment['status'], MantineColor>> & {default: MantineColor} = {
+const statusColorMap: Partial<Record<Appointment['status'] | 'default', MantineColor>> = {
   proposed: 'gray',
   pending: 'blue',
   booked: 'green',
@@ -218,20 +218,19 @@ export function CalendarPage(): JSX.Element {
   };
 
   return (
-    <Document>
-      <Title order={1} mb="md">
-        Calendar
-      </Title>
-      
-      <Paper p="md" mb="md">
-        <Group justify="space-between" mb="md">
+    <Container size="xl" mt="xl">
+      <Stack gap="xl">
+        <Group justify="space-between">
+          <Title order={1} c="blue.9">Appointments Calendar</Title>
           <Group>
-            <Button onClick={() => handleNavigate(new Date())}>Today</Button>
+            <Button variant="default" leftSection={<IconCalendarEvent size={16} />} onClick={() => handleNavigate(new Date())}>
+              Today
+            </Button>
             <Button
               leftSection={<IconPlus size={16} />}
               onClick={open}
               variant="filled"
-              color="green"
+              color="blue"
             >
               New Appointment
             </Button>
@@ -239,7 +238,7 @@ export function CalendarPage(): JSX.Element {
               leftSection={<IconDatabase size={16} />}
               onClick={handleGenerateTestData}
               variant="outline"
-              color="blue"
+              color="gray"
               loading={generatingTestData}
             >
               Generate Test Data
@@ -247,45 +246,74 @@ export function CalendarPage(): JSX.Element {
           </Group>
         </Group>
         
-        <Box style={{ height: '70vh' }}>
-          <Calendar
-            localizer={localizer}
-            events={events}
-            startAccessor="start"
-            endAccessor="end"
-            style={{ height: '100%' }}
-            view={viewType}
-            date={selectedDate}
-            onNavigate={handleNavigate}
-            onView={(view: View) => handleViewChange(view as 'day' | 'week' | 'month')}
-            onSelectEvent={handleSelectEvent}
-            eventPropGetter={(event: AppointmentEvent) => {
-              const appointment = event.resource;
-              const colorKey = statusColorMap[appointment.status] || statusColorMap.default;
-              const backgroundColor = theme.colors[colorKey][5];
-              
-              return {
-                style: {
-                  backgroundColor,
-                  borderRadius: '4px',
-                },
-              };
-            }}
-            components={{
-              event: (props: { event: AppointmentEvent }) => (
-                <div>
-                  <strong>{props.event.title}</strong>
+        <Card shadow="sm" p="lg" radius="md" withBorder>
+          <Group justify="space-between" mb="md">
+            <Group>
+              <Button 
+                variant={viewType === 'day' ? 'filled' : 'light'} 
+                color="blue" 
+                onClick={() => handleViewChange('day')}
+              >
+                Day
+              </Button>
+              <Button 
+                variant={viewType === 'week' ? 'filled' : 'light'} 
+                color="blue" 
+                onClick={() => handleViewChange('week')}
+              >
+                Week
+              </Button>
+              <Button 
+                variant={viewType === 'month' ? 'filled' : 'light'} 
+                color="blue" 
+                onClick={() => handleViewChange('month')}
+              >
+                Month
+              </Button>
+            </Group>
+          </Group>
+          
+          <Box style={{ height: '70vh' }}>
+            <Calendar
+              localizer={localizer}
+              events={events}
+              startAccessor="start"
+              endAccessor="end"
+              style={{ height: '100%' }}
+              view={viewType}
+              date={selectedDate}
+              onNavigate={handleNavigate}
+              onView={(view: View) => handleViewChange(view as 'day' | 'week' | 'month')}
+              onSelectEvent={handleSelectEvent}
+              eventPropGetter={(event: AppointmentEvent) => {
+                const appointment = event.resource;
+                const status = appointment.status || 'default';
+                const colorKey = statusColorMap[status] || statusColorMap.default || 'gray';
+                const backgroundColor = theme.colors[colorKey][5];
+                
+                return {
+                  style: {
+                    backgroundColor,
+                    borderRadius: '4px',
+                  },
+                };
+              }}
+              components={{
+                event: (props: { event: AppointmentEvent }) => (
                   <div>
-                    <Text size="xs">
-                      {moment(props.event.start).format('h:mm A')} - {moment(props.event.end).format('h:mm A')}
-                    </Text>
+                    <strong>{props.event.title}</strong>
+                    <div>
+                      <Text size="xs">
+                        {moment(props.event.start).format('h:mm A')} - {moment(props.event.end).format('h:mm A')}
+                      </Text>
+                    </div>
                   </div>
-                </div>
-              ),
-            }}
-          />
-        </Box>
-      </Paper>
+                ),
+              }}
+            />
+          </Box>
+        </Card>
+      </Stack>
 
       {/* New Appointment Modal */}
       <Modal opened={opened} onClose={close} title="Create New Appointment" size="md">
@@ -367,10 +395,10 @@ export function CalendarPage(): JSX.Element {
 
           <Group justify="flex-end" mt="xl">
             <Button variant="outline" onClick={close}>Cancel</Button>
-            <Button onClick={handleCreateAppointment}>Create Appointment</Button>
+            <Button color="blue" onClick={handleCreateAppointment}>Create Appointment</Button>
           </Group>
         </Box>
       </Modal>
-    </Document>
+    </Container>
   );
 }

@@ -1,18 +1,14 @@
-import { AppShell } from '@mantine/core';
+import { AppShell, Text } from '@mantine/core';
 import { ErrorBoundary, Loading, useMedplum, useMedplumProfile } from '@medplum/react';
-import { IconUsers, IconHome, IconLogout } from '@tabler/icons-react';
+import { IconCalendar, IconHome, IconLogout, IconUsers } from '@tabler/icons-react';
 import { Suspense } from 'react';
-import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import { PatientList } from './components/PatientList';
+import { Route, BrowserRouter as Router, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { PatientDetail } from './components/PatientDetail';
+import { PatientList } from './components/PatientList';
+import { CalendarPage } from './pages/CalendarPage';
 import { HomePage } from './pages/HomePage';
 import { LandingPage } from './pages/LandingPage';
 import { SignInPage } from './pages/SignInPage';
-import { MantineProvider, Text } from '@mantine/core';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { MedplumProvider } from '@medplum/react';
-import { theme } from './theme';
-import { CalendarPage } from './pages/CalendarPage';
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
@@ -21,6 +17,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   const navItems = [
     { icon: IconHome, label: 'Home', path: '/' },
     { icon: IconUsers, label: 'Patients', path: '/patients' },
+    { icon: IconCalendar, label: 'Calendar', path: '/calendar' },
   ];
 
   return (
@@ -110,31 +107,27 @@ export function App(): JSX.Element | null {
   }
 
   return (
-    <MedplumProvider medplum={medplum}>
-      <MantineProvider theme={theme}>
-        <Router>
-          <ErrorBoundary>
-            <Suspense fallback={<Loading />}>
-              <Routes>
-                <Route path="/signin" element={<SignInPage />} />
-                <Route
-                  path="*"
-                  element={
-                    <MainLayout>
-                      <Routes>
-                        <Route path="/" element={profile ? <HomePage /> : <LandingPage />} />
-                        <Route path="/patients" element={<PatientList />} />
-                        <Route path="/patients/:id" element={<PatientDetail />} />
-                        <Route path="/calendar" element={<CalendarPage />} />
-                      </Routes>
-                    </MainLayout>
-                  }
-                />
-              </Routes>
-            </Suspense>
-          </ErrorBoundary>
-        </Router>
-      </MantineProvider>
-    </MedplumProvider>
+    <Router>
+      <ErrorBoundary>
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            <Route path="/signin" element={<SignInPage />} />
+            <Route
+              path="*"
+              element={
+                <MainLayout>
+                  <Routes>
+                    <Route path="/" element={profile ? <HomePage /> : <LandingPage />} />
+                    <Route path="/patients" element={<PatientList />} />
+                    <Route path="/patients/:id" element={<PatientDetail />} />
+                    <Route path="/calendar" element={<CalendarPage />} />
+                  </Routes>
+                </MainLayout>
+              }
+            />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
+    </Router>
   );
 }
