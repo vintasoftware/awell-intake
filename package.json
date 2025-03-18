@@ -41,7 +41,7 @@
     "vite": "6.2.0"
   },
   "dependencies": {
-    "@mantine/dates": "^7.17.1",
+    "@mantine/dates": "^7.17.2",
     "@mantine/form": "^7.17.2",
     "dayjs": "^1.11.13",
     "react-router-dom": "^7.3.0",
