@@ -12,11 +12,13 @@ import {
   Stack,
   Badge,
   Loader,
-  Center
+  Center,
+  Button
 } from '@mantine/core';
-import { IconSearch, IconChevronRight } from '@tabler/icons-react';
+import { IconSearch, IconChevronRight, IconPlus } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CreatePatientModal } from './CreatePatientModal';
 
 export function PatientList() {
   const medplum = useMedplum();
@@ -24,6 +26,7 @@ export function PatientList() {
   const [searchQuery, setSearchQuery] = useState('');
   const [patients, setPatients] = useState<Patient[]>([]);
   const [loading, setLoading] = useState(true);
+  const [createModalOpen, setCreateModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchPatients = async () => {
@@ -51,18 +54,30 @@ export function PatientList() {
     });
   };
 
+  const handlePatientCreated = (newPatient: Patient) => {
+    setPatients([newPatient, ...patients]);
+  };
+
   return (
     <Container size="xl" mt="xl">
-      <Stack spacing="md">
+      <Stack gap="md">
         <Group justify="space-between">
-          <Title order={2} color="blue.9">Patients</Title>
-          <TextInput
-            placeholder="Search patients..."
-            icon={<IconSearch size={16} />}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            sx={{ width: 300 }}
-          />
+          <Title order={2} c="blue.9">Patients</Title>
+          <Group>
+            <TextInput
+              placeholder="Search patients..."
+              leftSection={<IconSearch size={16} />}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              sx={{ width: 300 }}
+            />
+            <Button
+              leftSection={<IconPlus size={16} />}
+              onClick={() => setCreateModalOpen(true)}
+            >
+              Create Patient
+            </Button>
+          </Group>
         </Group>
 
         <Card shadow="sm" p="md" radius="md" withBorder>
@@ -99,13 +114,13 @@ export function PatientList() {
                     onClick={() => navigate(`/patients/${patient.id}`)}
                   >
                     <td>
-                      <Group spacing="sm">
+                      <Group gap="sm">
                         <div>
-                          <Text weight={500}>
+                          <Text fw={500}>
                             {patient.name?.[0]?.given?.[0]} {patient.name?.[0]?.family}
                           </Text>
                           {patient.telecom?.[0]?.value && (
-                            <Text size="xs" color="dimmed">
+                            <Text size="xs" c="dimmed">
                               {patient.telecom[0].value}
                             </Text>
                           )}
@@ -124,7 +139,7 @@ export function PatientList() {
                       </Badge>
                     </td>
                     <td>
-                      <Text color="dimmed" size="sm">
+                      <Text c="dimmed" size="sm">
                         {patient.id?.slice(0, 8)}
                       </Text>
                     </td>
@@ -140,6 +155,12 @@ export function PatientList() {
           )}
         </Card>
       </Stack>
+
+      <CreatePatientModal
+        opened={createModalOpen}
+        onClose={() => setCreateModalOpen(false)}
+        onPatientCreated={handlePatientCreated}
+      />
     </Container>
   );
 }

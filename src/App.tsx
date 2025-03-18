@@ -12,6 +12,8 @@ import { MantineProvider, Text } from '@mantine/core';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { MedplumProvider } from '@medplum/react';
 import { theme } from './theme';
+import { Notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
@@ -109,8 +111,9 @@ export function App(): JSX.Element | null {
   }
 
   return (
-    <MedplumProvider medplum={medplum}>
-      <MantineProvider theme={theme}>
+    <MantineProvider theme={theme}>
+      <Notifications />
+      <MedplumProvider medplum={medplum}>
         <Router>
           <ErrorBoundary>
             <Suspense fallback={<Loading />}>
@@ -132,7 +135,7 @@ export function App(): JSX.Element | null {
             </Suspense>
           </ErrorBoundary>
         </Router>
-      </MantineProvider>
-    </MedplumProvider>
+      </MedplumProvider>
+    </MantineProvider>
   );
 }
