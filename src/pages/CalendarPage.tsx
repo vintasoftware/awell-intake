@@ -1,13 +1,13 @@
-import { Box, Button, Card, Container, Group, MantineColor, Modal, Select, Stack, Text, TextInput, Title, useMantineTheme } from '@mantine/core';
+import { Box, Button, ButtonGroup, Card, Container, Group, MantineColor, Modal, Select, Stack, Text, TextInput, Title, useMantineTheme } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import { getReferenceString } from '@medplum/core';
 import { Appointment, Patient, Practitioner } from '@medplum/fhirtypes';
 import { ResourceInput, useMedplum, useMedplumProfile } from '@medplum/react';
-import { IconCalendarEvent, IconDatabase, IconPlus } from '@tabler/icons-react';
+import { IconArrowLeft, IconArrowRight, IconCalendar, IconCalendarEvent, IconCalendarMonth, IconCalendarWeek, IconDatabase, IconPlus } from '@tabler/icons-react';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
-import { Calendar, View, momentLocalizer } from 'react-big-calendar';
+import { Calendar, ToolbarProps, View, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { createFakeAppointments } from '../utils/createFakeAppointments';
 
@@ -74,25 +74,25 @@ export function CalendarPage(): JSX.Element {
         practitioner: getReferenceString(profile),
         _count: '100',
       });
-      
+
       const fetchedAppointments = searchResult.entry?.map((e) => e.resource as Appointment) || [];
       setAppointments(fetchedAppointments);
-      
+
       // Convert appointments to calendar events
       const calendarEvents = fetchedAppointments.map((appointment) => {
         const start = appointment.start ? new Date(appointment.start) : new Date();
         const end = appointment.end ? new Date(appointment.end) : new Date(start.getTime() + 30 * 60000);
-        
+
         // Get patient name if available
         let title = 'Appointment';
         const patientParticipant = appointment.participant?.find(
           (p) => p.actor?.reference?.startsWith('Patient/')
         );
-        
+
         if (patientParticipant?.actor?.display) {
           title = patientParticipant.actor.display;
         }
-        
+
         return {
           id: appointment.id as string,
           title,
@@ -101,7 +101,7 @@ export function CalendarPage(): JSX.Element {
           resource: appointment,
         };
       });
-      
+
       setEvents(calendarEvents);
 
       // Fetch patients for the new appointment form
@@ -171,10 +171,10 @@ export function CalendarPage(): JSX.Element {
       };
 
       const result = await medplum.createResource(appointment);
-      
+
       // Add the new appointment to the list and create a new event
       setAppointments([...appointments, result]);
-      
+
       const newEvent: AppointmentEvent = {
         id: result.id as string,
         title: newAppointment.patientName,
@@ -182,9 +182,9 @@ export function CalendarPage(): JSX.Element {
         end: newAppointment.endDateTime,
         resource: result,
       };
-      
+
       setEvents([...events, newEvent]);
-      
+
       // Reset form and close modal
       setNewAppointment({
         patientId: '',
@@ -194,7 +194,7 @@ export function CalendarPage(): JSX.Element {
         description: '',
         status: 'booked',
       });
-      
+
       close();
     } catch (error) {
       console.error('Error creating appointment:', error);
@@ -223,9 +223,6 @@ export function CalendarPage(): JSX.Element {
         <Group justify="space-between">
           <Title order={1} c="blue.9">Appointments Calendar</Title>
           <Group>
-            <Button variant="default" leftSection={<IconCalendarEvent size={16} />} onClick={() => handleNavigate(new Date())}>
-              Today
-            </Button>
             <Button
               leftSection={<IconPlus size={16} />}
               onClick={open}
@@ -245,34 +242,8 @@ export function CalendarPage(): JSX.Element {
             </Button>
           </Group>
         </Group>
-        
+
         <Card shadow="sm" p="lg" radius="md" withBorder>
-          <Group justify="space-between" mb="md">
-            <Group>
-              <Button 
-                variant={viewType === 'day' ? 'filled' : 'light'} 
-                color="blue" 
-                onClick={() => handleViewChange('day')}
-              >
-                Day
-              </Button>
-              <Button 
-                variant={viewType === 'week' ? 'filled' : 'light'} 
-                color="blue" 
-                onClick={() => handleViewChange('week')}
-              >
-                Week
-              </Button>
-              <Button 
-                variant={viewType === 'month' ? 'filled' : 'light'} 
-                color="blue" 
-                onClick={() => handleViewChange('month')}
-              >
-                Month
-              </Button>
-            </Group>
-          </Group>
-          
           <Box style={{ height: '70vh' }}>
             <Calendar
               localizer={localizer}
@@ -290,7 +261,7 @@ export function CalendarPage(): JSX.Element {
                 const status = appointment.status || 'default';
                 const colorKey = statusColorMap[status] || statusColorMap.default || 'gray';
                 const backgroundColor = theme.colors[colorKey][5];
-                
+
                 return {
                   style: {
                     backgroundColor,
@@ -309,6 +280,60 @@ export function CalendarPage(): JSX.Element {
                     </div>
                   </div>
                 ),
+                toolbar: (props: ToolbarProps<AppointmentEvent>) => (
+                  <Group justify="space-between" py="md">
+                    <ButtonGroup>
+                      <Button
+                        variant="default"
+                        leftSection={<IconArrowLeft size={16} />}
+                        onClick={() => props.onNavigate('PREV')}
+                      >
+                        Back
+                      </Button>
+                      <Button
+                        variant="default"
+                        leftSection={<IconCalendarEvent size={16} />}
+                        onClick={() => props.onNavigate('TODAY')}
+                      >
+                        Today
+                      </Button>
+                      <Button
+                        variant="default"
+                        leftSection={<IconArrowRight size={16} />}
+                        onClick={() => props.onNavigate('NEXT')}
+                      >
+                        Next
+                      </Button>
+                    </ButtonGroup>
+                    <Text>{props.label}</Text>
+                    <ButtonGroup>
+                      <Button
+                        variant={viewType === 'day' ? 'filled' : 'light'}
+                        color="blue"
+                        leftSection={<IconCalendar size={16} />}
+                        onClick={() => props.onView('day')}
+                      >
+                        Day
+                      </Button>
+                      <Button
+                        variant={viewType === 'week' ? 'filled' : 'light'}
+                        color="blue"
+                        leftSection={<IconCalendarWeek size={16} />}
+                        onClick={() => props.onView('week')}
+                      >
+                        Week
+                      </Button>
+                      <Button
+                        variant={viewType === 'month' ? 'filled' : 'light'}
+                        color="blue"
+                        leftSection={<IconCalendarMonth size={16} />}
+                        onClick={() => props.onView('month')}
+                      >
+                        Month
+                      </Button>
+                    </ButtonGroup>
+                  </Group>
+                )
               }}
             />
           </Box>
