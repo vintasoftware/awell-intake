@@ -1,5 +1,5 @@
-import { useMedplum } from '@medplum/react';
-import { Patient, Appointment, Observation } from '@medplum/fhirtypes';
+import { AttachmentButton, useMedplum } from '@medplum/react';
+import { Patient, Appointment, Observation, Attachment, OperationOutcome, ResourceType, Practitioner, RelatedPerson } from '@medplum/fhirtypes';
 import {
   Container,
   Title,
@@ -11,26 +11,52 @@ import {
   Button,
   ActionIcon,
   TextInput,
-  Divider
+  Divider,
+  Grid,
+  CopyButton,
+  Paper,
+  Tooltip,
+  Badge
 } from '@mantine/core';
-import { IconCalendarEvent, IconUpload, IconMessage, IconPlus } from '@tabler/icons-react';
+import { IconCalendarEvent, IconUpload, IconMessage, IconPlus, IconCloudUpload, IconFileAlert, IconNotes, IconCopy, IconCheck, IconPhone, IconAt, IconHome, IconId, IconCalendarTime } from '@tabler/icons-react';
 import { useParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useForm } from '@mantine/form';
 import { DateTimePicker } from '@mantine/dates';
-import { notifications } from '@mantine/notifications';
+import { notifications, showNotification, updateNotification } from '@mantine/notifications';
+import { createReference, MedplumClient, normalizeErrorString } from '@medplum/core';
+import { ResourceTimeline } from './ResourceTimeline';
+import dayjs from 'dayjs';
 
 interface ChartNoteForm {
   content: string;
   date: Date;
 }
 
+interface TimelineItem {
+  id: string;
+  date: string;
+  type: 'note' | 'appointment' | 'media' | 'report';
+  title: string;
+  content?: string;
+  metadata?: {
+    [key: string]: string;
+  };
+}
+
+interface UpcomingAppointmentsBoxProps {
+  patient: Patient;
+}
+
+interface RelatedContactsBoxProps {
+  patient: Patient;
+}
+
 export function PatientDetail() {
   const { id } = useParams();
   const medplum = useMedplum();
   const [patient, setPatient] = useState<Patient | null>(null);
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
-
+  const [refresh, setRefresh] = useState(false);
   const form = useForm<ChartNoteForm>({
     initialValues: {
       content: '',
@@ -38,16 +64,29 @@ export function PatientDetail() {
     },
   });
 
+  const loadTimelineResources = useCallback((medplum: MedplumClient, resourceType: ResourceType, id: string) => {
+    const ref = `${resourceType}/${id}`;
+    const _count = 100;
+    return Promise.allSettled([
+      medplum.readHistory('Patient', id),
+      medplum.search('Communication', { subject: ref, _count }),
+      medplum.search('DiagnosticReport', { subject: ref, _count }),
+      medplum.search('QuestionnaireResponse', { patient: ref, _count }),
+      medplum.search('Observation', { patient: ref, _count }),
+      medplum.search('Media', { subject: ref, _count }),
+      medplum.search('ServiceRequest', { subject: ref, _count }),
+      medplum.search('Task', { subject: ref, _count }),
+      medplum.search('Encounter', { patient: ref, _count }),
+      medplum.search('DocumentReference', { patient: ref, _count }),
+      medplum.search('ClinicalImpression', { patient: ref, _count }),
+    ]);
+  }, [refresh]);
+
   useEffect(() => {
     const fetchPatientData = async () => {
       if (id) {
         const patientData = await medplum.readResource('Patient', id);
         setPatient(patientData);
-
-        const appts = await medplum.searchResources('Appointment', {
-          patient: id
-        });
-        setAppointments(appts);
       }
     };
     fetchPatientData();
@@ -79,28 +118,20 @@ export function PatientDetail() {
 
     try {
       await medplum.createResource({
-        resourceType: 'DocumentReference',
-        status: 'current',
-        type: {
-          coding: [{
-            system: 'http://loinc.org',
-            code: '11506-3',
-            display: 'Progress note'
-          }]
-        },
-        subject: {
-          reference: `Patient/${patient?.id}`
-        },
-        content: [{
-          attachment: {
-            contentType: 'text/plain',
-            data: values.content
-          }
+        resourceType: 'ClinicalImpression',
+        status: 'completed',
+        description: 'Chart Note',
+        subject: createReference(patient),
+        date: values.date.toISOString(),
+        note: [{
+          text: values.content,
+          authorReference: createReference(medplum.getProfile() as Practitioner),
+          time: new Date().toISOString(),
         }],
-        date: values.date.toISOString()
       });
 
       form.reset();
+      setRefresh(!refresh);
       notifications.show({
         title: 'Success',
         message: 'Chart note added successfully',
@@ -125,112 +156,264 @@ export function PatientDetail() {
               <Title order={1}>
                 {patient.name?.[0]?.given?.[0]} {patient.name?.[0]?.family}
               </Title>
-              <Text color="dimmed" mt={7}>
-                ({patient.birthDate && getAge(patient.birthDate)})
+              <Text mt={7}>
+                {patient.birthDate && `${formatDate(patient.birthDate)} (${getAge(patient.birthDate)} y/o)`}
               </Text>
             </Group>
-            <Text color="dimmed" size="sm">
-              Next: {appointments[0]?.start && formatDate(appointments[0].start)}
-            </Text>
           </div>
-          <Group>
-            <Button variant="default" leftSection={<IconCalendarEvent size={16} />}>
-              Share
-            </Button>
-            <Button variant="default" leftSection={<IconUpload size={16} />}>
-              Upload
-            </Button>
-            <Button variant="default" leftSection={<IconMessage size={16} />}>
-              Message
-            </Button>
-          </Group>
         </Group>
 
-        <Group align="flex-start" spacing="xl">
-          <Stack spacing="md" style={{ flex: 1 }}>
-            <Tabs defaultValue="overview">
-              <Tabs.List>
-                <Tabs.Tab value="overview">Overview</Tabs.Tab>
-              </Tabs.List>
+        <Grid gutter="xl">
+          <Grid.Col span={9}>
+            <Group align="flex-start" spacing="xl">
+              <Stack spacing="md" style={{ flex: 1 }}>
+                <Tabs defaultValue="overview">
+                  <Tabs.List>
+                    <Tabs.Tab value="overview">Overview</Tabs.Tab>
+                  </Tabs.List>
 
-              <Card mt="md" p="lg" radius="md" withBorder>
-                <Stack spacing="xl">
-                  <form onSubmit={form.onSubmit(handleSubmitNote)}>
-                    <Stack spacing="sm">
-                      <TextInput
-                        placeholder="Add Chart Note: include notes from a call with a client or copy & paste contents..."
-                        {...form.getInputProps('content')}
+                  <Card mt="md" p="lg" radius="md" withBorder>
+                    <Stack spacing="xl">
+                      <Card withBorder p="md" radius="md" style={{ backgroundColor: '#f7fdff' }}>
+                        <form onSubmit={form.onSubmit(handleSubmitNote)}>
+                          <Stack spacing="sm">
+                            <TextInput
+                              placeholder="Add Chart Note: include notes from a call with a client or copy & paste contents..."
+                              {...form.getInputProps('content')}
+                            />
+                            <Group justify="space-between" align="flex-end">
+                              <DateTimePicker
+                                valueFormat="MMM D, YYYY hh:mm A"
+                                label="Note Date"
+                                placeholder="Pick date and time"
+                                {...form.getInputProps('date')}
+                              />
+                              <Button
+                                type="submit"
+                                variant="light"
+                                color="blue"
+                                size="sm"
+                                leftSection={<IconPlus size={16} />}
+                              >
+                                Add Note
+                              </Button>
+                            </Group>
+                          </Stack>
+                        </form>
+                      </Card>
+
+                      <Divider />
+
+                      <ResourceTimeline
+                        value={patient}
+                        loadTimelineResources={loadTimelineResources}
                       />
-                      <Group justify="space-between" align="flex-end">
-                        <DateTimePicker
-                          valueFormat="MMM D, YYYY hh:mm A"
-                          label="Note Date"
-                          placeholder="Pick date and time"
-                          {...form.getInputProps('date')}
-                        />
-                        <Button
-                          type="submit"
-                          variant="light"
-                          color="blue"
-                          size="sm"
-                        >
-                          Add Note
-                        </Button>
-                      </Group>
                     </Stack>
-                  </form>
-
-                  <Divider />
-
-                  {appointments.map((appointment, index) => (
-                    <div key={index}>
-                      <Group justify="space-between" mb="xs">
-                        <Text weight={500}>APPOINTMENT #{index + 1}</Text>
-                        <Text size="sm" color="dimmed">
-                          {appointment.start && formatDate(appointment.start)} {' '}
-                          {new Date(appointment.start || '').toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
-                        </Text>
-                      </Group>
-                      <Text size="sm" color="dimmed">BILLING CODE: {appointment.serviceType?.[0]?.coding?.[0]?.code}</Text>
-                      {appointment.description && (
-                        <Text size="sm" mt="xs">{appointment.description}</Text>
-                      )}
-                      {index < appointments.length - 1 && <Divider mt="xl" />}
-                    </div>
-                  ))}
-                </Stack>
-              </Card>
-            </Tabs>
-          </Stack>
-
-          <Stack spacing="md" w={300}>
-            <Card withBorder radius="md" p="md">
-              <Text weight={500} size="sm" mb="xs">Client Info</Text>
-              <Stack spacing="xs">
-                <Text size="sm">Phone: {patient.telecom?.[0]?.value}</Text>
-                <Text size="sm">Email: {patient.telecom?.[1]?.value}</Text>
-                <Text size="sm">
-                  Address: {patient.address?.[0]?.line?.[0]}, {patient.address?.[0]?.city}, {patient.address?.[0]?.state}
-                </Text>
+                  </Card>
+                </Tabs>
               </Stack>
-            </Card>
+            </Group>
+          </Grid.Col>
+          <Grid.Col span={3}>
+            <Stack>
+              <ClientInfoBox patient={patient} />
+              <UpcomingAppointmentsBox patient={patient} />
+              <RelatedContactsBox patient={patient} />
+            </Stack>
+          </Grid.Col>
+        </Grid>
 
-            <Card withBorder radius="md" p="md">
-              <Text weight={500} size="sm" mb="xs">Upcoming Appointments</Text>
-              <Stack spacing="xs">
-                {appointments.slice(0, 3).map((appointment, index) => (
-                  <Group key={index} justify="space-between">
-                    <Text size="sm">{appointment.start && formatDate(appointment.start)}</Text>
-                    <Text size="sm" color="dimmed">
-                      {new Date(appointment.start || '').toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
-                    </Text>
-                  </Group>
-                ))}
-              </Stack>
-            </Card>
-          </Stack>
-        </Group>
       </Stack>
     </Container>
+  );
+}
+
+function ClientInfoBox({ patient }: { patient: Patient }) {
+  return (
+    <Paper withBorder p="md" mt="xl" radius="md">
+      <Stack>
+        <Text fw={500} size="sm">Client info</Text>
+
+        {patient.telecom?.find(t => t.system === 'email')?.value && (
+          <Group align="center" wrap="nowrap">
+            <Text size="sm" c="dimmed"><b>Email:</b> {patient.telecom.find(t => t.system === 'email')?.value}</Text>
+            <CopyButton value={patient.telecom.find(t => t.system === 'email')?.value || ''} timeout={2000}>
+              {({ copied, copy }) => (
+                <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="left">
+                  <ActionIcon
+                    size="sm"
+                    variant="subtle"
+                    color={copied ? 'teal' : 'gray'}
+                    onClick={copy}
+                  >
+                    {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
+                  </ActionIcon>
+                </Tooltip>
+              )}
+            </CopyButton>
+          </Group>
+        )}
+
+
+        {patient.telecom?.[0]?.value && (
+          <Group align="center" wrap="nowrap">
+            <Text size="sm" c="dimmed"><b>Phone:</b> {patient.telecom[0].value}</Text>
+            <CopyButton value={patient.telecom[0].value} timeout={2000}>
+              {({ copied, copy }) => (
+                <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="left">
+                  <ActionIcon
+                    size="sm"
+                    variant="subtle"
+                    color={copied ? 'teal' : 'gray'}
+                    onClick={copy}
+                  >
+                    {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
+                  </ActionIcon>
+                </Tooltip>
+              )}
+            </CopyButton>
+          </Group>
+        )}
+
+        {patient.address?.[0] && (
+          <Text size="sm" c="dimmed">
+            <b>Addr:</b> {patient.address[0].line?.[0]}, {patient.address[0].city}, {patient.address[0].state} {patient.address[0].postalCode}
+          </Text>
+        )}
+      </Stack>
+    </Paper>
+  );
+}
+
+function UpcomingAppointmentsBox({ patient }: UpcomingAppointmentsBoxProps) {
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const medplum = useMedplum();
+
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        const results = await medplum.searchResources('Appointment', {
+          patient: `Patient/${patient.id}`,
+          date: 'ge' + new Date().toISOString().split('T')[0],
+          _sort: 'date',
+          _count: 3
+        });
+        setAppointments(results);
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+      }
+    };
+
+    fetchAppointments();
+  }, [medplum, patient.id]);
+
+  return (
+    <Paper withBorder p="md" mt="md" radius="md">
+      <Stack>
+        <Group justify="space-between">
+          <Text fw={500} size="sm">Upcoming Appointments</Text>
+        </Group>
+
+        {appointments.length === 0 ? (
+          <Text size="sm" c="dimmed" fs="italic">No upcoming appointments</Text>
+        ) : (
+          appointments.map((appointment) => (
+            <Stack key={appointment.id} spacing={4}>
+              <Group justify="space-between" wrap="nowrap">
+                <Text size="sm" fw={500}>
+                  {appointment.serviceType?.[0]?.text || 'Visit'}
+                </Text>
+                <Badge
+                  size="sm"
+                  color={appointment.status === 'booked' ? 'blue' : 'gray'}
+                >
+                  {appointment.status}
+                </Badge>
+              </Group>
+              <Text size="sm" c="dimmed">
+                {appointment.start && (
+                  dayjs(appointment.start).format('MMM D, YYYY h:mm A')
+                )}
+              </Text>
+              {appointment.description && (
+                <Text size="sm" c="dimmed" lineClamp={2}>
+                  {appointment.description}
+                </Text>
+              )}
+            </Stack>
+          ))
+        )}
+      </Stack>
+    </Paper>
+  );
+}
+
+function RelatedContactsBox({ patient }: RelatedContactsBoxProps) {
+  const [contacts, setContacts] = useState<RelatedPerson[]>([]);
+  const medplum = useMedplum();
+
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        const results = await medplum.searchResources('RelatedPerson', {
+          patient: `Patient/${patient.id}`,
+          _count: 5
+        });
+        setContacts(results);
+      } catch (error) {
+        console.error('Error fetching related contacts:', error);
+      }
+    };
+
+    fetchContacts();
+  }, [medplum, patient.id]);
+
+  return (
+    <Paper withBorder p="md" radius="md">
+      <Stack>
+        <Group justify="space-between">
+          <Text fw={500} size="sm">Emergency Contacts</Text>
+        </Group>
+
+        {contacts.length === 0 ? (
+          <Text size="sm" c="dimmed" fs="italic">No emergency contacts listed</Text>
+        ) : (
+          contacts.map((contact) => (
+            <Stack key={contact.id} spacing={4}>
+              <Group justify="space-between" wrap="nowrap">
+                <Text size="sm" fw={500}>
+                  {contact.name?.[0]?.text || `${contact.name?.[0]?.given?.[0]} ${contact.name?.[0]?.family}`}
+                </Text>
+                <Badge size="sm">
+                  {contact.relationship?.[0]?.text || contact.relationship?.[0]?.coding?.[0]?.display}
+                </Badge>
+              </Group>
+
+              {contact.telecom?.map((t, index) => (
+                <Group key={index} align="center" wrap="nowrap">
+                  <Text size="sm" c="dimmed">
+                    <b>{t.system === 'phone' ? 'Phone:' : 'Email:'}</b> {t.value}
+                  </Text>
+                  <CopyButton value={t.value || ''} timeout={2000}>
+                    {({ copied, copy }) => (
+                      <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="left">
+                        <ActionIcon
+                          size="sm"
+                          variant="subtle"
+                          color={copied ? 'teal' : 'gray'}
+                          onClick={copy}
+                        >
+                          {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
+                        </ActionIcon>
+                      </Tooltip>
+                    )}
+                  </CopyButton>
+                </Group>
+              ))}
+            </Stack>
+          ))
+        )}
+      </Stack>
+    </Paper>
   );
 }
