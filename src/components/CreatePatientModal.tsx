@@ -69,7 +69,7 @@ export function CreatePatientModal({ opened, onClose, onPatientCreated }: Create
     }
 
     try {
-      const orderData: Task = {
+      const taskData: Task = {
         resourceType: 'Task',
         status: 'accepted',
         intent: 'order',
@@ -89,7 +89,7 @@ export function CreatePatientModal({ opened, onClose, onPatientCreated }: Create
           },
         ],
       };
-      await medplum.createResource<Task>(orderData);
+      await medplum.createResource<Task>(taskData);
 
       notifications.show({
         title: 'Success',
