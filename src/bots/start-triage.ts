@@ -1,9 +1,9 @@
 import { BotEvent, MedplumClient } from '@medplum/core';
-import { Patient } from '@medplum/fhirtypes';
-import { parseAwellPayload, startPatientPathway } from './utils/awell';
+import { Task } from '@medplum/fhirtypes';
+import { startGenericPathway } from './utils/awell';
 
 export async function handler(medplum: MedplumClient, event: BotEvent): Promise<void> {
-  const patient = event.input as Patient;
+  const task = event.input as Task;
 
   if (!event.secrets['AWELL_API_KEY'].valueString) {
     throw new Error('Missing AWELL_API_KEY secret');
@@ -22,12 +22,16 @@ export async function handler(medplum: MedplumClient, event: BotEvent): Promise<
   const apiKey = event.secrets['AWELL_API_KEY'].valueString;
   const pathwayDefinitionId = event.secrets['TRIAGE_PATHWAY_DEFINITION_ID'].valueString;
   const dataPointDefinitionId = event.secrets['TRIAGE_DATA_POINT_DEFINITION_ID'].valueString;
-  const payload = parseAwellPayload(patient);
 
-  await startPatientPathway(patient, apiUrl, apiKey, pathwayDefinitionId, [
+  if (!task.input || task.input.length === 0 || !task.input[0].valueContactPoint?.value) {
+    throw new Error('Missing phone number');
+  }
+
+  const phone = task.input[0].valueContactPoint.value;
+  await startGenericPathway(apiUrl, apiKey, pathwayDefinitionId, [
     {
       data_point_definition_id: dataPointDefinitionId,
-      value: payload.phone,
+      value: phone,
     },
   ]);
 }

@@ -133,6 +133,35 @@ export async function getAwellPatient(patientID: string, apiUrl: string, apiKey:
   return awellPatient;
 }
 
+export async function startGenericPathway(
+  apiUrl: string,
+  apiKey: string,
+  pathwayDefinitionId: string,
+  dataPoints: Record<string, string>[]
+) {
+  const startPathwayQuery = `
+      mutation {
+        startPathway(input: {
+          pathway_definition_id: "${pathwayDefinitionId}",
+          data_points: [
+            ${dataPoints
+              .map(
+                (point) => `{
+              data_point_definition_id: "${point.data_point_definition_id}",
+              value: "${point.value}"
+            }`
+              )
+              .join(',\n            ')}
+          ]
+        }) {
+          pathway_id
+        }
+      }
+    `;
+
+  await executePathwayQuery(startPathwayQuery, apiUrl, apiKey);
+}
+
 export async function startPatientPathway(
   patient: Patient,
   apiUrl: string,
