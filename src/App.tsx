@@ -1,5 +1,5 @@
 import { AppShell, Text } from '@mantine/core';
-import { ErrorBoundary, Loading, Logo, useMedplum, useMedplumProfile } from '@medplum/react';
+import { ErrorBoundary, Loading, useMedplum, useMedplumProfile } from '@medplum/react';
 import { IconUsers, IconHome, IconLogout, IconStethoscope, IconCalendar } from '@tabler/icons-react';
 import { Suspense } from 'react';
 import { Route, BrowserRouter as Router, Routes, useLocation, useNavigate } from 'react-router-dom';
@@ -12,6 +12,7 @@ import { SignInPage } from './pages/SignInPage';
 import { PatientList } from './components/PatientList';
 import { AppointmentPage } from './pages/AppointmentPage';
 import { CalendarPage } from './pages/CalendarPage';
+import '@mantine/notifications/styles.css';
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
