@@ -1,17 +1,15 @@
-import { Button, Container, Group, Paper, Table, Text, Title } from '@mantine/core';
+import { Container, Group, Paper, Table, Text, Title } from '@mantine/core';
 import { Practitioner } from '@medplum/fhirtypes';
 import { useMedplum, MedplumLink } from '@medplum/react';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 export function PractitionerList(): JSX.Element {
   const medplum = useMedplum();
-  const navigate = useNavigate();
   const [practitioners, setPractitioners] = useState<Practitioner[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    loadPractitioners();
+    void loadPractitioners();
   }, []);
 
   async function loadPractitioners(): Promise<void> {
@@ -21,7 +19,7 @@ export function PractitionerList(): JSX.Element {
         _count: 100,
         _sort: 'name',
       });
-      setPractitioners((response.entry || []).map(entry => entry.resource as Practitioner));
+      setPractitioners((response.entry || []).map((entry) => entry.resource as Practitioner));
     } catch (error) {
       console.error('Error loading practitioners', error);
     } finally {
@@ -31,16 +29,12 @@ export function PractitionerList(): JSX.Element {
 
   const rows = practitioners.map((practitioner) => {
     const name = practitioner.name?.[0];
-    const fullName = [name?.prefix?.[0], name?.given?.[0], name?.family]
-      .filter(Boolean)
-      .join(' ');
+    const fullName = [name?.prefix?.[0], name?.given?.[0], name?.family].filter(Boolean).join(' ');
 
     return (
       <Table.Tr key={practitioner.id}>
         <Table.Td>
-          <MedplumLink to={`/practitioners/${practitioner.id}`}>
-            {fullName || 'Unknown name'}
-          </MedplumLink>
+          <MedplumLink to={`/practitioners/${practitioner.id}`}>{fullName || 'Unknown name'}</MedplumLink>
         </Table.Td>
         <Table.Td>{practitioner.telecom?.[0]?.value || '-'}</Table.Td>
         <Table.Td>{practitioner.identifier?.[0]?.value || '-'}</Table.Td>

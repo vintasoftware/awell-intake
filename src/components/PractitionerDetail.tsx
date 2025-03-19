@@ -1,10 +1,21 @@
 import {
-  Button, Container, Title, Text, Paper, TextInput,
-  Group, Stack, Card, Badge, Modal, Select, ActionIcon
+  Button,
+  Container,
+  Title,
+  Text,
+  Paper,
+  TextInput,
+  Group,
+  Stack,
+  Card,
+  Badge,
+  Modal,
+  Select,
+  ActionIcon,
 } from '@mantine/core';
 import { Practitioner, PractitionerRole } from '@medplum/fhirtypes';
-import { useMedplum, ResourceBadge, MedplumLink } from '@medplum/react';
-import { useState, useEffect } from 'react';
+import { useMedplum } from '@medplum/react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { IconTrash, IconPlus } from '@tabler/icons-react';
 
@@ -17,19 +28,24 @@ export function PractitionerDetail(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(true);
   const [specialtyModalOpen, setSpecialtyModalOpen] = useState<boolean>(false);
   const [newSpecialty, setNewSpecialty] = useState<string>('');
-  const [availableSpecialties, setAvailableSpecialties] = useState<string[]>([
-    'Cardiology', 'Dermatology', 'Endocrinology', 'Gastroenterology',
-    'Neurology', 'Oncology', 'Orthopedics', 'Pediatrics', 'Psychiatry',
-    'Radiology', 'Surgery', 'Urology', 'Family Medicine', 'Internal Medicine'
-  ]);
+  const availableSpecialties = [
+    'Cardiology',
+    'Dermatology',
+    'Endocrinology',
+    'Gastroenterology',
+    'Neurology',
+    'Oncology',
+    'Orthopedics',
+    'Pediatrics',
+    'Psychiatry',
+    'Radiology',
+    'Surgery',
+    'Urology',
+    'Family Medicine',
+    'Internal Medicine',
+  ];
 
-  useEffect(() => {
-    if (id) {
-      loadPractitioner();
-    }
-  }, [id]);
-
-  async function loadPractitioner(): Promise<void> {
+  const loadPractitioner = useCallback(async (): Promise<void> => {
     if (id === 'new') {
       setPractitioner({
         resourceType: 'Practitioner',
@@ -49,24 +65,29 @@ export function PractitionerDetail(): JSX.Element {
       const rolesResponse = await medplum.search('PractitionerRole', {
         practitioner: `Practitioner/${id}`,
       });
-      setRoles((rolesResponse.entry || []).map(entry => entry.resource as PractitionerRole));
+      setRoles((rolesResponse.entry || []).map((entry) => entry.resource as PractitionerRole));
     } catch (error) {
       console.error('Error loading practitioner', error);
     } finally {
       setLoading(false);
     }
-  }
+  }, [id, medplum]);
+
+  useEffect(() => {
+    if (id) {
+      void loadPractitioner();
+    }
+  }, [id, loadPractitioner]);
 
   async function savePractitioner(): Promise<void> {
     if (!practitioner) return;
 
     try {
-      const result = id === 'new'
-        ? await medplum.createResource(practitioner)
-        : await medplum.updateResource(practitioner);
+      const result =
+        id === 'new' ? await medplum.createResource(practitioner) : await medplum.updateResource(practitioner);
 
       if (id === 'new') {
-        navigate(`/practitioners/${result.id}`);
+        void navigate(`/practitioners/${result.id}`);
       } else {
         setPractitioner(result);
       }
@@ -83,16 +104,20 @@ export function PractitionerDetail(): JSX.Element {
         resourceType: 'PractitionerRole',
         practitioner: {
           reference: `Practitioner/${practitioner.id}`,
-          display: getFullName(practitioner)
+          display: getFullName(practitioner),
         },
-        specialty: [{
-          coding: [{
-            system: 'http://terminology.hl7.org/CodeSystem/practitioner-specialty',
-            code: newSpecialty.toLowerCase().replace(/\s/g, '-'),
-            display: newSpecialty
-          }]
-        }],
-        active: true
+        specialty: [
+          {
+            coding: [
+              {
+                system: 'http://terminology.hl7.org/CodeSystem/practitioner-specialty',
+                code: newSpecialty.toLowerCase().replace(/\s/g, '-'),
+                display: newSpecialty,
+              },
+            ],
+          },
+        ],
+        active: true,
       };
 
       const result = await medplum.createResource(newRole);
@@ -107,7 +132,7 @@ export function PractitionerDetail(): JSX.Element {
   async function removeSpecialty(roleId: string): Promise<void> {
     try {
       await medplum.deleteResource('PractitionerRole', roleId);
-      setRoles(roles.filter(role => role.id !== roleId));
+      setRoles(roles.filter((role) => role.id !== roleId));
     } catch (error) {
       console.error('Error removing specialty', error);
     }
@@ -115,9 +140,7 @@ export function PractitionerDetail(): JSX.Element {
 
   function getFullName(p: Practitioner): string {
     const name = p.name?.[0];
-    return [name?.prefix?.[0], name?.given?.[0], name?.family]
-      .filter(Boolean)
-      .join(' ') || 'Unknown';
+    return [name?.prefix?.[0], name?.given?.[0], name?.family].filter(Boolean).join(' ') || 'Unknown';
   }
 
   function updateName(field: 'prefix' | 'given' | 'family', value: string): void {
@@ -140,18 +163,26 @@ export function PractitionerDetail(): JSX.Element {
   }
 
   if (loading) {
-    return <Container><Text>Loading practitioner details...</Text></Container>;
+    return (
+      <Container>
+        <Text>Loading practitioner details...</Text>
+      </Container>
+    );
   }
 
   if (!practitioner) {
-    return <Container><Text>Practitioner not found</Text></Container>;
+    return (
+      <Container>
+        <Text>Practitioner not found</Text>
+      </Container>
+    );
   }
 
   return (
     <Container size="lg">
       <Group justify="space-between" mb="md">
         <Title order={2}>{id === 'new' ? 'New Practitioner' : getFullName(practitioner)}</Title>
-        <Button onClick={savePractitioner}>Save</Button>
+        <Button onClick={() => void savePractitioner()}>Save</Button>
       </Group>
 
       <Paper p="md" withBorder mb="xl">
@@ -183,11 +214,7 @@ export function PractitionerDetail(): JSX.Element {
         <Paper p="md" withBorder>
           <Group justify="space-between" mb="md">
             <Title order={4}>Specialties</Title>
-            <Button
-              leftSection={<IconPlus size={16} />}
-              onClick={() => setSpecialtyModalOpen(true)}
-              size="sm"
-            >
+            <Button leftSection={<IconPlus size={16} />} onClick={() => setSpecialtyModalOpen(true)} size="sm">
               Add Specialty
             </Button>
           </Group>
@@ -205,7 +232,7 @@ export function PractitionerDetail(): JSX.Element {
                       </Badge>
                       {role.active === false && <Badge color="red">Inactive</Badge>}
                     </Group>
-                    <ActionIcon color="red" onClick={() => removeSpecialty(role.id as string)}>
+                    <ActionIcon color="red" onClick={() => void removeSpecialty(role.id as string)}>
                       <IconTrash size={16} />
                     </ActionIcon>
                   </Group>
@@ -216,11 +243,7 @@ export function PractitionerDetail(): JSX.Element {
         </Paper>
       )}
 
-      <Modal
-        title="Add Specialty"
-        opened={specialtyModalOpen}
-        onClose={() => setSpecialtyModalOpen(false)}
-      >
+      <Modal title="Add Specialty" opened={specialtyModalOpen} onClose={() => setSpecialtyModalOpen(false)}>
         <Stack gap="md">
           <Select
             label="Select Specialty"
@@ -231,8 +254,12 @@ export function PractitionerDetail(): JSX.Element {
             clearable
           />
           <Group justify="flex-end">
-            <Button variant="outline" onClick={() => setSpecialtyModalOpen(false)}>Cancel</Button>
-            <Button onClick={addSpecialty} disabled={!newSpecialty}>Add</Button>
+            <Button variant="outline" onClick={() => setSpecialtyModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={() => void addSpecialty()} disabled={!newSpecialty}>
+              Add
+            </Button>
           </Group>
         </Stack>
       </Modal>
