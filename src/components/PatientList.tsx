@@ -30,8 +30,12 @@ export function PatientList() {
 
   useEffect(() => {
     const fetchPatients = async () => {
-      const results = await medplum.searchResources('Patient', {});
-      setPatients(results);
+      try {
+        const results = await medplum.searchResources('Patient', {});
+        setPatients(results);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchPatients();
   }, [medplum]);
@@ -48,10 +52,6 @@ export function PatientList() {
       month: 'short',
       day: 'numeric'
     });
-  };
-
-  const handlePatientCreated = (newPatient: Patient) => {
-    setPatients([newPatient, ...patients]);
   };
 
   return (
@@ -71,7 +71,7 @@ export function PatientList() {
               leftSection={<IconPlus size={16} />}
               onClick={() => setCreateModalOpen(true)}
             >
-              Create Patient
+              Start Triage
             </Button>
           </Group>
         </Group>
@@ -155,7 +155,6 @@ export function PatientList() {
       <CreatePatientModal
         opened={createModalOpen}
         onClose={() => setCreateModalOpen(false)}
-        onPatientCreated={handlePatientCreated}
       />
     </Container>
   );

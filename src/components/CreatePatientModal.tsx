@@ -19,14 +19,13 @@ import { IconCheck, IconX } from '@tabler/icons-react';
 interface CreatePatientModalProps {
   opened: boolean;
   onClose: () => void;
-  onPatientCreated: (patient: Patient) => void;
 }
 
 interface PatientFormValues {
   phone: string;
 }
 
-export function CreatePatientModal({ opened, onClose, onPatientCreated }: CreatePatientModalProps) {
+export function CreatePatientModal({ opened, onClose }: CreatePatientModalProps) {
   const medplum = useMedplum();
   const [startTriage, setStartTriage] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -116,7 +115,7 @@ export function CreatePatientModal({ opened, onClose, onPatientCreated }: Create
       opened={opened}
       onClose={handleClose}
       position="right"
-      title={<Title order={3}>Create New Patient</Title>}
+      title={<Title order={3}>Start Triage</Title>}
       padding="xl"
       size="md"
     >
@@ -147,7 +146,7 @@ export function CreatePatientModal({ opened, onClose, onPatientCreated }: Create
 
             <Group justify="flex-end" mt="xl">
               <Button variant="outline" onClick={handleClose} type="button">Cancel</Button>
-              <Button type="submit">Create Patient</Button>
+              <Button type="submit">Start Triage</Button>
             </Group>
           </Stack>
         </form>
