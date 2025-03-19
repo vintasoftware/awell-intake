@@ -29,7 +29,7 @@ export const BOTS: BotDescription[] = [
  * | delete    | Delete Only |
  * | undefined | All Interactions |
  */
-function getSubscriptionExtension(valueCode: 'create' | 'update' | 'delete' | undefined): Extension {
+export function getSubscriptionExtension(valueCode: 'create' | 'update' | 'delete' | undefined): Extension {
   return {
     url: 'https://medplum.com/fhir/StructureDefinition/subscription-supported-interaction',
     valueCode,

@@ -1,19 +1,9 @@
 import { useState } from 'react';
-import {
-  Drawer,
-  TextInput,
-  Button,
-  Group,
-  Stack,
-  Title,
-  Text,
-  Switch,
-  LoadingOverlay
-} from '@mantine/core';
-import { useForm, isEmail, hasLength, matches } from '@mantine/form';
+import { Drawer, TextInput, Button, Group, Stack, Title, Text, Switch, LoadingOverlay } from '@mantine/core';
+import { useForm, matches } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 import { useMedplum } from '@medplum/react';
-import { Patient, ContactPoint, TaskInput, Task } from '@medplum/fhirtypes';
+import { Task } from '@medplum/fhirtypes';
 import { IconCheck, IconX } from '@tabler/icons-react';
 
 interface CreatePatientModalProps {
@@ -30,17 +20,16 @@ export function CreatePatientModal({ opened, onClose }: CreatePatientModalProps)
   const [startTriage, setStartTriage] = useState(true);
   const [loading, setLoading] = useState(false);
 
-
-// E.164 format: + followed by 1-15 digits (e.g., +12345678900)
+  // E.164 format: + followed by 1-15 digits (e.g., +12345678900)
   const phoneRegex = /^\+[1-9]\d{1,14}$/;
 
   const form = useForm<PatientFormValues>({
     initialValues: {
-      phone: ''
+      phone: '',
     },
     validate: {
-      phone: matches(phoneRegex, 'Please enter a valid phone number')
-    }
+      phone: matches(phoneRegex, 'Please enter a valid phone number'),
+    },
   });
 
   const resetForm = () => {
@@ -60,11 +49,11 @@ export function CreatePatientModal({ opened, onClose }: CreatePatientModalProps)
         title: 'Nothing to do.',
         message: 'Triage is not enabled.',
         color: 'gray',
-        icon: <IconCheck />
+        icon: <IconCheck />,
       });
       setLoading(false);
       handleClose();
-      return
+      return;
     }
 
     try {
@@ -72,7 +61,7 @@ export function CreatePatientModal({ opened, onClose }: CreatePatientModalProps)
         resourceType: 'Task',
         status: 'accepted',
         intent: 'order',
-        description: "Trigger Triage",
+        description: 'Trigger Triage',
         code: {
           text: 'Trigger Triage',
         },
@@ -94,7 +83,7 @@ export function CreatePatientModal({ opened, onClose }: CreatePatientModalProps)
         title: 'Success',
         message: 'Triage triggered successfully',
         color: 'green',
-        icon: <IconCheck />
+        icon: <IconCheck />,
       });
       handleClose();
     } catch (error) {
@@ -103,7 +92,7 @@ export function CreatePatientModal({ opened, onClose }: CreatePatientModalProps)
         title: 'Error',
         message: 'Failed to trigger triage',
         color: 'red',
-        icon: <IconX />
+        icon: <IconX />,
       });
     } finally {
       setLoading(false);
@@ -145,7 +134,9 @@ export function CreatePatientModal({ opened, onClose }: CreatePatientModalProps)
             </Text>
 
             <Group justify="flex-end" mt="xl">
-              <Button variant="outline" onClick={handleClose} type="button">Cancel</Button>
+              <Button variant="outline" onClick={handleClose} type="button">
+                Cancel
+              </Button>
               <Button type="submit">Start Triage</Button>
             </Group>
           </Stack>
