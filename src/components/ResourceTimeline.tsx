@@ -1,133 +1,96 @@
-import { ActionIcon, Badge, Blockquote, Button, Card, Center, Container, Divider, Flex, Grid, Group, Loader, Menu, ScrollArea, Stack, Text, TextInput, Timeline, TimelineItem } from '@mantine/core';
-import { showNotification, updateNotification } from '@mantine/notifications';
-import { MedplumClient, ProfileResource, createReference, formatCodeableConcept, formatDate, formatQuantity, normalizeErrorString } from '@medplum/core';
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
+  ActionIcon,
+  Badge,
+  Blockquote,
+  Button,
+  Card,
+  Center,
+  Divider,
+  Flex,
+  Grid,
+  Group,
+  Loader,
+  Modal,
+  Stack,
+  Text,
+} from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
+import { MedplumClient, ProfileResource, formatCodeableConcept, formatQuantity } from '@medplum/core';
+import {
+  Annotation,
   Attachment,
-  AuditEvent,
   Bundle,
   Communication,
-  DiagnosticReport,
   Media,
-  OperationOutcome,
+  QuestionnaireResponse,
   Reference,
   Resource,
   ResourceType,
-  Task,
-  Encounter,
-  DocumentReference,
-  ClinicalImpression,
-  ServiceRequest,
-  QuestionnaireResponse,
 } from '@medplum/fhirtypes';
-import { sortByDateAndPriority, Panel, ResourceAvatar, AttachmentButton, ResourceTable, AttachmentDisplay, DiagnosticReportDisplay, TimelineItemProps, ResourceDiff } from '@medplum/react';
+import { ResourceDiff, ResourceTable, TimelineItemProps, sortByDateAndPriority } from '@medplum/react';
 import { useMedplum, useResource } from '@medplum/react-hooks';
-import { IconCalendarEvent, IconCheck, IconCloudUpload, IconFileAlert, IconMessage, IconNotes, IconDownload, IconEye, IconDotsVertical, IconPlus } from '@tabler/icons-react';
-import { ReactNode, useCallback, useEffect, useRef, useState } from 'react';
-import { Form, useNavigate } from 'react-router-dom';
+import { IconDownload, IconEye } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import { Modal } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-
+import { ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 const displayRules = {
-  "ClinicalImpression": {
-    "display": "Chart Note",
-    "icon": "IconStethoscope",
-    "fields": [
-      "subject",
-      "encounter",
-      "date",
-      "summary",
-      "note",
-    ]
+  ClinicalImpression: {
+    display: 'Chart Note',
+    icon: 'IconStethoscope',
+    fields: ['subject', 'encounter', 'date', 'summary', 'note'],
   },
-  "Patient": {
-    "display": "Patient History",
-    "icon": "IconUser",
-    "fields": []
+  Patient: {
+    display: 'Patient History',
+    icon: 'IconUser',
+    fields: [],
   },
-  "Communication": {
-    "display": "Communication",
-    "icon": "IconMessage",
-    "fields": [
-      "subject",
-      "date",
-      "text",
-    ]
+  Communication: {
+    display: 'Communication',
+    icon: 'IconMessage',
+    fields: ['subject', 'date', 'text'],
   },
-  "DiagnosticReport": {
-    "display": "Diagnostic Report",
-    "icon": "IconFile",
-    "fields": [
-      "subject",
-      "date",
-      "conclusion",
-      "resultsInterpreter",
-    ]
+  DiagnosticReport: {
+    display: 'Diagnostic Report',
+    icon: 'IconFile',
+    fields: ['subject', 'date', 'conclusion', 'resultsInterpreter'],
   },
-  "Media": {
-    "display": "Media",
-    "icon": "IconPhoto",
-    "fields": [
-      "subject",
-      "date",
-      "content",
-      "note",
-    ]
+  Media: {
+    display: 'Media',
+    icon: 'IconPhoto',
+    fields: ['subject', 'date', 'content', 'note'],
   },
-  "ServiceRequest": {
-    "display": "Service Order",
-    "icon": "IconFile",
-    "fields": [
-      "subject",
-      "date",
-      "serviceType",
-      "code",
-    ]
+  ServiceRequest: {
+    display: 'Service Order',
+    icon: 'IconFile',
+    fields: ['subject', 'date', 'serviceType', 'code'],
   },
-  "Encounter": {
-    "display": "Encounter",
-    "icon": "IconFile",
-    "fields": [
-      "subject",
-      "date",
-      "type",
-      "period",
-      "code",
-      "reasonCode",
-    ],
+  Encounter: {
+    display: 'Encounter',
+    icon: 'IconFile',
+    fields: ['subject', 'date', 'type', 'period', 'code', 'reasonCode'],
   },
-  "DocumentReference": {
-    "display": "Document Reference",
-    "icon": "IconFile",
-    "fields": [
-      "subject",
-      "date",
-      "type",
-      "description",
-      "author",
-      "content",
-    ]
+  DocumentReference: {
+    display: 'Document Reference',
+    icon: 'IconFile',
+    fields: ['subject', 'date', 'type', 'description', 'author', 'content'],
   },
-  "QuestionnaireResponse": {
-    "display": "Assessment",
-    "icon": "IconFile",
-    "fields": [
-      "date",
-      "questionnaire",
-      "answer",
-    ]
+  QuestionnaireResponse: {
+    display: 'Assessment',
+    icon: 'IconFile',
+    fields: ['date', 'questionnaire', 'answer'],
   },
-  "Observation": {
-    "display": "Observation",
-    "icon": "IconFile",
-    "fields": [
-      "date",
-      "code",
-      "valueQuantity",
-    ]
-  }
-}
+  Observation: {
+    display: 'Observation',
+    icon: 'IconFile',
+    fields: ['date', 'code', 'valueQuantity'],
+  },
+};
 
 export interface ResourceTimelineMenuItemContext {
   readonly primaryResource: Resource;
@@ -157,7 +120,6 @@ export function ResourceTimeline<T extends Resource>(props: ResourceTimelineProp
   const [history, setHistory] = useState<Bundle>();
   const [items, setItems] = useState<Resource[]>([]);
   const loadTimelineResources = props.loadTimelineResources;
-  const navigate = useNavigate();
 
   const itemsRef = useRef<Resource[]>(items);
   itemsRef.current = items;
@@ -218,15 +180,6 @@ export function ResourceTimeline<T extends Resource>(props: ResourceTimelineProp
   );
 
   /**
-   * Adds an array of resources to the timeline.
-   * @param resource - Resource to add.
-   */
-  const addResource = useCallback(
-    (resource: Resource): void => sortAndSetItems([...itemsRef.current, resource]),
-    [sortAndSetItems]
-  );
-
-  /**
    * Loads the timeline.
    */
   const loadTimeline = useCallback(() => {
@@ -242,7 +195,6 @@ export function ResourceTimeline<T extends Resource>(props: ResourceTimelineProp
   }, [medplum, props.value, loadTimelineResources, handleBatchResponse]);
 
   useEffect(() => loadTimeline(), [loadTimeline]);
-
 
   const groupItemsByDate = useCallback((items: Resource[]): GroupedTimelineItems => {
     return items.reduce((groups: GroupedTimelineItems, item) => {
@@ -265,7 +217,7 @@ export function ResourceTimeline<T extends Resource>(props: ResourceTimelineProp
 
   return (
     <>
-      <Stack spacing="xl">
+      <Stack gap="xl">
         {Object.entries(groupItemsByDate(items)).map(([date, dateItems]) => (
           <Grid key={date} gutter="md">
             <Grid.Col span={2}>
@@ -283,7 +235,7 @@ export function ResourceTimeline<T extends Resource>(props: ResourceTimelineProp
 
                 return (
                   <div key={key}>
-                    <Group justify="space-between" wrap='nowrap' mb="xs">
+                    <Group justify="space-between" wrap="nowrap" mb="xs">
                       <TimelineItemContent key={key} item={item} history={history as Bundle} />
                       <Text size="sm" c="dimmed">
                         {dayjs(item.meta?.lastUpdated).format('h:mm A')}
@@ -316,12 +268,10 @@ function getPrevious(history: Bundle, version: Resource): Resource | undefined {
 }
 
 function HistoryTimelineItem(props: HistoryTimelineItemProps): JSX.Element {
-  const { history, resource, ...rest } = props;
+  const { history, resource } = props;
   const previous = getPrevious(history, resource);
   if (previous) {
-    return (
-      <ResourceDiff original={previous} revised={props.resource} />
-    );
+    return <ResourceDiff original={previous} revised={props.resource} />;
   } else {
     return (
       <Card withBorder>
@@ -342,34 +292,19 @@ interface QuestionnaireResponseViewProps {
 
 function QuestionnaireResponseView({ response, opened, onClose }: QuestionnaireResponseViewProps) {
   return (
-    <Modal
-      opened={opened}
-      onClose={onClose}
-      title={response.questionnaire?.display || 'Assessment Details'}
-      size="lg"
-    >
-      <Stack spacing="md">
+    <Modal opened={opened} onClose={onClose} title={response.questionnaire || 'Assessment Details'} size="lg">
+      <Stack gap="md">
         {response.item?.map((item, index) => (
           <Card key={index} withBorder>
-            <Stack spacing="xs">
+            <Stack gap="xs">
               <Text fw={600}>{item.text}</Text>
               {item.answer?.map((answer, answerIndex) => (
-                <Group key={answerIndex} spacing="xs">
-                  {answer.valueString && (
-                    <Text>{answer.valueString}</Text>
-                  )}
-                  {answer.valueDecimal && (
-                    <Text>{answer.valueDecimal}</Text>
-                  )}
-                  {answer.valueInteger && (
-                    <Text>{answer.valueInteger}</Text>
-                  )}
-                  {answer.valueBoolean !== undefined && (
-                    <Text>{answer.valueBoolean ? 'Yes' : 'No'}</Text>
-                  )}
-                  {answer.valueCoding && (
-                    <Text>{answer.valueCoding.display || answer.valueCoding.code}</Text>
-                  )}
+                <Group key={answerIndex} gap="xs">
+                  {answer.valueString && <Text>{answer.valueString}</Text>}
+                  {answer.valueDecimal && <Text>{answer.valueDecimal}</Text>}
+                  {answer.valueInteger && <Text>{answer.valueInteger}</Text>}
+                  {answer.valueBoolean !== undefined && <Text>{answer.valueBoolean ? 'Yes' : 'No'}</Text>}
+                  {answer.valueCoding && <Text>{answer.valueCoding.display || answer.valueCoding.code}</Text>}
                 </Group>
               ))}
             </Stack>
@@ -380,27 +315,18 @@ function QuestionnaireResponseView({ response, opened, onClose }: QuestionnaireR
   );
 }
 
-function TimelineItemContent({ key, item, history }: { key: string, item: Resource, history: Bundle }): JSX.Element {
-  const navigate = useNavigate();
-
-  if (item.resourceType === "Patient") {
-    return <HistoryTimelineItem key={key} history={history} resource={item} />;
-  }
-
+function TimelineItemContent({ key, item, history }: { key: string; item: Resource; history: Bundle }) {
   const rule = displayRules[item.resourceType as keyof typeof displayRules];
-  if (!rule) return null;
+  const [opened, { open, close }] = useDisclosure(false);
 
-  const renderContent = () => {
+  const content = useMemo(() => {
     switch (item.resourceType) {
       case 'DocumentReference':
         return (
-          <Stack spacing="xs">
-            <Group position="apart">
+          <Stack gap="xs">
+            <Group justify="space-between">
               <Text>{item.description || item.type?.text || 'Document'}</Text>
-              <ActionIcon
-                variant="subtle"
-                onClick={() => window.open(item.content?.[0]?.attachment?.url, '_blank')}
-              >
+              <ActionIcon variant="subtle" onClick={() => window.open(item.content?.[0]?.attachment?.url, '_blank')}>
                 <IconDownload size={16} />
               </ActionIcon>
             </Group>
@@ -412,10 +338,10 @@ function TimelineItemContent({ key, item, history }: { key: string, item: Resour
           </Stack>
         );
 
-      case 'Media':
+      case 'Media': {
         const contentType = item.content.contentType || '';
         return (
-          <Stack spacing="xs">
+          <Stack gap="xs">
             {contentType.startsWith('image/') && (
               <img
                 src={item.content.url}
@@ -423,22 +349,27 @@ function TimelineItemContent({ key, item, history }: { key: string, item: Resour
                 style={{ maxWidth: '100%', maxHeight: 200, objectFit: 'contain' }}
               />
             )}
-            <Button variant="light" size="xs" onClick={() => window.open(item.content.url, '_blank')}>Download</Button>
+            <Button variant="light" size="xs" onClick={() => window.open(item.content.url, '_blank')}>
+              Download
+            </Button>
           </Stack>
         );
+      }
 
-      case 'QuestionnaireResponse':
-        const [opened, { open, close }] = useDisclosure(false);
+      case 'QuestionnaireResponse': {
         return (
-          <Stack spacing="xs">
+          <Stack gap="xs">
             {item.item?.slice(0, 2).map((item, index) => (
               <Text key={index} size="sm" lineClamp={1}>
-                {item.text}: {item.answer?.[0]?.valueString ||
-                            item.answer?.[0]?.valueDecimal ||
-                            item.answer?.[0]?.valueInteger ||
-                            (item.answer?.[0]?.valueBoolean !== undefined ?
-                              (item.answer[0].valueBoolean ? 'Yes' : 'No') :
-                              item.answer?.[0]?.valueCoding?.display)}
+                {item.text}:{' '}
+                {item.answer?.[0]?.valueString ||
+                  item.answer?.[0]?.valueDecimal ||
+                  item.answer?.[0]?.valueInteger ||
+                  (item.answer?.[0]?.valueBoolean !== undefined
+                    ? item.answer[0].valueBoolean
+                      ? 'Yes'
+                      : 'No'
+                    : item.answer?.[0]?.valueCoding?.display)}
               </Text>
             ))}
             {item.item && item.item.length > 2 && (
@@ -448,27 +379,19 @@ function TimelineItemContent({ key, item, history }: { key: string, item: Resour
             )}
 
             <Group>
-              <Button
-                variant="light"
-                size="xs"
-                onClick={open}
-                leftSection={<IconEye size={14} />}
-              >
+              <Button variant="light" size="xs" onClick={open} leftSection={<IconEye size={14} />}>
                 View Details
               </Button>
             </Group>
-            <QuestionnaireResponseView
-              response={item}
-              opened={opened}
-              onClose={close}
-            />
+            <QuestionnaireResponseView response={item} opened={opened} onClose={close} />
           </Stack>
         );
+      }
 
       default:
         // Generic display using displayRules
         return (
-          <Stack spacing="xs">
+          <Stack gap="xs">
             {rule.fields.map((field) => {
               const value = (item as any)[field];
               if (!value) return null;
@@ -490,29 +413,31 @@ function TimelineItemContent({ key, item, history }: { key: string, item: Resour
               }
 
               if (field === 'note') {
-                return (
-                  value.map(
-                    (note) =>
-                      note.text && (
-                        <Blockquote
-                          key={`note-${note.text}`}
-                          cite={`${note.authorReference?.display || note.authorString} – ${note.time && dayjs(note.time).format('MMM D, YYYY h:mm A')}`}
-                          icon={null}
-                          style={{ maxWidth: '600px' }}
-                        >
-                          {note.text}
-                        </Blockquote>
+                return value.map(
+                  (note: Annotation) =>
+                    note.text && (
+                      <Blockquote
+                        key={`note-${note.text}`}
+                        cite={`${note.authorReference?.display || note.authorString} – ${note.time && dayjs(note.time).format('MMM D, YYYY h:mm A')}`}
+                        icon={null}
+                        style={{ maxWidth: '600px' }}
+                      >
+                        {note.text}
+                      </Blockquote>
                     )
-                  )
                 );
               }
 
               if (field === 'code') {
-                return (<>{formatCodeableConcept(value)}</>)
+                return <>{formatCodeableConcept(value)}</>;
               }
 
               if (field === 'valueQuantity') {
-                return (<p><b>Result</b>: {formatQuantity(value)}</p>)
+                return (
+                  <p key={field}>
+                    <b>Result</b>: {formatQuantity(value)}
+                  </p>
+                );
               }
 
               if (typeof value === 'string') {
@@ -528,34 +453,31 @@ function TimelineItemContent({ key, item, history }: { key: string, item: Resour
           </Stack>
         );
     }
-  };
+  }, [item, rule, close, open, opened]);
+
+  if (item.resourceType === 'Patient') {
+    return <HistoryTimelineItem key={key} history={history} resource={item} />;
+  }
+
+  if (!rule) return null;
 
   return (
     <Card>
       <Flex direction="column" mb="xs">
         <Group>
           <Text fw={600}>{rule.display}</Text>
-          {item.status ?
-            <Badge key={item.status} color={item.status === 'completed' || item.status === 'finished' ? 'green' : 'blue'}>
-              {item.status}
+          {'status' in item ? (
+            <Badge
+              key={item.status as string}
+              color={item.status === 'completed' || item.status === 'finished' ? 'green' : 'blue'}
+            >
+              {item.status as string}
             </Badge>
-          : null}
+          ) : null}
         </Group>
       </Flex>
 
-      {renderContent()}
-
-      <Container my="sm" p={0}>
-        {rule?.actions && (
-          <Group gap="xs">
-            {rule.actions.map((action) => (
-              <Button key={action} variant="light" size="xs">
-                {action}
-              </Button>
-            ))}
-          </Group>
-        )}
-      </Container>
+      {content}
     </Card>
   );
 }

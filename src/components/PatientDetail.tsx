@@ -1,5 +1,5 @@
-import { AttachmentButton, useMedplum } from '@medplum/react';
-import { Patient, Appointment, Observation, Attachment, OperationOutcome, ResourceType, Practitioner, RelatedPerson } from '@medplum/fhirtypes';
+import { useMedplum } from '@medplum/react';
+import { Patient, Appointment, ResourceType, Practitioner, RelatedPerson } from '@medplum/fhirtypes';
 import {
   Container,
   Title,
@@ -16,32 +16,21 @@ import {
   CopyButton,
   Paper,
   Tooltip,
-  Badge
+  Badge,
 } from '@mantine/core';
-import { IconCalendarEvent, IconUpload, IconMessage, IconPlus, IconCloudUpload, IconFileAlert, IconNotes, IconCopy, IconCheck, IconPhone, IconAt, IconHome, IconId, IconCalendarTime } from '@tabler/icons-react';
+import { IconPlus, IconCopy, IconCheck } from '@tabler/icons-react';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import { useForm } from '@mantine/form';
 import { DateTimePicker } from '@mantine/dates';
-import { notifications, showNotification, updateNotification } from '@mantine/notifications';
-import { createReference, MedplumClient, normalizeErrorString } from '@medplum/core';
+import { notifications } from '@mantine/notifications';
+import { createReference, MedplumClient } from '@medplum/core';
 import { ResourceTimeline } from './ResourceTimeline';
 import dayjs from 'dayjs';
 
 interface ChartNoteForm {
   content: string;
   date: Date;
-}
-
-interface TimelineItem {
-  id: string;
-  date: string;
-  type: 'note' | 'appointment' | 'media' | 'report';
-  title: string;
-  content?: string;
-  metadata?: {
-    [key: string]: string;
-  };
 }
 
 interface UpcomingAppointmentsBoxProps {
@@ -64,23 +53,27 @@ export function PatientDetail() {
     },
   });
 
-  const loadTimelineResources = useCallback((medplum: MedplumClient, resourceType: ResourceType, id: string) => {
-    const ref = `${resourceType}/${id}`;
-    const _count = 100;
-    return Promise.allSettled([
-      medplum.readHistory('Patient', id),
-      medplum.search('Communication', { subject: ref, _count }),
-      medplum.search('DiagnosticReport', { subject: ref, _count }),
-      medplum.search('QuestionnaireResponse', { patient: ref, _count }),
-      medplum.search('Observation', { patient: ref, _count }),
-      medplum.search('Media', { subject: ref, _count }),
-      medplum.search('ServiceRequest', { subject: ref, _count }),
-      medplum.search('Task', { subject: ref, _count }),
-      medplum.search('Encounter', { patient: ref, _count }),
-      medplum.search('DocumentReference', { patient: ref, _count }),
-      medplum.search('ClinicalImpression', { patient: ref, _count }),
-    ]);
-  }, [refresh]);
+  const loadTimelineResources = useCallback(
+    (medplum: MedplumClient, resourceType: ResourceType, id: string) => {
+      const ref = `${resourceType}/${id}`;
+      const _count = 100;
+      return Promise.allSettled([
+        medplum.readHistory('Patient', id),
+        medplum.search('Communication', { subject: ref, _count }),
+        medplum.search('DiagnosticReport', { subject: ref, _count }),
+        medplum.search('QuestionnaireResponse', { patient: ref, _count }),
+        medplum.search('Observation', { patient: ref, _count }),
+        medplum.search('Media', { subject: ref, _count }),
+        medplum.search('ServiceRequest', { subject: ref, _count }),
+        medplum.search('Task', { subject: ref, _count }),
+        medplum.search('Encounter', { patient: ref, _count }),
+        medplum.search('DocumentReference', { patient: ref, _count }),
+        medplum.search('ClinicalImpression', { patient: ref, _count }),
+      ]);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    },
+    [refresh]
+  );
 
   useEffect(() => {
     const fetchPatientData = async () => {
@@ -89,7 +82,7 @@ export function PatientDetail() {
         setPatient(patientData);
       }
     };
-    fetchPatientData();
+    void fetchPatientData();
   }, [id, medplum]);
 
   if (!patient) return <Text>Loading...</Text>;
@@ -98,7 +91,7 @@ export function PatientDetail() {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
@@ -123,11 +116,13 @@ export function PatientDetail() {
         description: 'Chart Note',
         subject: createReference(patient),
         date: values.date.toISOString(),
-        note: [{
-          text: values.content,
-          authorReference: createReference(medplum.getProfile() as Practitioner),
-          time: new Date().toISOString(),
-        }],
+        note: [
+          {
+            text: values.content,
+            authorReference: createReference(medplum.getProfile() as Practitioner),
+            time: new Date().toISOString(),
+          },
+        ],
       });
 
       form.reset();
@@ -135,24 +130,24 @@ export function PatientDetail() {
       notifications.show({
         title: 'Success',
         message: 'Chart note added successfully',
-        color: 'green'
+        color: 'green',
       });
     } catch (error) {
       console.error('Error creating chart note:', error);
       notifications.show({
         title: 'Error',
         message: 'Failed to add chart note',
-        color: 'red'
+        color: 'red',
       });
     }
   };
 
   return (
     <Container size="xl" mt="xl">
-      <Stack spacing="xl">
+      <Stack gap="xl">
         <Group justify="space-between">
           <div>
-            <Group spacing="xs">
+            <Group gap="xs">
               <Title order={1}>
                 {patient.name?.[0]?.given?.[0]} {patient.name?.[0]?.family}
               </Title>
@@ -165,18 +160,18 @@ export function PatientDetail() {
 
         <Grid gutter="xl">
           <Grid.Col span={9}>
-            <Group align="flex-start" spacing="xl">
-              <Stack spacing="md" style={{ flex: 1 }}>
+            <Group align="flex-start" gap="xl">
+              <Stack gap="md" style={{ flex: 1 }}>
                 <Tabs defaultValue="overview">
                   <Tabs.List>
                     <Tabs.Tab value="overview">Overview</Tabs.Tab>
                   </Tabs.List>
 
                   <Card mt="md" p="lg" radius="md" withBorder>
-                    <Stack spacing="xl">
+                    <Stack gap="xl">
                       <Card withBorder p="md" radius="md" style={{ backgroundColor: '#f7fdff' }}>
                         <form onSubmit={form.onSubmit(handleSubmitNote)}>
-                          <Stack spacing="sm">
+                          <Stack gap="sm">
                             <TextInput
                               placeholder="Add Chart Note: include notes from a call with a client or copy & paste contents..."
                               {...form.getInputProps('content')}
@@ -204,10 +199,7 @@ export function PatientDetail() {
 
                       <Divider />
 
-                      <ResourceTimeline
-                        value={patient}
-                        loadTimelineResources={loadTimelineResources}
-                      />
+                      <ResourceTimeline value={patient} loadTimelineResources={loadTimelineResources} />
                     </Stack>
                   </Card>
                 </Tabs>
@@ -222,7 +214,6 @@ export function PatientDetail() {
             </Stack>
           </Grid.Col>
         </Grid>
-
       </Stack>
     </Container>
   );
@@ -232,20 +223,19 @@ function ClientInfoBox({ patient }: { patient: Patient }) {
   return (
     <Paper withBorder p="md" mt="xl" radius="md">
       <Stack>
-        <Text fw={500} size="sm">Client info</Text>
+        <Text fw={500} size="sm">
+          Client info
+        </Text>
 
-        {patient.telecom?.find(t => t.system === 'email')?.value && (
+        {patient.telecom?.find((t) => t.system === 'email')?.value && (
           <Group align="center" wrap="nowrap">
-            <Text size="sm" c="dimmed"><b>Email:</b> {patient.telecom.find(t => t.system === 'email')?.value}</Text>
-            <CopyButton value={patient.telecom.find(t => t.system === 'email')?.value || ''} timeout={2000}>
+            <Text size="sm" c="dimmed">
+              <b>Email:</b> {patient.telecom.find((t) => t.system === 'email')?.value}
+            </Text>
+            <CopyButton value={patient.telecom.find((t) => t.system === 'email')?.value || ''} timeout={2000}>
               {({ copied, copy }) => (
                 <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="left">
-                  <ActionIcon
-                    size="sm"
-                    variant="subtle"
-                    color={copied ? 'teal' : 'gray'}
-                    onClick={copy}
-                  >
+                  <ActionIcon size="sm" variant="subtle" color={copied ? 'teal' : 'gray'} onClick={copy}>
                     {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
                   </ActionIcon>
                 </Tooltip>
@@ -254,19 +244,15 @@ function ClientInfoBox({ patient }: { patient: Patient }) {
           </Group>
         )}
 
-
         {patient.telecom?.[0]?.value && (
           <Group align="center" wrap="nowrap">
-            <Text size="sm" c="dimmed"><b>Phone:</b> {patient.telecom[0].value}</Text>
+            <Text size="sm" c="dimmed">
+              <b>Phone:</b> {patient.telecom[0].value}
+            </Text>
             <CopyButton value={patient.telecom[0].value} timeout={2000}>
               {({ copied, copy }) => (
                 <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="left">
-                  <ActionIcon
-                    size="sm"
-                    variant="subtle"
-                    color={copied ? 'teal' : 'gray'}
-                    onClick={copy}
-                  >
+                  <ActionIcon size="sm" variant="subtle" color={copied ? 'teal' : 'gray'} onClick={copy}>
                     {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
                   </ActionIcon>
                 </Tooltip>
@@ -277,7 +263,8 @@ function ClientInfoBox({ patient }: { patient: Patient }) {
 
         {patient.address?.[0] && (
           <Text size="sm" c="dimmed">
-            <b>Addr:</b> {patient.address[0].line?.[0]}, {patient.address[0].city}, {patient.address[0].state} {patient.address[0].postalCode}
+            <b>Addr:</b> {patient.address[0].line?.[0]}, {patient.address[0].city}, {patient.address[0].state}{' '}
+            {patient.address[0].postalCode}
           </Text>
         )}
       </Stack>
@@ -296,7 +283,7 @@ function UpcomingAppointmentsBox({ patient }: UpcomingAppointmentsBoxProps) {
           patient: `Patient/${patient.id}`,
           date: 'ge' + new Date().toISOString().split('T')[0],
           _sort: 'date',
-          _count: 3
+          _count: 3,
         });
         setAppointments(results);
       } catch (error) {
@@ -304,36 +291,35 @@ function UpcomingAppointmentsBox({ patient }: UpcomingAppointmentsBoxProps) {
       }
     };
 
-    fetchAppointments();
+    void fetchAppointments();
   }, [medplum, patient.id]);
 
   return (
     <Paper withBorder p="md" mt="md" radius="md">
       <Stack>
         <Group justify="space-between">
-          <Text fw={500} size="sm">Upcoming Appointments</Text>
+          <Text fw={500} size="sm">
+            Upcoming Appointments
+          </Text>
         </Group>
 
         {appointments.length === 0 ? (
-          <Text size="sm" c="dimmed" fs="italic">No upcoming appointments</Text>
+          <Text size="sm" c="dimmed" fs="italic">
+            No upcoming appointments
+          </Text>
         ) : (
           appointments.map((appointment) => (
-            <Stack key={appointment.id} spacing={4}>
+            <Stack key={appointment.id} gap={4}>
               <Group justify="space-between" wrap="nowrap">
                 <Text size="sm" fw={500}>
                   {appointment.serviceType?.[0]?.text || 'Visit'}
                 </Text>
-                <Badge
-                  size="sm"
-                  color={appointment.status === 'booked' ? 'blue' : 'gray'}
-                >
+                <Badge size="sm" color={appointment.status === 'booked' ? 'blue' : 'gray'}>
                   {appointment.status}
                 </Badge>
               </Group>
               <Text size="sm" c="dimmed">
-                {appointment.start && (
-                  dayjs(appointment.start).format('MMM D, YYYY h:mm A')
-                )}
+                {appointment.start && dayjs(appointment.start).format('MMM D, YYYY h:mm A')}
               </Text>
               {appointment.description && (
                 <Text size="sm" c="dimmed" lineClamp={2}>
@@ -357,7 +343,7 @@ function RelatedContactsBox({ patient }: RelatedContactsBoxProps) {
       try {
         const results = await medplum.searchResources('RelatedPerson', {
           patient: `Patient/${patient.id}`,
-          _count: 5
+          _count: 5,
         });
         setContacts(results);
       } catch (error) {
@@ -365,21 +351,25 @@ function RelatedContactsBox({ patient }: RelatedContactsBoxProps) {
       }
     };
 
-    fetchContacts();
+    void fetchContacts();
   }, [medplum, patient.id]);
 
   return (
     <Paper withBorder p="md" radius="md">
       <Stack>
         <Group justify="space-between">
-          <Text fw={500} size="sm">Emergency Contacts</Text>
+          <Text fw={500} size="sm">
+            Emergency Contacts
+          </Text>
         </Group>
 
         {contacts.length === 0 ? (
-          <Text size="sm" c="dimmed" fs="italic">No emergency contacts listed</Text>
+          <Text size="sm" c="dimmed" fs="italic">
+            No emergency contacts listed
+          </Text>
         ) : (
           contacts.map((contact) => (
-            <Stack key={contact.id} spacing={4}>
+            <Stack key={contact.id} gap={4}>
               <Group justify="space-between" wrap="nowrap">
                 <Text size="sm" fw={500}>
                   {contact.name?.[0]?.text || `${contact.name?.[0]?.given?.[0]} ${contact.name?.[0]?.family}`}
@@ -397,12 +387,7 @@ function RelatedContactsBox({ patient }: RelatedContactsBoxProps) {
                   <CopyButton value={t.value || ''} timeout={2000}>
                     {({ copied, copy }) => (
                       <Tooltip label={copied ? 'Copied' : 'Copy'} withArrow position="left">
-                        <ActionIcon
-                          size="sm"
-                          variant="subtle"
-                          color={copied ? 'teal' : 'gray'}
-                          onClick={copy}
-                        >
+                        <ActionIcon size="sm" variant="subtle" color={copied ? 'teal' : 'gray'} onClick={copy}>
                           {copied ? <IconCheck size={14} /> : <IconCopy size={14} />}
                         </ActionIcon>
                       </Tooltip>
