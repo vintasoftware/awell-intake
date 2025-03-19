@@ -1,10 +1,12 @@
 import { AppShell } from '@mantine/core';
 import { ErrorBoundary, Loading, Logo, useMedplum, useMedplumProfile } from '@medplum/react';
-import { IconUser, IconUsers, IconHome, IconLogout } from '@tabler/icons-react';
+import { IconUser, IconUsers, IconHome, IconLogout, IconStethoscope } from '@tabler/icons-react';
 import { Suspense } from 'react';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { PatientList } from './components/PatientList';
 import { PatientDetail } from './components/PatientDetail';
+import { PractitionerList } from './components/PractitionerList';
+import { PractitionerDetail } from './components/PractitionerDetail';
 import { HomePage } from './pages/HomePage';
 import { LandingPage } from './pages/LandingPage';
 import { SignInPage } from './pages/SignInPage';
@@ -20,6 +22,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   const navItems = [
     { icon: IconHome, label: 'Home', path: '/' },
     { icon: IconUsers, label: 'Patients', path: '/patients' },
+    { icon: IconStethoscope, label: 'Practitioners', path: '/practitioners' },
   ];
 
   return (
@@ -124,6 +127,8 @@ export function App(): JSX.Element | null {
                         <Route path="/" element={profile ? <HomePage /> : <LandingPage />} />
                         <Route path="/patients" element={<PatientList />} />
                         <Route path="/patients/:id" element={<PatientDetail />} />
+                        <Route path="/practitioners" element={<PractitionerList />} />
+                        <Route path="/practitioners/:id" element={<PractitionerDetail />} />
                       </Routes>
                     </MainLayout>
                   }
