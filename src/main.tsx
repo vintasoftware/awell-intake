@@ -1,14 +1,19 @@
 import { MantineProvider, createTheme } from '@mantine/core';
-import '@mantine/core/styles.css';
 import { MedplumClient } from '@medplum/core';
 import { MedplumProvider } from '@medplum/react';
-import '@medplum/react/styles.css';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
 import { App } from './App';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
 
+import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
+import '@medplum/react/styles.css';
+
+// Set up dayjs plugins
+dayjs.extend(duration);
 
 const medplum = new MedplumClient({
   onUnauthenticated: () => (window.location.href = '/'),

@@ -12,7 +12,7 @@ import {
   Stack,
   Badge,
   Loader,
-  Center
+  Center,
 } from '@mantine/core';
 import { IconSearch, IconChevronRight } from '@tabler/icons-react';
 import { useState, useEffect } from 'react';
@@ -34,34 +34,34 @@ export function PatientList() {
         setLoading(false);
       }
     };
-    fetchPatients();
+    void fetchPatients();
   }, [medplum]);
 
-  const filteredPatients = patients.filter(patient =>
-    `${patient.name?.[0]?.given?.[0]} ${patient.name?.[0]?.family}`
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
+  const filteredPatients = patients.filter((patient) =>
+    `${patient.name?.[0]?.given?.[0]} ${patient.name?.[0]?.family}`.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
   return (
     <Container size="xl" mt="xl">
-      <Stack spacing="md">
+      <Stack gap="md">
         <Group justify="space-between">
-          <Title order={2} color="blue.9">Patients</Title>
+          <Title order={2} c="blue.9">
+            Patients
+          </Title>
           <TextInput
             placeholder="Search patients..."
-            icon={<IconSearch size={16} />}
+            leftSection={<IconSearch size={16} />}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            sx={{ width: 300 }}
+            style={{ width: 300 }}
           />
         </Group>
 
@@ -96,12 +96,12 @@ export function PatientList() {
                   <Table.Tr
                     key={patient.id}
                     style={{ cursor: 'pointer' }}
-                    onClick={() => navigate(`/patients/${patient.id}`)}
+                    onClick={() => void navigate(`/patients/${patient.id}`)}
                   >
                     <td>
-                      <Group spacing="sm">
+                      <Group gap="sm">
                         <div>
-                          <Text weight={500}>
+                          <Text fw={500}>
                             {patient.name?.[0]?.given?.[0]} {patient.name?.[0]?.family}
                           </Text>
                           {patient.telecom?.[0]?.value && (
@@ -116,10 +116,7 @@ export function PatientList() {
                       <Text>{patient.birthDate && formatDate(patient.birthDate)}</Text>
                     </td>
                     <td>
-                      <Badge
-                        color={patient.gender === 'male' ? 'blue' : 'pink'}
-                        variant="light"
-                      >
+                      <Badge color={patient.gender === 'male' ? 'blue' : 'pink'} variant="light">
                         {(patient.gender || 'N/A').charAt(0).toUpperCase() + (patient.gender || 'N/A').slice(1)}
                       </Badge>
                     </td>
