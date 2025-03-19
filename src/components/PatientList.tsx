@@ -1,15 +1,4 @@
-import {
-  ActionIcon,
-  Badge,
-  Card,
-  Container,
-  Group,
-  Stack,
-  Table,
-  Text,
-  TextInput,
-  Title
-} from '@mantine/core';
+import { ActionIcon, Badge, Card, Container, Group, Stack, Table, Text, TextInput, Title } from '@mantine/core';
 import { Patient } from '@medplum/fhirtypes';
 import { useMedplum } from '@medplum/react';
 import { IconChevronRight, IconSearch } from '@tabler/icons-react';
@@ -27,20 +16,18 @@ export function PatientList() {
       const results = await medplum.searchResources('Patient', {});
       setPatients(results);
     };
-    fetchPatients();
+    void fetchPatients();
   }, [medplum]);
 
-  const filteredPatients = patients.filter(patient =>
-    `${patient.name?.[0]?.given?.[0]} ${patient.name?.[0]?.family}`
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
+  const filteredPatients = patients.filter((patient) =>
+    `${patient.name?.[0]?.given?.[0]} ${patient.name?.[0]?.family}`.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
@@ -48,7 +35,9 @@ export function PatientList() {
     <Container size="xl" mt="xl">
       <Stack gap="md">
         <Group justify="space-between">
-          <Title order={2} c="blue.9">Patients</Title>
+          <Title order={2} c="blue.9">
+            Patients
+          </Title>
           <TextInput
             placeholder="Search patients..."
             leftSection={<IconSearch size={16} />}
@@ -84,7 +73,7 @@ export function PatientList() {
                 <Table.Tr
                   key={patient.id}
                   style={{ cursor: 'pointer' }}
-                  onClick={() => navigate(`/patients/${patient.id}`)}
+                  onClick={() => void navigate(`/patients/${patient.id}`)}
                 >
                   <td>
                     <Group gap="sm">
@@ -104,10 +93,7 @@ export function PatientList() {
                     <Text>{patient.birthDate && formatDate(patient.birthDate)}</Text>
                   </td>
                   <td>
-                    <Badge
-                      color={patient.gender === 'male' ? 'blue' : 'pink'}
-                      variant="light"
-                    >
+                    <Badge color={patient.gender === 'male' ? 'blue' : 'pink'} variant="light">
                       {patient.gender?.charAt(0).toUpperCase() ?? '' + patient.gender?.slice(1)}
                     </Badge>
                   </td>

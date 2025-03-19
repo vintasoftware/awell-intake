@@ -1,16 +1,41 @@
-import { Box, Button, ButtonGroup, Card, Container, Group, MantineColor, Modal, Select, Stack, Text, TextInput, Title, useMantineTheme } from '@mantine/core';
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Card,
+  Container,
+  Group,
+  LoadingOverlay,
+  MantineColor,
+  Modal,
+  Select,
+  Stack,
+  Text,
+  TextInput,
+  Title,
+  useMantineTheme,
+} from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useDisclosure } from '@mantine/hooks';
 import { getReferenceString } from '@medplum/core';
 import { Appointment, Patient, Practitioner } from '@medplum/fhirtypes';
 import { ResourceInput, useMedplum, useMedplumProfile } from '@medplum/react';
-import { IconArrowLeft, IconArrowRight, IconCalendar, IconCalendarEvent, IconCalendarMonth, IconCalendarWeek, IconDatabase, IconPlus } from '@tabler/icons-react';
+import {
+  IconArrowLeft,
+  IconArrowRight,
+  IconCalendar,
+  IconCalendarEvent,
+  IconCalendarMonth,
+  IconCalendarWeek,
+  IconDatabase,
+  IconPlus,
+} from '@tabler/icons-react';
 import moment from 'moment';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Calendar, ToolbarProps, View, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import { createFakeAppointments } from '../utils/createFakeAppointments';
 import { useNavigate } from 'react-router-dom';
+import { createFakeAppointments } from '../utils/createFakeAppointments';
 
 // Setup the localizer for react-big-calendar
 const localizer = momentLocalizer(moment);
@@ -54,11 +79,11 @@ export function CalendarPage(): JSX.Element {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [events, setEvents] = useState<AppointmentEvent[]>([]);
   const [viewType, setViewType] = useState<'day' | 'week' | 'month'>('week');
-  const [loading, setLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [patients, setPatients] = useState<Patient[]>([]);
   const [opened, { open, close }] = useDisclosure(false);
   const [generatingTestData, setGeneratingTestData] = useState<boolean>(false);
+  const [creatingAppointment, setCreatingAppointment] = useState<boolean>(false);
   const [newAppointment, setNewAppointment] = useState<NewAppointmentFormData>({
     patientId: '',
     patientName: '',
@@ -68,9 +93,9 @@ export function CalendarPage(): JSX.Element {
     status: 'booked',
   });
 
-  const fetchAppointments = async () => {
+  const fetchAppointments = useCallback(async () => {
     try {
-      setLoading(true);
+      setIsLoading(true);
       // Get appointments where the current practitioner is a participant
       const searchResult = await medplum.search('Appointment', {
         practitioner: getReferenceString(profile),
@@ -87,9 +112,7 @@ export function CalendarPage(): JSX.Element {
 
         // Get patient name if available
         let title = 'Appointment';
-        const patientParticipant = appointment.participant?.find(
-          (p) => p.actor?.reference?.startsWith('Patient/')
-        );
+        const patientParticipant = appointment.participant?.find((p) => p.actor?.reference?.startsWith('Patient/'));
 
         if (patientParticipant?.actor?.display) {
           title = patientParticipant.actor.display;
@@ -105,26 +128,19 @@ export function CalendarPage(): JSX.Element {
       });
 
       setEvents(calendarEvents);
-
-      // Fetch patients for the new appointment form
-      const patientsResult = await medplum.search('Patient', {
-        _count: '100',
-      });
-
-      setPatients(patientsResult.entry?.map((e) => e.resource as Patient) || []);
     } catch (error) {
       console.error('Error fetching appointments:', error);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
-  };
+  }, [medplum, profile]);
 
   // Fetch appointments for the current practitioner
   useEffect(() => {
     if (profile?.id) {
-      fetchAppointments();
+      void fetchAppointments();
     }
-  }, [medplum, profile]);
+  }, [fetchAppointments, medplum, profile]);
 
   const handleViewChange = (newView: 'day' | 'week' | 'month') => {
     setViewType(newView);
@@ -136,7 +152,7 @@ export function CalendarPage(): JSX.Element {
 
   const handleSelectEvent = (event: AppointmentEvent) => {
     if (event.resource.id) {
-      navigate(`/appointment/${event.resource.id}`);
+      void navigate(`/appointment/${event.resource.id}`);
     }
   };
 
@@ -146,6 +162,8 @@ export function CalendarPage(): JSX.Element {
         alert('Please select a patient');
         return;
       }
+
+      setCreatingAppointment(true);
 
       // Create new appointment
       const appointment: Appointment = {
@@ -178,7 +196,7 @@ export function CalendarPage(): JSX.Element {
       setAppointments([...appointments, result]);
 
       const newEvent: AppointmentEvent = {
-        id: result.id as string,
+        id: result.id,
         title: newAppointment.patientName,
         start: newAppointment.startDateTime,
         end: newAppointment.endDateTime,
@@ -201,6 +219,8 @@ export function CalendarPage(): JSX.Element {
     } catch (error) {
       console.error('Error creating appointment:', error);
       alert('Failed to create appointment. Please try again.');
+    } finally {
+      setCreatingAppointment(false);
     }
   };
 
@@ -209,7 +229,7 @@ export function CalendarPage(): JSX.Element {
       setGeneratingTestData(true);
       await createFakeAppointments(medplum, profile);
       // Refresh appointments
-      await fetchAppointments();
+      void fetchAppointments();
       alert('Test data created successfully!');
     } catch (error) {
       console.error('Error generating test data:', error);
@@ -219,23 +239,28 @@ export function CalendarPage(): JSX.Element {
     }
   };
 
+  if (!profile) {
+    return (
+      <Container size="xl" mt="xl">
+        <LoadingOverlay visible={true} />
+      </Container>
+    );
+  }
+
   return (
     <Container size="xl" mt="xl">
       <Stack gap="xl">
         <Group justify="space-between">
-          <Title order={2} c="blue.9">Appointments Calendar</Title>
+          <Title order={2} c="blue.9">
+            Appointments Calendar
+          </Title>
           <Group>
-            <Button
-              leftSection={<IconPlus size={16} />}
-              onClick={open}
-              variant="filled"
-              color="blue"
-            >
+            <Button leftSection={<IconPlus size={16} />} onClick={open} variant="filled" color="blue">
               New Appointment
             </Button>
             <Button
               leftSection={<IconDatabase size={16} />}
-              onClick={handleGenerateTestData}
+              onClick={() => void handleGenerateTestData()}
               variant="outline"
               color="gray"
               loading={generatingTestData}
@@ -246,7 +271,8 @@ export function CalendarPage(): JSX.Element {
         </Group>
 
         <Card shadow="sm" p="lg" radius="md" withBorder>
-          <Box style={{ height: '70vh' }}>
+          <Box style={{ height: '70vh', position: 'relative' }}>
+            <LoadingOverlay visible={isLoading} />
             <Calendar
               localizer={localizer}
               events={events}
@@ -257,7 +283,7 @@ export function CalendarPage(): JSX.Element {
               date={selectedDate}
               onNavigate={handleNavigate}
               onView={(view: View) => handleViewChange(view as 'day' | 'week' | 'month')}
-              onSelectEvent={handleSelectEvent}
+              onSelectEvent={(event) => void handleSelectEvent(event)}
               eventPropGetter={(event: AppointmentEvent) => {
                 const appointment = event.resource;
                 const status = appointment.status || 'default';
@@ -335,7 +361,7 @@ export function CalendarPage(): JSX.Element {
                       </Button>
                     </ButtonGroup>
                   </Group>
-                )
+                ),
               }}
             />
           </Box>
@@ -344,17 +370,19 @@ export function CalendarPage(): JSX.Element {
 
       {/* New Appointment Modal */}
       <Modal opened={opened} onClose={close} title="Create New Appointment" size="md">
-        <Box p="md">
+        <Box p="md" pos="relative">
+          <LoadingOverlay visible={creatingAppointment} />
           <ResourceInput
             resourceType="Patient"
             name="patient"
-            required
             onChange={(patient: Patient | undefined) => {
               if (patient) {
                 setNewAppointment({
                   ...newAppointment,
-                  patientId: patient.id as string,
-                  patientName: patient.name?.[0]?.text || `${patient.name?.[0]?.given?.[0] || ''} ${patient.name?.[0]?.family || ''}`,
+                  patientId: patient.id || '',
+                  patientName:
+                    patient.name?.[0]?.text ||
+                    `${patient.name?.[0]?.given?.[0] || ''} ${patient.name?.[0]?.family || ''}`,
                 });
               }
             }}
@@ -421,8 +449,12 @@ export function CalendarPage(): JSX.Element {
           />
 
           <Group justify="flex-end" mt="xl">
-            <Button variant="outline" onClick={close}>Cancel</Button>
-            <Button color="blue" onClick={handleCreateAppointment}>Create Appointment</Button>
+            <Button variant="outline" onClick={close}>
+              Cancel
+            </Button>
+            <Button onClick={() => void handleCreateAppointment()} loading={creatingAppointment}>
+              Create Appointment
+            </Button>
           </Group>
         </Box>
       </Modal>

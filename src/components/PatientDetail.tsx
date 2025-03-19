@@ -1,15 +1,4 @@
-import {
-  Button,
-  Card,
-  Container,
-  Divider,
-  Group,
-  Stack,
-  Tabs,
-  Text,
-  TextInput,
-  Title
-} from '@mantine/core';
+import { Button, Card, Container, Divider, Group, Stack, Tabs, Text, TextInput, Title } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
@@ -44,12 +33,12 @@ export function PatientDetail() {
         setPatient(patientData);
 
         const appts = await medplum.searchResources('Appointment', {
-          patient: id
+          patient: id,
         });
         setAppointments(appts);
       }
     };
-    fetchPatientData();
+    void fetchPatientData();
   }, [id, medplum]);
 
   if (!patient) return <Text>Loading...</Text>;
@@ -58,7 +47,7 @@ export function PatientDetail() {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
@@ -81,36 +70,40 @@ export function PatientDetail() {
         resourceType: 'DocumentReference',
         status: 'current',
         type: {
-          coding: [{
-            system: 'http://loinc.org',
-            code: '11506-3',
-            display: 'Progress note'
-          }]
+          coding: [
+            {
+              system: 'http://loinc.org',
+              code: '11506-3',
+              display: 'Progress note',
+            },
+          ],
         },
         subject: {
-          reference: `Patient/${patient?.id}`
+          reference: `Patient/${patient?.id}`,
         },
-        content: [{
-          attachment: {
-            contentType: 'text/plain',
-            data: values.content
-          }
-        }],
-        date: values.date.toISOString()
+        content: [
+          {
+            attachment: {
+              contentType: 'text/plain',
+              data: values.content,
+            },
+          },
+        ],
+        date: values.date.toISOString(),
       });
 
       form.reset();
       notifications.show({
         title: 'Success',
         message: 'Chart note added successfully',
-        color: 'green'
+        color: 'green',
       });
     } catch (error) {
       console.error('Error creating chart note:', error);
       notifications.show({
         title: 'Error',
         message: 'Failed to add chart note',
-        color: 'red'
+        color: 'red',
       });
     }
   };
@@ -167,12 +160,7 @@ export function PatientDetail() {
                           placeholder="Pick date and time"
                           {...form.getInputProps('date')}
                         />
-                        <Button
-                          type="submit"
-                          variant="light"
-                          color="blue"
-                          size="sm"
-                        >
+                        <Button type="submit" variant="light" color="blue" size="sm">
                           Add Note
                         </Button>
                       </Group>
@@ -186,13 +174,20 @@ export function PatientDetail() {
                       <Group justify="space-between" mb="xs">
                         <Text fw={500}>APPOINTMENT #{index + 1}</Text>
                         <Text size="sm" c="dimmed">
-                          {appointment.start && formatDate(appointment.start)} {' '}
-                          {new Date(appointment.start || '').toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}
+                          {appointment.start && formatDate(appointment.start)}{' '}
+                          {new Date(appointment.start || '').toLocaleTimeString([], {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                          })}
                         </Text>
                       </Group>
-                      <Text size="sm" c="dimmed">BILLING CODE: {appointment.serviceType?.[0]?.coding?.[0]?.code}</Text>
+                      <Text size="sm" c="dimmed">
+                        BILLING CODE: {appointment.serviceType?.[0]?.coding?.[0]?.code}
+                      </Text>
                       {appointment.description && (
-                        <Text size="sm" mt="xs">{appointment.description}</Text>
+                        <Text size="sm" mt="xs">
+                          {appointment.description}
+                        </Text>
                       )}
                       {index < appointments.length - 1 && <Divider mt="xl" />}
                     </div>
@@ -204,18 +199,23 @@ export function PatientDetail() {
 
           <Stack gap="md" w={300}>
             <Card withBorder radius="md" p="md">
-              <Text fw={500} size="sm" mb="xs">Client Info</Text>
+              <Text fw={500} size="sm" mb="xs">
+                Client Info
+              </Text>
               <Stack gap="xs">
                 <Text size="sm">Phone: {patient.telecom?.[0]?.value}</Text>
                 <Text size="sm">Email: {patient.telecom?.[1]?.value}</Text>
                 <Text size="sm">
-                  Address: {patient.address?.[0]?.line?.[0]}, {patient.address?.[0]?.city}, {patient.address?.[0]?.state}
+                  Address: {patient.address?.[0]?.line?.[0]}, {patient.address?.[0]?.city},{' '}
+                  {patient.address?.[0]?.state}
                 </Text>
               </Stack>
             </Card>
 
             <Card withBorder radius="md" p="md">
-              <Text fw={500} size="sm" mb="xs">Upcoming Appointments</Text>
+              <Text fw={500} size="sm" mb="xs">
+                Upcoming Appointments
+              </Text>
               <Stack gap="xs">
                 {appointments.slice(0, 3).map((appointment, index) => (
                   <Group key={index} justify="space-between">

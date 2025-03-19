@@ -41,7 +41,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
           {navItems.map((item) => (
             <div
               key={item.path}
-              onClick={() => navigate(item.path)}
+              onClick={() => void navigate(item.path)}
               style={{
                 padding: '12px 16px',
                 marginBottom: '8px',
@@ -92,9 +92,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         </AppShell.Section>
       </AppShell.Navbar>
 
-      <AppShell.Main style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
-        {children}
-      </AppShell.Main>
+      <AppShell.Main style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>{children}</AppShell.Main>
     </AppShell>
   );
 }
