@@ -20,7 +20,7 @@ import { getReferenceString } from '@medplum/core';
 import { Appointment, Encounter } from '@medplum/fhirtypes';
 import { useResource, useMedplum } from '@medplum/react';
 import { IconCalendarEvent, IconCheck, IconNotes, IconPencil, IconRefresh, IconUsers } from '@tabler/icons-react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
@@ -235,16 +235,16 @@ export function AppointmentPage(): JSX.Element {
 
   const formatDateTime = (dateTime?: string) => {
     if (!dateTime) return 'Not scheduled';
-    return moment(dateTime).format('dddd, MMMM D, YYYY [at] h:mm A');
+    return dayjs(dateTime).format('dddd, MMMM D, YYYY [at] h:mm A');
   };
 
   const formatDuration = (start?: string, end?: string) => {
     if (!start || !end) return '';
 
-    const startTime = moment(start);
-    const endTime = moment(end);
-    const duration = moment.duration(endTime.diff(startTime));
-    const minutes = duration.asMinutes();
+    const startTime = dayjs(start);
+    const endTime = dayjs(end);
+    const durationTime = dayjs.duration(endTime.diff(startTime));
+    const minutes = durationTime.asMinutes();
 
     return `${minutes} minutes`;
   };
@@ -469,7 +469,7 @@ export function AppointmentPage(): JSX.Element {
                     {encounter.period?.start && (
                       <>
                         <Text fw={500}>Started</Text>
-                        <Text>{moment(encounter.period.start).format('MMMM D, YYYY [at] h:mm A')}</Text>
+                        <Text>{dayjs(encounter.period.start).format('MMMM D, YYYY [at] h:mm A')}</Text>
                       </>
                     )}
 
@@ -478,7 +478,7 @@ export function AppointmentPage(): JSX.Element {
                         <Text fw={500} mt="sm">
                           Ended
                         </Text>
-                        <Text>{moment(encounter.period.end).format('MMMM D, YYYY [at] h:mm A')}</Text>
+                        <Text>{dayjs(encounter.period.end).format('MMMM D, YYYY [at] h:mm A')}</Text>
                       </>
                     )}
 

@@ -30,15 +30,15 @@ import {
   IconDatabase,
   IconPlus,
 } from '@tabler/icons-react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { useCallback, useEffect, useState } from 'react';
-import { Calendar, ToolbarProps, View, momentLocalizer } from 'react-big-calendar';
+import { Calendar, ToolbarProps, View, dayjsLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useNavigate } from 'react-router-dom';
 import { createFakeAppointments } from '../utils/createFakeAppointments';
 
 // Setup the localizer for react-big-calendar
-const localizer = momentLocalizer(moment);
+const localizer = dayjsLocalizer(dayjs);
 
 interface AppointmentEvent {
   id: string;
@@ -303,7 +303,7 @@ export function CalendarPage(): JSX.Element {
                     <strong>{props.event.title}</strong>
                     <div>
                       <Text size="xs">
-                        {moment(props.event.start).format('h:mm A')} - {moment(props.event.end).format('h:mm A')}
+                        {dayjs(props.event.start).format('h:mm A')} - {dayjs(props.event.end).format('h:mm A')}
                       </Text>
                     </div>
                   </div>
