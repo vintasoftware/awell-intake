@@ -10,6 +10,7 @@ import { CalendarPage } from './pages/CalendarPage';
 import { HomePage } from './pages/HomePage';
 import { LandingPage } from './pages/LandingPage';
 import { SignInPage } from './pages/SignInPage';
+import '@mantine/notifications/styles.css';
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
