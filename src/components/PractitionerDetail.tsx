@@ -156,7 +156,11 @@ export function PractitionerDetail(): JSX.Element {
     } else if (field === 'family') {
       updatedPractitioner.name[0].family = value;
     } else if (field === 'prefix') {
-      updatedPractitioner.name[0].prefix = [value];
+      if (!value) {
+        updatedPractitioner.name[0].prefix = [];
+      } else {
+        updatedPractitioner.name[0].prefix = [value];
+      }
     }
 
     setPractitioner(updatedPractitioner);
