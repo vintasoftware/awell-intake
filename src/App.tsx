@@ -1,18 +1,15 @@
-import { AppShell } from '@mantine/core';
-import { ErrorBoundary, Loading, Logo, useMedplum, useMedplumProfile } from '@medplum/react';
-import { IconUser, IconUsers, IconHome, IconLogout } from '@tabler/icons-react';
+import { AppShell, Text } from '@mantine/core';
+import { ErrorBoundary, Loading, useMedplum, useMedplumProfile } from '@medplum/react';
+import { IconCalendar, IconHome, IconLogout, IconUsers } from '@tabler/icons-react';
 import { Suspense } from 'react';
-import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import { PatientList } from './components/PatientList';
+import { Route, BrowserRouter as Router, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { PatientDetail } from './components/PatientDetail';
+import { PatientList } from './components/PatientList';
+import { AppointmentPage } from './pages/AppointmentPage';
+import { CalendarPage } from './pages/CalendarPage';
 import { HomePage } from './pages/HomePage';
 import { LandingPage } from './pages/LandingPage';
 import { SignInPage } from './pages/SignInPage';
-import { MantineProvider, Text } from '@mantine/core';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { MedplumProvider } from '@medplum/react';
-import { theme } from './theme';
-import { Notifications } from '@mantine/notifications';
 import '@mantine/notifications/styles.css';
 
 function MainLayout({ children }: { children: React.ReactNode }) {
@@ -22,6 +19,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   const navItems = [
     { icon: IconHome, label: 'Home', path: '/' },
     { icon: IconUsers, label: 'Patients', path: '/patients' },
+    { icon: IconCalendar, label: 'Calendar', path: '/calendar' },
   ];
 
   return (
@@ -44,7 +42,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
           {navItems.map((item) => (
             <div
               key={item.path}
-              onClick={() => navigate(item.path)}
+              onClick={() => void navigate(item.path)}
               style={{
                 padding: '12px 16px',
                 marginBottom: '8px',
@@ -95,9 +93,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
         </AppShell.Section>
       </AppShell.Navbar>
 
-      <AppShell.Main style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>
-        {children}
-      </AppShell.Main>
+      <AppShell.Main style={{ backgroundColor: 'var(--mantine-color-gray-0)' }}>{children}</AppShell.Main>
     </AppShell>
   );
 }
@@ -111,31 +107,28 @@ export function App(): JSX.Element | null {
   }
 
   return (
-    <MantineProvider theme={theme}>
-      <Notifications />
-      <MedplumProvider medplum={medplum}>
-        <Router>
-          <ErrorBoundary>
-            <Suspense fallback={<Loading />}>
-              <Routes>
-                <Route path="/signin" element={<SignInPage />} />
-                <Route
-                  path="*"
-                  element={
-                    <MainLayout>
-                      <Routes>
-                        <Route path="/" element={profile ? <HomePage /> : <LandingPage />} />
-                        <Route path="/patients" element={<PatientList />} />
-                        <Route path="/patients/:id" element={<PatientDetail />} />
-                      </Routes>
-                    </MainLayout>
-                  }
-                />
-              </Routes>
-            </Suspense>
-          </ErrorBoundary>
-        </Router>
-      </MedplumProvider>
-    </MantineProvider>
+    <Router>
+      <ErrorBoundary>
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            <Route path="/signin" element={<SignInPage />} />
+            <Route
+              path="*"
+              element={
+                <MainLayout>
+                  <Routes>
+                    <Route path="/" element={profile ? <HomePage /> : <LandingPage />} />
+                    <Route path="/patients" element={<PatientList />} />
+                    <Route path="/patients/:id" element={<PatientDetail />} />
+                    <Route path="/calendar" element={<CalendarPage />} />
+                    <Route path="/appointment/:id" element={<AppointmentPage />} />
+                  </Routes>
+                </MainLayout>
+              }
+            />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
+    </Router>
   );
 }

@@ -1,22 +1,22 @@
-import { useMedplum } from '@medplum/react';
-import { Patient } from '@medplum/fhirtypes';
 import {
-  Table,
-  Card,
-  Text,
-  Group,
-  TextInput,
   ActionIcon,
-  Container,
-  Title,
-  Stack,
   Badge,
-  Loader,
+  Button,
+  Card,
   Center,
-  Button
+  Container,
+  Group,
+  Loader,
+  Stack,
+  Table,
+  Text,
+  TextInput,
+  Title,
 } from '@mantine/core';
-import { IconSearch, IconChevronRight, IconPlus } from '@tabler/icons-react';
-import { useState, useEffect } from 'react';
+import { Patient } from '@medplum/fhirtypes';
+import { useMedplum } from '@medplum/react';
+import { IconChevronRight, IconPlus, IconSearch } from '@tabler/icons-react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CreatePatientModal } from './CreatePatientModal';
 
@@ -37,20 +37,18 @@ export function PatientList() {
         setLoading(false);
       }
     };
-    fetchPatients();
+    void fetchPatients();
   }, [medplum]);
 
-  const filteredPatients = patients.filter(patient =>
-    `${patient.name?.[0]?.given?.[0]} ${patient.name?.[0]?.family}`
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase())
+  const filteredPatients = patients.filter((patient) =>
+    `${patient.name?.[0]?.given?.[0]} ${patient.name?.[0]?.family}`.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const formatDate = (date: string) => {
     return new Date(date).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
@@ -58,7 +56,9 @@ export function PatientList() {
     <Container size="xl" mt="xl">
       <Stack gap="md">
         <Group justify="space-between">
-          <Title order={2} c="blue.9">Patients</Title>
+          <Title order={2} c="blue.9">
+            Patients
+          </Title>
           <Group>
             <TextInput
               placeholder="Search patients..."
@@ -67,10 +67,7 @@ export function PatientList() {
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{ width: 300 }}
             />
-            <Button
-              leftSection={<IconPlus size={16} />}
-              onClick={() => setCreateModalOpen(true)}
-            >
+            <Button leftSection={<IconPlus size={16} />} onClick={() => setCreateModalOpen(true)}>
               Start Triage
             </Button>
           </Group>
@@ -107,7 +104,7 @@ export function PatientList() {
                   <Table.Tr
                     key={patient.id}
                     style={{ cursor: 'pointer' }}
-                    onClick={() => navigate(`/patients/${patient.id}`)}
+                    onClick={() => void navigate(`/patients/${patient.id}`)}
                   >
                     <td>
                       <Group gap="sm">
@@ -127,10 +124,7 @@ export function PatientList() {
                       <Text>{patient.birthDate && formatDate(patient.birthDate)}</Text>
                     </td>
                     <td>
-                      <Badge
-                        color={patient.gender === 'male' ? 'blue' : 'pink'}
-                        variant="light"
-                      >
+                      <Badge color={patient.gender === 'male' ? 'blue' : 'pink'} variant="light">
                         {(patient.gender || 'N/A').charAt(0).toUpperCase() + (patient.gender || 'N/A').slice(1)}
                       </Badge>
                     </td>
@@ -152,10 +146,7 @@ export function PatientList() {
         </Card>
       </Stack>
 
-      <CreatePatientModal
-        opened={createModalOpen}
-        onClose={() => setCreateModalOpen(false)}
-      />
+      <CreatePatientModal opened={createModalOpen} onClose={() => setCreateModalOpen(false)} />
     </Container>
   );
 }
