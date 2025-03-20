@@ -1,15 +1,17 @@
 import { AppShell, Text } from '@mantine/core';
 import { ErrorBoundary, Loading, useMedplum, useMedplumProfile } from '@medplum/react';
-import { IconCalendar, IconHome, IconLogout, IconUsers } from '@tabler/icons-react';
+import { IconUsers, IconHome, IconLogout, IconStethoscope, IconCalendar } from '@tabler/icons-react';
 import { Suspense } from 'react';
 import { Route, BrowserRouter as Router, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { PatientDetail } from './components/PatientDetail';
-import { PatientList } from './components/PatientList';
-import { AppointmentPage } from './pages/AppointmentPage';
-import { CalendarPage } from './pages/CalendarPage';
+import { PractitionerList } from './components/PractitionerList';
+import { PractitionerDetail } from './components/PractitionerDetail';
 import { HomePage } from './pages/HomePage';
 import { LandingPage } from './pages/LandingPage';
 import { SignInPage } from './pages/SignInPage';
+import { PatientList } from './components/PatientList';
+import { AppointmentPage } from './pages/AppointmentPage';
+import { CalendarPage } from './pages/CalendarPage';
 import '@mantine/notifications/styles.css';
 
 function MainLayout({ children }: { children: React.ReactNode }) {
@@ -19,6 +21,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
   const navItems = [
     { icon: IconHome, label: 'Home', path: '/' },
     { icon: IconUsers, label: 'Patients', path: '/patients' },
+    { icon: IconStethoscope, label: 'Practitioners', path: '/practitioners' },
     { icon: IconCalendar, label: 'Calendar', path: '/calendar' },
   ];
 
@@ -120,6 +123,8 @@ export function App(): JSX.Element | null {
                     <Route path="/" element={profile ? <HomePage /> : <LandingPage />} />
                     <Route path="/patients" element={<PatientList />} />
                     <Route path="/patients/:id" element={<PatientDetail />} />
+                    <Route path="/practitioners" element={<PractitionerList />} />
+                    <Route path="/practitioners/:id" element={<PractitionerDetail />} />
                     <Route path="/calendar" element={<CalendarPage />} />
                     <Route path="/appointment/:id" element={<AppointmentPage />} />
                   </Routes>
