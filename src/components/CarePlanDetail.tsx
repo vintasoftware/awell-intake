@@ -28,10 +28,21 @@ import {
   IconCheckbox,
   IconInfoCircle,
   IconCalendarEvent,
+  IconCircleCheck,
 } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { notifications } from '@mantine/notifications';
+
+// Activity status options
+const activityStatusOptions = [
+  { value: 'not-started', label: 'Not Started' },
+  { value: 'scheduled', label: 'Scheduled' },
+  { value: 'in-progress', label: 'In Progress' },
+  { value: 'on-hold', label: 'On Hold' },
+  { value: 'completed', label: 'Completed' },
+  { value: 'cancelled', label: 'Cancelled' },
+];
 
 // Status badge color mapping
 const getStatusColor = (status: string): string => {
@@ -197,6 +208,58 @@ export function CarePlanDetail() {
       notifications.show({
         title: 'Error',
         message: 'Failed to delete care plan',
+        color: 'red',
+      });
+    }
+  };
+
+  const handleActivityStatusChange = async (activityIndex: number, newStatus: string) => {
+    if (!carePlan || !id || !carePlan.activity) return;
+
+    try {
+      // Create a deep copy of the carePlan to avoid mutating state directly
+      const updatedCarePlan = JSON.parse(JSON.stringify(carePlan)) as CarePlan;
+
+      // Ensure activity array exists
+      if (!updatedCarePlan.activity) {
+        updatedCarePlan.activity = [];
+      }
+
+      // Update the specific activity's status
+      if (updatedCarePlan.activity[activityIndex]?.detail) {
+        // Define the valid status values for type safety
+        type ActivityStatus =
+          | 'not-started'
+          | 'scheduled'
+          | 'in-progress'
+          | 'on-hold'
+          | 'completed'
+          | 'cancelled'
+          | 'entered-in-error'
+          | 'stopped'
+          | 'unknown';
+
+        // Update with proper typing
+        updatedCarePlan.activity[activityIndex].detail.status = newStatus as ActivityStatus;
+      }
+
+      // Update the resource on the server
+      await medplum.updateResource(updatedCarePlan);
+
+      // Update local state
+      setCarePlan(updatedCarePlan);
+
+      notifications.show({
+        title: 'Success',
+        message: 'Activity status updated',
+        color: 'green',
+        icon: <IconCircleCheck size={16} />,
+      });
+    } catch (error) {
+      console.error('Error updating activity status:', error);
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to update activity status',
         color: 'red',
       });
     }
@@ -382,7 +445,7 @@ export function CarePlanDetail() {
                   <Stack gap="sm">
                     {carePlan.activity.map((activity, index) => (
                       <Card key={index} shadow="xs" p="md" radius="sm" withBorder>
-                        <Group justify="space-between">
+                        <Group justify="space-between" align="flex-start">
                           <Box>
                             <Text fw={600}>
                               {activity.detail?.description || activity.reference?.display || `Activity ${index + 1}`}
@@ -396,9 +459,32 @@ export function CarePlanDetail() {
                             )}
                           </Box>
 
-                          <Badge color={getStatusColor(activity.detail?.status || 'not-started')}>
-                            {formatStatus(activity.detail?.status || 'not-started')}
-                          </Badge>
+                          <Group>
+                            <Badge color={getStatusColor(activity.detail?.status || 'not-started')}>
+                              {formatStatus(activity.detail?.status || 'not-started')}
+                            </Badge>
+
+                            <Menu position="bottom-end" shadow="md" width={200}>
+                              <Menu.Target>
+                                <ActionIcon variant="subtle" size="sm">
+                                  <IconDotsVertical size={16} />
+                                </ActionIcon>
+                              </Menu.Target>
+
+                              <Menu.Dropdown>
+                                <Menu.Label>Change Status</Menu.Label>
+                                {activityStatusOptions.map((option) => (
+                                  <Menu.Item
+                                    key={option.value}
+                                    onClick={() => void handleActivityStatusChange(index, option.value)}
+                                    disabled={activity.detail?.status === option.value}
+                                  >
+                                    {option.label}
+                                  </Menu.Item>
+                                ))}
+                              </Menu.Dropdown>
+                            </Menu>
+                          </Group>
                         </Group>
                       </Card>
                     ))}
