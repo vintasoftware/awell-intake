@@ -1,8 +1,8 @@
 import { AppShell, Text } from '@mantine/core';
 import { ErrorBoundary, Loading, useMedplum, useMedplumProfile } from '@medplum/react';
-import { IconUsers, IconHome, IconLogout, IconStethoscope, IconCalendar } from '@tabler/icons-react';
+import { IconUsers, IconHome, IconLogout, IconStethoscope, IconCalendar, IconFile } from '@tabler/icons-react';
 import { Suspense } from 'react';
-import { Route, BrowserRouter as Router, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes, useLocation, useNavigate, Link } from 'react-router-dom';
 import { PatientDetail } from './components/PatientDetail';
 import { PractitionerList } from './components/PractitionerList';
 import { PractitionerDetail } from './components/PractitionerDetail';
@@ -13,6 +13,11 @@ import { PatientList } from './components/PatientList';
 import { AppointmentPage } from './pages/AppointmentPage';
 import { CalendarPage } from './pages/CalendarPage';
 import '@mantine/notifications/styles.css';
+import { CarePlanList } from './components/CarePlanList';
+import { PlanDefinitionDetail } from './components/PlanDefinitionDetail';
+import { PlanDefinitionList } from './components/PlanDefinitionList';
+import { CarePlanCreateForm } from './components/CarePlanCreateForm';
+import { PlanDefinitionCreateForm } from './components/PlanDefinitionCreateForm';
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
@@ -23,6 +28,7 @@ function MainLayout({ children }: { children: React.ReactNode }) {
     { icon: IconUsers, label: 'Patients', path: '/patients' },
     { icon: IconStethoscope, label: 'Practitioners', path: '/practitioners' },
     { icon: IconCalendar, label: 'Calendar', path: '/calendar' },
+    { icon: IconFile, label: 'Protocols', path: '/care-plan-templates' },
   ];
 
   return (
@@ -127,6 +133,11 @@ export function App(): JSX.Element | null {
                     <Route path="/practitioners/:id" element={<PractitionerDetail />} />
                     <Route path="/calendar" element={<CalendarPage />} />
                     <Route path="/appointment/:id" element={<AppointmentPage />} />
+                    <Route path="/care-plan-templates" element={<PlanDefinitionList />} />
+                    <Route path="/care-plan-templates/new" element={<PlanDefinitionCreateForm />} />
+                    <Route path="/care-plan-templates/:id" element={<PlanDefinitionDetail />} />
+                    <Route path="/care-plans" element={<CarePlanList />} />
+                    <Route path="/care-plans/new" element={<CarePlanCreateForm />} />
                   </Routes>
                 </MainLayout>
               }
