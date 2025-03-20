@@ -1,23 +1,23 @@
 import { AppShell, Text } from '@mantine/core';
 import { ErrorBoundary, Loading, useMedplum, useMedplumProfile } from '@medplum/react';
-import { IconUsers, IconHome, IconLogout, IconStethoscope, IconCalendar, IconFile } from '@tabler/icons-react';
+import { IconCalendar, IconFile, IconHome, IconLogout, IconStethoscope, IconUsers } from '@tabler/icons-react';
 import { Suspense } from 'react';
-import { Route, BrowserRouter as Router, Routes, useLocation, useNavigate, Link } from 'react-router-dom';
+import { Route, BrowserRouter as Router, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { CarePlanCreateForm } from './components/CarePlanCreateForm';
+import { CarePlanDetail } from './components/CarePlanDetail';
+import { CarePlanList } from './components/CarePlanList';
 import { PatientDetail } from './components/PatientDetail';
-import { PractitionerList } from './components/PractitionerList';
+import { PatientList } from './components/PatientList';
+import { PlanDefinitionCreateForm } from './components/PlanDefinitionCreateForm';
+import { PlanDefinitionDetail } from './components/PlanDefinitionDetail';
+import { PlanDefinitionList } from './components/PlanDefinitionList';
 import { PractitionerDetail } from './components/PractitionerDetail';
+import { PractitionerList } from './components/PractitionerList';
+import { AppointmentPage } from './pages/AppointmentPage';
+import { CalendarPage } from './pages/CalendarPage';
 import { HomePage } from './pages/HomePage';
 import { LandingPage } from './pages/LandingPage';
 import { SignInPage } from './pages/SignInPage';
-import { PatientList } from './components/PatientList';
-import { AppointmentPage } from './pages/AppointmentPage';
-import { CalendarPage } from './pages/CalendarPage';
-import '@mantine/notifications/styles.css';
-import { CarePlanList } from './components/CarePlanList';
-import { PlanDefinitionDetail } from './components/PlanDefinitionDetail';
-import { PlanDefinitionList } from './components/PlanDefinitionList';
-import { CarePlanCreateForm } from './components/CarePlanCreateForm';
-import { PlanDefinitionCreateForm } from './components/PlanDefinitionCreateForm';
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
@@ -138,6 +138,7 @@ export function App(): JSX.Element | null {
                     <Route path="/care-plan-templates/:id" element={<PlanDefinitionDetail />} />
                     <Route path="/care-plans" element={<CarePlanList />} />
                     <Route path="/care-plans/new" element={<CarePlanCreateForm />} />
+                    <Route path="/care-plans/:id" element={<CarePlanDetail />} />
                   </Routes>
                 </MainLayout>
               }
