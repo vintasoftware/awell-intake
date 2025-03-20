@@ -13,11 +13,10 @@ import {
   Box,
   MultiSelect,
   NumberInput,
-  Accordion,
-  Tabs
+  Tabs,
 } from '@mantine/core';
 import { useMedplum } from '@medplum/react';
-import { PlanDefinition, CodeableConcept } from '@medplum/fhirtypes';
+import { PlanDefinition, PlanDefinitionGoal } from '@medplum/fhirtypes';
 import { notifications } from '@mantine/notifications';
 import { useForm } from '@mantine/form';
 import { useNavigate } from 'react-router-dom';
@@ -38,7 +37,7 @@ const developmentalAssessments = [
   { value: 'developmental-milestones', label: 'Developmental Milestones Review' },
   { value: 'vision-screening', label: 'Vision Screening' },
   { value: 'hearing-screening', label: 'Hearing Screening' },
-  { value: 'blood-pressure', label: 'Blood Pressure' }
+  { value: 'blood-pressure', label: 'Blood Pressure' },
 ];
 
 // Common pediatric preventive care interventions
@@ -50,7 +49,7 @@ const preventiveCareActivities = [
   { value: 'lead-screening', label: 'Lead Screening' },
   { value: 'anemia-screening', label: 'Anemia Screening' },
   { value: 'dental-varnish', label: 'Fluoride Varnish Application' },
-  { value: 'development-education', label: 'Developmental Education' }
+  { value: 'development-education', label: 'Developmental Education' },
 ];
 
 // Common age range options for pediatric protocols
@@ -61,7 +60,7 @@ const ageRangeOptions = [
   { value: 'toddler', label: 'Toddler (1-3 years)' },
   { value: 'preschool', label: 'Preschool (3-5 years)' },
   { value: 'school-age', label: 'School Age (5-12 years)' },
-  { value: 'adolescent', label: 'Adolescent (12-18 years)' }
+  { value: 'adolescent', label: 'Adolescent (12-18 years)' },
 ];
 
 // Template types
@@ -71,7 +70,7 @@ const templateOptions = [
   { value: 'vaccination', label: 'Vaccination Schedule Protocol' },
   { value: 'chronic-condition', label: 'Chronic Condition Management' },
   { value: 'behavioral-health', label: 'Behavioral Health Screening' },
-  { value: 'custom', label: 'Custom Protocol' }
+  { value: 'custom', label: 'Custom Protocol' },
 ];
 
 export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCreateModalProps) {
@@ -122,14 +121,15 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
       form.setValues({
         ...form.values,
         title: form.values.title || 'Well-Child Visit Protocol',
-        purpose: 'Comprehensive well-child care including growth monitoring, developmental screening, and preventive care',
+        purpose:
+          'Comprehensive well-child care including growth monitoring, developmental screening, and preventive care',
         assessments: ['growth', 'developmental-milestones', 'vision-screening', 'hearing-screening'],
         activities: ['vaccines', 'anticipatory-guidance', 'nutrition-counseling', 'safety-counseling'],
         includeGrowthTracking: true,
         includeDevelopmentalScreening: true,
         includeVaccinations: true,
         includeAnticipGuidance: true,
-        goalDescription: 'Ensure appropriate growth and development according to pediatric standards'
+        goalDescription: 'Ensure appropriate growth and development according to pediatric standards',
       });
     } else if (templateType === 'developmental-screening') {
       form.setValues({
@@ -142,7 +142,7 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
         includeDevelopmentalScreening: true,
         includeVaccinations: false,
         includeAnticipGuidance: true,
-        goalDescription: 'Early identification of developmental concerns and appropriate intervention'
+        goalDescription: 'Early identification of developmental concerns and appropriate intervention',
       });
     } else if (templateType === 'vaccination') {
       form.setValues({
@@ -155,7 +155,7 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
         includeDevelopmentalScreening: false,
         includeVaccinations: true,
         includeAnticipGuidance: true,
-        goalDescription: 'Complete age-appropriate immunizations per recommended schedule'
+        goalDescription: 'Complete age-appropriate immunizations per recommended schedule',
       });
     }
   };
@@ -169,33 +169,31 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
   // Create PlanDefinition resource
   const handleSubmit = async (values: typeof form.values) => {
     // Create a goal for the PlanDefinition
-    const goal: any = {
+    const goal: PlanDefinitionGoal = {
       description: {
-        text: values.goalDescription
+        text: values.goalDescription,
       },
       addresses: [
         {
-          text: 'Pediatric preventive care'
-        }
+          text: 'Pediatric preventive care',
+        },
       ],
-      target: []
+      target: [],
     };
 
     if (values.includeGrowthTracking) {
-      goal.target.push({
+      goal.target!.push({
         measure: {
-          text: 'Growth parameters'
+          text: 'Growth parameters',
         },
-        detailString: 'Within normal percentiles for age'
       });
     }
 
     if (values.includeDevelopmentalScreening) {
-      goal.target.push({
+      goal.target!.push({
         measure: {
-          text: 'Developmental milestones'
+          text: 'Developmental milestones',
         },
-        detailString: 'Age-appropriate milestone achievement'
       });
     }
 
@@ -204,49 +202,53 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
 
     // Add assessment actions
     for (const assessment of values.assessments) {
-      const assessmentItem = developmentalAssessments.find(a => a.value === assessment);
+      const assessmentItem = developmentalAssessments.find((a) => a.value === assessment);
       if (assessmentItem) {
         actions.push({
           title: assessmentItem.label,
           description: `Perform ${assessmentItem.label} at appropriate intervals`,
           type: {
-            coding: [{
-              system: 'http://terminology.hl7.org/CodeSystem/action-type',
-              code: 'create'
-            }]
-          }
+            coding: [
+              {
+                system: 'http://terminology.hl7.org/CodeSystem/action-type',
+                code: 'create',
+              },
+            ],
+          },
         });
       }
     }
 
     // Add activity actions
     for (const activity of values.activities) {
-      const activityItem = preventiveCareActivities.find(a => a.value === activity);
+      const activityItem = preventiveCareActivities.find((a) => a.value === activity);
       if (activityItem) {
         actions.push({
           title: activityItem.label,
           description: `Provide ${activityItem.label} at appropriate intervals`,
           type: {
-            coding: [{
-              system: 'http://terminology.hl7.org/CodeSystem/action-type',
-              code: 'create'
-            }]
-          }
+            coding: [
+              {
+                system: 'http://terminology.hl7.org/CodeSystem/action-type',
+                code: 'create',
+              },
+            ],
+          },
         });
       }
     }
 
     // Create useContext for age ranges
-    const useContext = values.ageRange.map(range => {
-      const rangeItem = ageRangeOptions.find(a => a.value === range);
+    const useContext = values.ageRange.map((range) => {
+      const rangeItem = ageRangeOptions.find((a) => a.value === range);
       return {
         code: {
           system: 'http://terminology.hl7.org/CodeSystem/usage-context-type',
-          code: 'age'
+          code: 'age',
         },
         valueCodeableConcept: {
-          text: rangeItem?.label || range
-        }
+          text: rangeItem?.label || range,
+        },
       };
     });
 
@@ -260,7 +262,7 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
       purpose: values.purpose,
       useContext: useContext,
       goal: [goal],
-      action: actions
+      action: actions,
     };
 
     try {
@@ -271,7 +273,7 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
         color: 'green',
       });
       onClose();
-      navigate(`/care-plan-templates/${result.id}`);
+      void navigate(`/care-plan-templates/${result.id}`);
     } catch (error) {
       console.error('Error creating protocol:', error);
       notifications.show({
@@ -285,9 +287,11 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
   return (
     <Modal opened={opened} onClose={onClose} title="Create Care Protocol" size="xl">
       <form onSubmit={form.onSubmit(handleSubmit)}>
-        <Stack spacing="md">
+        <Stack gap="md">
           <Box mb="md">
-            <Title order={4} mb="xs">Template Selection</Title>
+            <Title order={4} mb="xs">
+              Template Selection
+            </Title>
             <Text size="sm" color="dimmed" mb="md">
               Choose a template or start from scratch with a custom protocol
             </Text>
@@ -304,7 +308,9 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
           <Divider my="md" />
 
           <Box>
-            <Title order={4} mb="md">Basic Information</Title>
+            <Title order={4} mb="md">
+              Basic Information
+            </Title>
             <TextInput
               label="Protocol Title"
               placeholder="e.g., Infant Well-Child Protocol (0-12 months)"
@@ -319,15 +325,11 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
                 data={[
                   { value: 'draft', label: 'Draft' },
                   { value: 'active', label: 'Active' },
-                  { value: 'retired', label: 'Retired' }
+                  { value: 'retired', label: 'Retired' },
                 ]}
                 {...form.getInputProps('status')}
               />
-              <TextInput
-                label="Version"
-                placeholder="1.0"
-                {...form.getInputProps('version')}
-              />
+              <TextInput label="Version" placeholder="1.0" {...form.getInputProps('version')} />
             </Group>
 
             <Textarea
@@ -350,7 +352,9 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
           <Divider my="md" />
 
           <Box>
-            <Title order={4} mb="md">Target Population</Title>
+            <Title order={4} mb="md">
+              Target Population
+            </Title>
             <MultiSelect
               label="Age Range"
               data={ageRangeOptions}
@@ -380,7 +384,7 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
             </Tabs.List>
 
             <Tabs.Panel value="components">
-              <Stack spacing="md">
+              <Stack gap="md">
                 <Title order={5}>Core Protocol Components</Title>
                 <Text size="sm" color="dimmed">
                   Select the standard components to include in this pediatric protocol
@@ -421,7 +425,7 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
             </Tabs.Panel>
 
             <Tabs.Panel value="assessments">
-              <Stack spacing="md">
+              <Stack gap="md">
                 <Title order={5}>Assessment Tools</Title>
                 <Text size="sm" color="dimmed">
                   Select screenings and assessments to include in this protocol
@@ -437,7 +441,7 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
             </Tabs.Panel>
 
             <Tabs.Panel value="activities">
-              <Stack spacing="md">
+              <Stack gap="md">
                 <Title order={5}>Preventive Care Activities</Title>
                 <Text size="sm" color="dimmed">
                   Select preventive care activities to include in this protocol
@@ -453,7 +457,7 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
             </Tabs.Panel>
 
             <Tabs.Panel value="goals">
-              <Stack spacing="md">
+              <Stack gap="md">
                 <Title order={5}>Clinical Goals</Title>
                 <Text size="sm" color="dimmed">
                   Define the primary goal for this care protocol
@@ -471,7 +475,9 @@ export function PlanDefinitionCreateModal({ opened, onClose }: PlanDefinitionCre
           </Tabs>
 
           <Group justify="flex-end" mt="xl">
-            <Button variant="outline" onClick={onClose}>Cancel</Button>
+            <Button variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
             <Button type="submit">Create Protocol</Button>
           </Group>
         </Stack>

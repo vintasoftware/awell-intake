@@ -11,7 +11,7 @@ import {
   Badge,
   Loader,
   Center,
-  Stack
+  Stack,
 } from '@mantine/core';
 import { useMedplum } from '@medplum/react';
 import { PlanDefinition } from '@medplum/fhirtypes';
@@ -23,10 +23,14 @@ import { PlanDefinitionCreateModal } from './PlanDefinitionCreateModal';
 // Status badge color mapping
 const getStatusColor = (status: string): string => {
   switch (status) {
-    case 'active': return 'green';
-    case 'draft': return 'yellow';
-    case 'retired': return 'gray';
-    default: return 'blue';
+    case 'active':
+      return 'green';
+    case 'draft':
+      return 'yellow';
+    case 'retired':
+      return 'gray';
+    default:
+      return 'blue';
   }
 };
 
@@ -59,7 +63,7 @@ export function PlanDefinitionList() {
         // Fetch PlanDefinitions from Medplum FHIR server
         const results = await medplum.searchResources('PlanDefinition', {
           _count: '100',
-          _sort: '-_lastUpdated'
+          _sort: '-_lastUpdated',
         });
         setPlanDefinitions(results);
       } catch (error) {
@@ -78,25 +82,23 @@ export function PlanDefinitionList() {
       return 'All ages';
     }
 
-    const ageContext = planDefinition.useContext.find(
-      context => context.code?.code === 'age'
-    );
+    const ageContext = planDefinition.useContext.find((context) => context.code?.code === 'age');
 
     if (!ageContext || !ageContext.valueCodeableConcept) {
       return 'All ages';
     }
 
-    return ageContext.valueCodeableConcept.text ||
-           ageContext.valueCodeableConcept.coding?.[0]?.display ||
-           'All ages';
+    return ageContext.valueCodeableConcept.text || ageContext.valueCodeableConcept.coding?.[0]?.display || 'All ages';
   };
 
   // Filter plan definitions based on search and filters
-  const filteredPlanDefinitions = planDefinitions.filter(plan => {
+  const filteredPlanDefinitions = planDefinitions.filter((plan) => {
     // Filter by search term
     const matchesSearch =
-      (plan.title?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
-      (plan.description?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
+      plan.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      false ||
+      plan.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      false;
 
     // Filter by status
     const matchesStatus = statusFilter === 'all' || plan.status === statusFilter;
@@ -107,13 +109,19 @@ export function PlanDefinitionList() {
     }
 
     const ageRange = getAgeRange(plan).toLowerCase();
-    if (ageFilter === 'infant' && (ageRange.includes('infant') || ageRange.includes('0-') || ageRange.includes('newborn'))) {
+    if (
+      ageFilter === 'infant' &&
+      (ageRange.includes('infant') || ageRange.includes('0-') || ageRange.includes('newborn'))
+    ) {
       return matchesSearch && matchesStatus;
     }
     if (ageFilter === 'child' && (ageRange.includes('child') || ageRange.includes('3-') || ageRange.includes('5-'))) {
       return matchesSearch && matchesStatus;
     }
-    if (ageFilter === 'adolescent' && (ageRange.includes('adolescent') || ageRange.includes('teen') || ageRange.includes('12-'))) {
+    if (
+      ageFilter === 'adolescent' &&
+      (ageRange.includes('adolescent') || ageRange.includes('teen') || ageRange.includes('12-'))
+    ) {
       return matchesSearch && matchesStatus;
     }
     if (ageFilter === 'adult' && (ageRange.includes('adult') || ageRange.includes('18+'))) {
@@ -134,7 +142,7 @@ export function PlanDefinitionList() {
   };
 
   const handleCreateProtocol = () => {
-    navigate('/care-plan-templates/new');
+    void navigate('/care-plan-templates/new');
   };
 
   return (
@@ -166,7 +174,7 @@ export function PlanDefinitionList() {
                 { value: 'all', label: 'All Statuses' },
                 { value: 'active', label: 'Active' },
                 { value: 'draft', label: 'Draft' },
-                { value: 'retired', label: 'Retired' }
+                { value: 'retired', label: 'Retired' },
               ]}
               style={{ width: 150 }}
             />
@@ -179,7 +187,7 @@ export function PlanDefinitionList() {
                 { value: 'infant', label: 'Infant (0-2y)' },
                 { value: 'child', label: 'Child (3-11y)' },
                 { value: 'adolescent', label: 'Adolescent (12-18y)' },
-                { value: 'adult', label: 'Adult (18+)' }
+                { value: 'adult', label: 'Adult (18+)' },
               ]}
               style={{ width: 180 }}
             />
@@ -194,7 +202,7 @@ export function PlanDefinitionList() {
           ) : (
             <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="md">
               {filteredPlanDefinitions.length > 0 ? (
-                filteredPlanDefinitions.map(plan => (
+                filteredPlanDefinitions.map((plan) => (
                   <Card
                     key={plan.id}
                     shadow="sm"
@@ -202,12 +210,14 @@ export function PlanDefinitionList() {
                     radius="md"
                     withBorder
                     style={{ cursor: 'pointer' }}
-                    onClick={() => navigate(`/care-plan-templates/${plan.id}`)}
+                    onClick={() => void navigate(`/care-plan-templates/${plan.id}`)}
                   >
                     <Group align="flex-start" gap="xs">
                       {getProtocolIcon(plan.title || '')}
                       <div style={{ flex: 1 }}>
-                        <Text fw={500} size="lg" lineClamp={1}>{plan.title || 'Untitled Protocol'}</Text>
+                        <Text fw={500} size="lg" lineClamp={1}>
+                          {plan.title || 'Untitled Protocol'}
+                        </Text>
                         <Badge color={getStatusColor(plan.status || 'unknown')} mb="sm">
                           {plan.status?.charAt(0).toUpperCase() + plan.status?.slice(1) || 'Unknown'}
                         </Badge>
@@ -221,7 +231,9 @@ export function PlanDefinitionList() {
                     )}
 
                     <Group justify="space-between" mt="md">
-                      <Text size="xs" c="dimmed">Age: {getAgeRange(plan)}</Text>
+                      <Text size="xs" c="dimmed">
+                        Age: {getAgeRange(plan)}
+                      </Text>
                       <Text size="xs" c="dimmed">
                         {plan.meta?.lastUpdated ? `Updated: ${formatDate(plan.meta.lastUpdated)}` : ''}
                       </Text>
@@ -233,7 +245,7 @@ export function PlanDefinitionList() {
                         fullWidth
                         onClick={(e) => {
                           e.stopPropagation();
-                          navigate(`/care-plans/new?template=${plan.id}`);
+                          void navigate(`/care-plans/new?template=${plan.id}`);
                         }}
                       >
                         Use This Protocol
@@ -257,10 +269,7 @@ export function PlanDefinitionList() {
         </Card>
       </Stack>
 
-      <PlanDefinitionCreateModal
-        opened={createModalOpen}
-        onClose={() => setCreateModalOpen(false)}
-      />
+      <PlanDefinitionCreateModal opened={createModalOpen} onClose={() => setCreateModalOpen(false)} />
     </Container>
   );
 }

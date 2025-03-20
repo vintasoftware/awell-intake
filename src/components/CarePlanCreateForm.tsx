@@ -14,7 +14,7 @@ import {
   Center,
   List,
   Box,
-  Alert
+  Alert,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useMedplum } from '@medplum/react';
@@ -69,14 +69,14 @@ export function CarePlanCreateForm() {
         // Fetch patients
         const patientResults = await medplum.searchResources('Patient', {
           _count: '100',
-          _sort: 'name'
+          _sort: 'name',
         });
         setPatients(patientResults);
 
         // Fetch practitioners
         const practitionerResults = await medplum.searchResources('Practitioner', {
           _count: '100',
-          _sort: 'name'
+          _sort: 'name',
         });
         setPractitioners(practitionerResults);
 
@@ -84,7 +84,7 @@ export function CarePlanCreateForm() {
         const templateResults = await medplum.searchResources('PlanDefinition', {
           status: 'active,draft',
           _count: '100',
-          _sort: '-_lastUpdated'
+          _sort: '-_lastUpdated',
         });
         setTemplates(templateResults);
 
@@ -120,7 +120,7 @@ export function CarePlanCreateForm() {
       form.setValues({
         ...form.values,
         title: template.title ? `${template.title} Care Plan` : form.values.title,
-        description: template.description || form.values.description
+        description: template.description || form.values.description,
       });
 
       setTemplateLoaded(true);
@@ -157,14 +157,18 @@ export function CarePlanCreateForm() {
       // Create references
       const subject = {
         reference: `Patient/${values.patientId}`,
-        display: patients.find(p => p.id === values.patientId)?.name?.[0]?.given?.[0] + ' ' +
-                 patients.find(p => p.id === values.patientId)?.name?.[0]?.family || 'Unknown Patient'
+        display:
+          patients.find((p) => p.id === values.patientId)?.name?.[0]?.given?.[0] +
+            ' ' +
+            patients.find((p) => p.id === values.patientId)?.name?.[0]?.family || 'Unknown Patient',
       };
 
       const author = {
         reference: `Practitioner/${values.practitionerId}`,
-        display: practitioners.find(p => p.id === values.practitionerId)?.name?.[0]?.given?.[0] + ' ' +
-                 practitioners.find(p => p.id === values.practitionerId)?.name?.[0]?.family || 'Unknown Practitioner'
+        display:
+          practitioners.find((p) => p.id === values.practitionerId)?.name?.[0]?.given?.[0] +
+            ' ' +
+            practitioners.find((p) => p.id === values.practitionerId)?.name?.[0]?.family || 'Unknown Practitioner',
       };
 
       // Build activities based on template
@@ -174,13 +178,13 @@ export function CarePlanCreateForm() {
         for (const action of selectedTemplate.action) {
           activities.push({
             detail: {
-              status: 'not-started',
+              status: 'not-started' as const,
               description: action.description || action.title,
               scheduledPeriod: {
                 start: values.startDate.toISOString(),
-                end: values.endDate.toISOString()
-              }
-            }
+                end: values.endDate.toISOString(),
+              },
+            },
           });
         }
       }
@@ -197,24 +201,25 @@ export function CarePlanCreateForm() {
         created: new Date().toISOString(),
         period: {
           start: values.startDate.toISOString(),
-          end: values.endDate.toISOString()
+          end: values.endDate.toISOString(),
         },
-        activity: activities
+        activity: activities,
       };
 
       // Add basedOn reference if using a template
       if (values.templateId) {
-        carePlan.basedOn = [{
-          reference: `PlanDefinition/${values.templateId}`
-        }];
+        carePlan.basedOn = [
+          {
+            reference: `PlanDefinition/${values.templateId}`,
+          },
+        ];
       }
 
       // Add goal reference if template has goals
       if (selectedTemplate?.goal && selectedTemplate.goal.length > 0) {
-        carePlan.goal = selectedTemplate.goal.map(goal => ({
-          description: {
-            text: goal.description?.text || 'Goal'
-          }
+        carePlan.goal = selectedTemplate.goal.map((goal) => ({
+          reference: `Goal/${goal.id}`,
+          display: goal.description?.text || 'Goal',
         }));
       }
 
@@ -227,8 +232,7 @@ export function CarePlanCreateForm() {
       });
 
       // Navigate to the new care plan
-      navigate(`/care-plans/${result.id}`);
-
+      void navigate(`/care-plans/${result.id}`);
     } catch (error) {
       console.error('Error creating care plan:', error);
       notifications.show({
@@ -256,28 +260,32 @@ export function CarePlanCreateForm() {
           <Button
             leftSection={<IconArrowLeft size={16} />}
             variant="outline"
-            onClick={() => navigate('/care-plans')}
+            onClick={() => void navigate('/care-plans')}
           >
             Back to Care Plans
           </Button>
         </Group>
 
         <Card shadow="sm" p="xl" radius="md" withBorder>
-          <Title order={2} mb="md">Create New Care Plan</Title>
+          <Title order={2} mb="md">
+            Create New Care Plan
+          </Title>
 
           <form onSubmit={form.onSubmit(handleSubmit)}>
-            <Stack spacing="md">
+            <Stack gap="md">
               <Card shadow="xs" p="md" radius="md" withBorder>
-                <Title order={4} mb="md">1. Select Patient and Provider</Title>
+                <Title order={4} mb="md">
+                  1. Select Patient and Provider
+                </Title>
                 <Group grow mb="md">
                   <Select
                     label="Patient"
                     placeholder="Select a patient"
                     searchable
                     required
-                    data={patients.map(patient => ({
+                    data={patients.map((patient) => ({
                       value: patient.id || '',
-                      label: `${patient.name?.[0]?.given?.[0] || ''} ${patient.name?.[0]?.family || ''}`
+                      label: `${patient.name?.[0]?.given?.[0] || ''} ${patient.name?.[0]?.family || ''}`,
                     }))}
                     {...form.getInputProps('patientId')}
                   />
@@ -287,9 +295,9 @@ export function CarePlanCreateForm() {
                     placeholder="Select a provider"
                     searchable
                     required
-                    data={practitioners.map(practitioner => ({
+                    data={practitioners.map((practitioner) => ({
                       value: practitioner.id || '',
-                      label: `${practitioner.name?.[0]?.given?.[0] || ''} ${practitioner.name?.[0]?.family || ''}`
+                      label: `${practitioner.name?.[0]?.given?.[0] || ''} ${practitioner.name?.[0]?.family || ''}`,
                     }))}
                     {...form.getInputProps('practitionerId')}
                   />
@@ -324,14 +332,16 @@ export function CarePlanCreateForm() {
               <Divider my="md" />
 
               <Card shadow="xs" p="md" radius="md" withBorder>
-                <Title order={4} mb="md">2. Select Care Protocol Template</Title>
+                <Title order={4} mb="md">
+                  2. Select Care Protocol Template
+                </Title>
                 <Select
                   label="Protocol Template"
                   placeholder="Select a protocol template"
                   searchable
-                  data={templates.map(template => ({
+                  data={templates.map((template) => ({
                     value: template.id || '',
-                    label: template.title || 'Untitled Protocol'
+                    label: template.title || 'Untitled Protocol',
                   }))}
                   value={form.values.templateId}
                   onChange={handleTemplateChange}
@@ -356,12 +366,12 @@ export function CarePlanCreateForm() {
 
                       {selectedTemplate.goal && selectedTemplate.goal.length > 0 && (
                         <>
-                          <Text size="sm" fw={500} mt="sm">Goals:</Text>
+                          <Text size="sm" fw={500} mt="sm">
+                            Goals:
+                          </Text>
                           <List size="sm">
                             {selectedTemplate.goal.map((goal, index) => (
-                              <List.Item key={index}>
-                                {goal.description?.text || `Goal ${index + 1}`}
-                              </List.Item>
+                              <List.Item key={index}>{goal.description?.text || `Goal ${index + 1}`}</List.Item>
                             ))}
                           </List>
                         </>
@@ -369,7 +379,9 @@ export function CarePlanCreateForm() {
 
                       {selectedTemplate.action && selectedTemplate.action.length > 0 && (
                         <>
-                          <Text size="sm" fw={500} mt="sm">Recommended Actions:</Text>
+                          <Text size="sm" fw={500} mt="sm">
+                            Recommended Actions:
+                          </Text>
                           <List size="sm">
                             {selectedTemplate.action.map((action, index) => (
                               <List.Item key={index}>
@@ -387,7 +399,9 @@ export function CarePlanCreateForm() {
               <Divider my="md" />
 
               <Card shadow="xs" p="md" radius="md" withBorder>
-                <Title order={4} mb="md">3. Care Plan Details</Title>
+                <Title order={4} mb="md">
+                  3. Care Plan Details
+                </Title>
                 <TextInput
                   label="Care Plan Title"
                   placeholder="e.g., Growth and Development Care Plan"
@@ -406,16 +420,10 @@ export function CarePlanCreateForm() {
               </Card>
 
               <Group justify="flex-end" mt="xl">
-                <Button
-                  variant="outline"
-                  onClick={() => navigate('/care-plans')}
-                >
+                <Button variant="outline" onClick={() => void navigate('/care-plans')}>
                   Cancel
                 </Button>
-                <Button
-                  type="submit"
-                  leftSection={<IconCheck size={16} />}
-                >
+                <Button type="submit" leftSection={<IconCheck size={16} />}>
                   Create Care Plan
                 </Button>
               </Group>

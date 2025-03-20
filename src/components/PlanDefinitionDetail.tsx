@@ -12,7 +12,7 @@ import {
   Loader,
   Center,
   Alert,
-  Stack
+  Stack,
 } from '@mantine/core';
 import { useMedplum } from '@medplum/react';
 import { PlanDefinition } from '@medplum/fhirtypes';
@@ -53,23 +53,27 @@ export function PlanDefinitionDetail() {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
   // Get status badge color
   const getStatusColor = (status: string): string => {
     switch (status) {
-      case 'active': return 'green';
-      case 'draft': return 'yellow';
-      case 'retired': return 'gray';
-      default: return 'blue';
+      case 'active':
+        return 'green';
+      case 'draft':
+        return 'yellow';
+      case 'retired':
+        return 'gray';
+      default:
+        return 'blue';
     }
   };
 
   // Create a care plan based on this protocol
   const handleCreateCarePlan = () => {
-    navigate(`/care-plans/new?template=${id}`);
+    void navigate(`/care-plans/new?template=${id}`);
   };
 
   if (loading) {
@@ -91,7 +95,7 @@ export function PlanDefinitionDetail() {
         <Button
           leftSection={<IconArrowBack size={16} />}
           variant="outline"
-          onClick={() => navigate('/care-plan-templates')}
+          onClick={() => void navigate('/care-plan-templates')}
           mt="md"
         >
           Back to Protocols
@@ -107,20 +111,17 @@ export function PlanDefinitionDetail() {
           <Button
             leftSection={<IconArrowBack size={16} />}
             variant="outline"
-            onClick={() => navigate('/care-plan-templates')}
+            onClick={() => void navigate('/care-plan-templates')}
           >
             Back
           </Button>
-          <Button
-            leftSection={<IconPlus size={16} />}
-            onClick={handleCreateCarePlan}
-          >
+          <Button leftSection={<IconPlus size={16} />} onClick={handleCreateCarePlan}>
             Create Care Plan
           </Button>
         </Group>
 
         <Card shadow="sm" p="lg" radius="md" withBorder>
-          <Group position="apart" mb="xs">
+          <Group justify="space-between" mb="xs">
             <Title order={2}>{planDefinition.title || 'Untitled Protocol'}</Title>
             <Badge color={getStatusColor(planDefinition.status || 'unknown')} size="lg">
               {planDefinition.status?.charAt(0).toUpperCase() + planDefinition.status?.slice(1) || 'Unknown'}
@@ -133,7 +134,7 @@ export function PlanDefinitionDetail() {
             </Text>
           )}
 
-          <Group spacing="xl" mb="md">
+          <Group gap="xl" mb="md">
             {planDefinition.version && (
               <Text size="sm">
                 <b>Version:</b> {planDefinition.version}
@@ -169,19 +170,23 @@ export function PlanDefinitionDetail() {
             <Card shadow="sm" p="lg" radius="md" withBorder>
               {planDefinition.purpose && (
                 <>
-                  <Title order={4} mb="xs">Purpose</Title>
+                  <Title order={4} mb="xs">
+                    Purpose
+                  </Title>
                   <Text mb="lg">{planDefinition.purpose}</Text>
                 </>
               )}
 
               {planDefinition.useContext && planDefinition.useContext.length > 0 && (
                 <>
-                  <Title order={4} mb="xs">Applicable Contexts</Title>
+                  <Title order={4} mb="xs">
+                    Applicable Contexts
+                  </Title>
                   <List mb="lg">
                     {planDefinition.useContext.map((context, index) => (
                       <List.Item key={index}>
                         <Text>
-                          <b>{context.code?.text || context.code?.code}:</b>{' '}
+                          <b>{context.code?.display || context.code?.code}:</b>{' '}
                           {context.valueCodeableConcept?.text ||
                             context.valueCodeableConcept?.coding?.[0]?.display ||
                             'Not specified'}
@@ -194,7 +199,9 @@ export function PlanDefinitionDetail() {
 
               {planDefinition.relatedArtifact && planDefinition.relatedArtifact.length > 0 && (
                 <>
-                  <Title order={4} mb="xs">Related Resources</Title>
+                  <Title order={4} mb="xs">
+                    Related Resources
+                  </Title>
                   <List mb="lg">
                     {planDefinition.relatedArtifact.map((artifact, index) => (
                       <List.Item key={index}>
@@ -223,23 +230,27 @@ export function PlanDefinitionDetail() {
                         {action.description && <Text mb="md">{action.description}</Text>}
                         {action.textEquivalent && (
                           <Text mb="md" style={{ fontStyle: 'italic' }}>
-                            "{action.textEquivalent}"
+                            &quot;{action.textEquivalent}&quot;
                           </Text>
                         )}
 
                         {action.action && action.action.length > 0 && (
                           <>
-                            <Title order={5} mb="xs">Sub-Actions</Title>
+                            <Title order={5} mb="xs">
+                              Sub-Actions
+                            </Title>
                             <List type="ordered" mb="md">
                               {action.action.map((subAction, subIndex) => (
                                 <List.Item key={subIndex}>
                                   <Text fw={500}>{subAction.title || `Sub-Action ${subIndex + 1}`}</Text>
                                   {subAction.description && (
-                                    <Text size="sm" ml="md">{subAction.description}</Text>
+                                    <Text size="sm" ml="md">
+                                      {subAction.description}
+                                    </Text>
                                   )}
                                   {subAction.textEquivalent && (
                                     <Text size="sm" ml="md" style={{ fontStyle: 'italic' }}>
-                                      "{subAction.textEquivalent}"
+                                      &quot;{subAction.textEquivalent}&quot;
                                     </Text>
                                   )}
                                 </List.Item>
@@ -280,7 +291,9 @@ export function PlanDefinitionDetail() {
 
                     {goal.addresses && goal.addresses.length > 0 && (
                       <>
-                        <Text size="sm" mb="xs"><b>Addresses:</b></Text>
+                        <Text size="sm" mb="xs">
+                          <b>Addresses:</b>
+                        </Text>
                         <List size="sm" mb="md">
                           {goal.addresses.map((condition, condIndex) => (
                             <List.Item key={condIndex}>
@@ -293,13 +306,17 @@ export function PlanDefinitionDetail() {
 
                     {goal.target && goal.target.length > 0 && (
                       <>
-                        <Text size="sm" mb="xs"><b>Targets:</b></Text>
+                        <Text size="sm" mb="xs">
+                          <b>Targets:</b>
+                        </Text>
                         <List size="sm">
                           {goal.target.map((target, targetIndex) => (
                             <List.Item key={targetIndex}>
                               {target.measure?.text || target.measure?.coding?.[0]?.display || 'Measure'}
-                              {target.detailQuantity && `: ${target.detailQuantity.value} ${target.detailQuantity.unit || ''}`}
-                              {target.detailRange && `: ${target.detailRange.low?.value || ''}-${target.detailRange.high?.value || ''} ${target.detailRange.high?.unit || ''}`}
+                              {target.detailQuantity &&
+                                `: ${target.detailQuantity.value} ${target.detailQuantity.unit || ''}`}
+                              {target.detailRange &&
+                                `: ${target.detailRange.low?.value || ''}-${target.detailRange.high?.value || ''} ${target.detailRange.high?.unit || ''}`}
                             </List.Item>
                           ))}
                         </List>

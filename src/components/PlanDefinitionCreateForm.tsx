@@ -15,11 +15,11 @@ import {
   Text,
   Box,
   Alert,
-  Stack
+  Stack,
 } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { useMedplum } from '@medplum/react';
-import { PlanDefinition, CodeableConcept } from '@medplum/fhirtypes';
+import { PlanDefinition, PlanDefinitionGoal } from '@medplum/fhirtypes';
 import { notifications } from '@mantine/notifications';
 import {
   IconStethoscope,
@@ -27,7 +27,7 @@ import {
   IconUser,
   IconClipboardList,
   IconBrandTabler,
-  IconArrowLeft
+  IconArrowLeft,
 } from '@tabler/icons-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -41,7 +41,7 @@ const developmentalAssessments = [
   { value: 'developmental-milestones', label: 'Developmental Milestones Review' },
   { value: 'vision-screening', label: 'Vision Screening' },
   { value: 'hearing-screening', label: 'Hearing Screening' },
-  { value: 'blood-pressure', label: 'Blood Pressure' }
+  { value: 'blood-pressure', label: 'Blood Pressure' },
 ];
 
 // Common pediatric preventive care interventions
@@ -53,7 +53,7 @@ const preventiveCareActivities = [
   { value: 'lead-screening', label: 'Lead Screening' },
   { value: 'anemia-screening', label: 'Anemia Screening' },
   { value: 'dental-varnish', label: 'Fluoride Varnish Application' },
-  { value: 'development-education', label: 'Developmental Education' }
+  { value: 'development-education', label: 'Developmental Education' },
 ];
 
 // Common age range options for pediatric protocols
@@ -64,7 +64,7 @@ const ageRangeOptions = [
   { value: 'toddler', label: 'Toddler (1-3 years)' },
   { value: 'preschool', label: 'Preschool (3-5 years)' },
   { value: 'school-age', label: 'School Age (5-12 years)' },
-  { value: 'adolescent', label: 'Adolescent (12-18 years)' }
+  { value: 'adolescent', label: 'Adolescent (12-18 years)' },
 ];
 
 // Template types
@@ -74,7 +74,7 @@ const templateOptions = [
   { value: 'vaccination', label: 'Vaccination Schedule Protocol' },
   { value: 'chronic-condition', label: 'Chronic Condition Management' },
   { value: 'behavioral-health', label: 'Behavioral Health Screening' },
-  { value: 'custom', label: 'Custom Protocol' }
+  { value: 'custom', label: 'Custom Protocol' },
 ];
 
 export function PlanDefinitionCreateForm() {
@@ -87,7 +87,7 @@ export function PlanDefinitionCreateForm() {
   const form = useForm({
     initialValues: {
       title: '',
-      status: 'draft',
+      status: 'draft' as PlanDefinition['status'],
       version: '1.0',
       description: '',
       purpose: '',
@@ -126,14 +126,15 @@ export function PlanDefinitionCreateForm() {
       form.setValues({
         ...form.values,
         title: form.values.title || 'Well-Child Visit Protocol',
-        purpose: 'Comprehensive well-child care including growth monitoring, developmental screening, and preventive care',
+        purpose:
+          'Comprehensive well-child care including growth monitoring, developmental screening, and preventive care',
         assessments: ['growth', 'developmental-milestones', 'vision-screening', 'hearing-screening'],
         activities: ['vaccines', 'anticipatory-guidance', 'nutrition-counseling', 'safety-counseling'],
         includeGrowthTracking: true,
         includeDevelopmentalScreening: true,
         includeVaccinations: true,
         includeAnticipGuidance: true,
-        goalDescription: 'Ensure appropriate growth and development according to pediatric standards'
+        goalDescription: 'Ensure appropriate growth and development according to pediatric standards',
       });
     } else if (templateType === 'developmental-screening') {
       form.setValues({
@@ -146,7 +147,7 @@ export function PlanDefinitionCreateForm() {
         includeDevelopmentalScreening: true,
         includeVaccinations: false,
         includeAnticipGuidance: true,
-        goalDescription: 'Early identification of developmental concerns and appropriate intervention'
+        goalDescription: 'Early identification of developmental concerns and appropriate intervention',
       });
     } else if (templateType === 'vaccination') {
       form.setValues({
@@ -159,7 +160,7 @@ export function PlanDefinitionCreateForm() {
         includeDevelopmentalScreening: false,
         includeVaccinations: true,
         includeAnticipGuidance: true,
-        goalDescription: 'Complete age-appropriate immunizations per recommended schedule'
+        goalDescription: 'Complete age-appropriate immunizations per recommended schedule',
       });
     }
   };
@@ -173,33 +174,31 @@ export function PlanDefinitionCreateForm() {
   // Create PlanDefinition resource
   const handleSubmit = async (values: typeof form.values) => {
     // Create a goal for the PlanDefinition
-    const goal: any = {
+    const goal: PlanDefinitionGoal = {
       description: {
-        text: values.goalDescription
+        text: values.goalDescription,
       },
       addresses: [
         {
-          text: 'Pediatric preventive care'
-        }
+          text: 'Pediatric preventive care',
+        },
       ],
-      target: []
+      target: [],
     };
 
     if (values.includeGrowthTracking) {
-      goal.target.push({
+      goal.target!.push({
         measure: {
-          text: 'Growth parameters'
+          text: 'Growth parameters',
         },
-        detailString: 'Age-appropriate growth parameters'
       });
     }
 
     if (values.includeDevelopmentalScreening) {
-      goal.target.push({
+      goal.target!.push({
         measure: {
-          text: 'Developmental milestones'
+          text: 'Developmental milestones',
         },
-        detailString: 'Age-appropriate developmental milestones'
       });
     }
 
@@ -211,17 +210,17 @@ export function PlanDefinitionCreateForm() {
       version: values.version,
       description: values.description,
       purpose: values.purpose,
-      useContext: values.ageRange.map(age => ({
+      useContext: values.ageRange.map((age) => ({
         code: {
           system: 'http://terminology.hl7.org/CodeSystem/usage-context-type',
-          code: 'age'
+          code: 'age',
         },
         valueCodeableConcept: {
-          text: ageRangeOptions.find(option => option.value === age)?.label
-        }
+          text: ageRangeOptions.find((option) => option.value === age)?.label,
+        },
       })),
       goal: [goal],
-      action: []
+      action: [],
     };
 
     // Add actions based on selected components
@@ -229,13 +228,15 @@ export function PlanDefinitionCreateForm() {
       planDefinition.action?.push({
         title: 'Growth Measurement',
         description: 'Measure height, weight, and plot on appropriate growth chart',
-        dynamicValue: [{
-          path: 'timing',
-          expression: {
-            language: 'text/cql',
-            expression: `Every ${values.visitFrequency} months`
-          }
-        }]
+        dynamicValue: [
+          {
+            path: 'timing',
+            expression: {
+              language: 'text/cql',
+              expression: `Every ${values.visitFrequency} months`,
+            },
+          },
+        ],
       });
     }
 
@@ -243,13 +244,15 @@ export function PlanDefinitionCreateForm() {
       planDefinition.action?.push({
         title: 'Developmental Screening',
         description: 'Perform age-appropriate developmental screening',
-        dynamicValue: [{
-          path: 'timing',
-          expression: {
-            language: 'text/cql',
-            expression: `Every ${values.visitFrequency} months`
-          }
-        }]
+        dynamicValue: [
+          {
+            path: 'timing',
+            expression: {
+              language: 'text/cql',
+              expression: `Every ${values.visitFrequency} months`,
+            },
+          },
+        ],
       });
     }
 
@@ -257,13 +260,15 @@ export function PlanDefinitionCreateForm() {
       planDefinition.action?.push({
         title: 'Vaccination Administration',
         description: 'Administer age-appropriate vaccinations per schedule',
-        dynamicValue: [{
-          path: 'timing',
-          expression: {
-            language: 'text/cql',
-            expression: 'As indicated by vaccination schedule'
-          }
-        }]
+        dynamicValue: [
+          {
+            path: 'timing',
+            expression: {
+              language: 'text/cql',
+              expression: 'As indicated by vaccination schedule',
+            },
+          },
+        ],
       });
     }
 
@@ -271,45 +276,51 @@ export function PlanDefinitionCreateForm() {
       planDefinition.action?.push({
         title: 'Anticipatory Guidance',
         description: 'Provide age-appropriate anticipatory guidance to caregivers',
-        dynamicValue: [{
-          path: 'timing',
-          expression: {
-            language: 'text/cql',
-            expression: `Every ${values.visitFrequency} months`
-          }
-        }]
+        dynamicValue: [
+          {
+            path: 'timing',
+            expression: {
+              language: 'text/cql',
+              expression: `Every ${values.visitFrequency} months`,
+            },
+          },
+        ],
       });
     }
 
     // Add selected assessments
-    values.assessments.forEach(assessment => {
-      const assessmentInfo = developmentalAssessments.find(a => a.value === assessment);
+    values.assessments.forEach((assessment) => {
+      const assessmentInfo = developmentalAssessments.find((a) => a.value === assessment);
       planDefinition.action?.push({
         title: assessmentInfo?.label || assessment,
         description: `Perform ${assessmentInfo?.label || assessment}`,
-        dynamicValue: [{
-          path: 'timing',
-          expression: {
-            language: 'text/cql',
-            expression: 'As clinically indicated'
-          }
-        }]
+        dynamicValue: [
+          {
+            path: 'timing',
+            expression: {
+              language: 'text/cql',
+              expression: 'As clinically indicated',
+            },
+          },
+        ],
       });
     });
 
     // Add selected activities
-    values.activities.forEach(activity => {
-      const activityInfo = preventiveCareActivities.find(a => a.value === activity);
+    values.activities.forEach((activity) => {
+      const activityInfo = preventiveCareActivities.find((a) => a.value === activity);
       planDefinition.action?.push({
         title: activityInfo?.label || activity,
         description: `Perform ${activityInfo?.label || activity}`,
-        dynamicValue: [{
-          path: 'timing',
-          expression: {
-            language: 'text/cql',
-            expression: 'As clinically indicated'
-          }
-        }]
+        dynamicValue: [
+          {
+            path: 'timing',
+            expression: {
+              language: 'text/cql',
+              expression: 'As clinically indicated',
+            },
+          },
+        ],
       });
     });
 
@@ -324,7 +335,7 @@ export function PlanDefinitionCreateForm() {
       });
 
       // Navigate to the new PlanDefinition
-      navigate(`/care-plan-templates/${result.id}`);
+      void navigate(`/care-plan-templates/${result.id}`);
     } catch (error) {
       console.error('Error creating PlanDefinition:', error);
       notifications.show({
@@ -337,12 +348,12 @@ export function PlanDefinitionCreateForm() {
 
   return (
     <Container size="xl" mt="xl">
-      <Stack spacing="md">
+      <Stack gap="md">
         <Group>
           <Button
             leftSection={<IconArrowLeft size={16} />}
             variant="outline"
-            onClick={() => navigate('/care-plan-templates')}
+            onClick={() => void navigate('/care-plan-templates')}
           >
             Back to Protocols
           </Button>
@@ -352,9 +363,11 @@ export function PlanDefinitionCreateForm() {
 
         <Card shadow="sm" p="lg" radius="md" withBorder>
           <form onSubmit={form.onSubmit(handleSubmit)}>
-            <Stack spacing="md">
+            <Stack gap="md">
               <Box mb="md">
-                <Title order={4} mb="xs">Template Selection</Title>
+                <Title order={4} mb="xs">
+                  Template Selection
+                </Title>
                 <Text size="sm" color="dimmed" mb="md">
                   Select a starting template or create a custom protocol from scratch
                 </Text>
@@ -390,7 +403,7 @@ export function PlanDefinitionCreateForm() {
                 </Tabs.List>
 
                 <Tabs.Panel value="basics" pt="md">
-                  <Stack spacing="md">
+                  <Stack gap="md">
                     <TextInput
                       label="Protocol Title"
                       placeholder="e.g., Infant Well-Visit Protocol"
@@ -404,15 +417,11 @@ export function PlanDefinitionCreateForm() {
                         data={[
                           { value: 'draft', label: 'Draft' },
                           { value: 'active', label: 'Active' },
-                          { value: 'retired', label: 'Retired' }
+                          { value: 'retired', label: 'Retired' },
                         ]}
                         {...form.getInputProps('status')}
                       />
-                      <TextInput
-                        label="Version"
-                        placeholder="1.0"
-                        {...form.getInputProps('version')}
-                      />
+                      <TextInput label="Version" placeholder="1.0" {...form.getInputProps('version')} />
                     </Group>
 
                     <Textarea
@@ -440,7 +449,7 @@ export function PlanDefinitionCreateForm() {
                 </Tabs.Panel>
 
                 <Tabs.Panel value="components" pt="md">
-                  <Stack spacing="md">
+                  <Stack gap="md">
                     <Title order={5}>Core Protocol Components</Title>
                     <Text size="sm" color="dimmed">
                       Select the standard components to include in this pediatric protocol
@@ -481,7 +490,7 @@ export function PlanDefinitionCreateForm() {
                 </Tabs.Panel>
 
                 <Tabs.Panel value="assessments" pt="md">
-                  <Stack spacing="md">
+                  <Stack gap="md">
                     <Title order={5}>Assessment Tools</Title>
                     <Text size="sm" color="dimmed">
                       Select screenings and assessments to include in this protocol
@@ -497,7 +506,7 @@ export function PlanDefinitionCreateForm() {
                 </Tabs.Panel>
 
                 <Tabs.Panel value="activities" pt="md">
-                  <Stack spacing="md">
+                  <Stack gap="md">
                     <Title order={5}>Preventive Care Activities</Title>
                     <Text size="sm" color="dimmed">
                       Select preventive care activities to include in this protocol
@@ -513,7 +522,7 @@ export function PlanDefinitionCreateForm() {
                 </Tabs.Panel>
 
                 <Tabs.Panel value="goals" pt="md">
-                  <Stack spacing="md">
+                  <Stack gap="md">
                     <Title order={5}>Clinical Goals</Title>
                     <Text size="sm" color="dimmed">
                       Define the primary goal for this care protocol
@@ -535,12 +544,10 @@ export function PlanDefinitionCreateForm() {
               </Tabs>
 
               <Group justify="flex-end" mt="xl">
-                <Button variant="outline" onClick={() => navigate('/care-plan-templates')}>
+                <Button variant="outline" onClick={() => void navigate('/care-plan-templates')}>
                   Cancel
                 </Button>
-                <Button type="submit">
-                  Create Protocol
-                </Button>
+                <Button type="submit">Create Protocol</Button>
               </Group>
             </Stack>
           </form>

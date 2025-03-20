@@ -12,16 +12,17 @@ import {
   ActionIcon,
   Loader,
   Center,
-  Stack
+  Stack,
 } from '@mantine/core';
 import { useMedplum } from '@medplum/react';
-import { CarePlan, Reference } from '@medplum/fhirtypes';
+import { CarePlan, Patient, Reference } from '@medplum/fhirtypes';
 import { IconPlus, IconSearch, IconChevronRight } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { MedplumClient } from '@medplum/core';
 
 // Helper function to extract patient name from reference
-const getPatientName = async (medplum: any, reference: Reference) => {
+const getPatientName = async (medplum: MedplumClient, reference: Reference<Patient>) => {
   try {
     if (!reference.reference) return 'Unknown Patient';
     const patient = await medplum.readReference(reference);
@@ -35,11 +36,16 @@ const getPatientName = async (medplum: any, reference: Reference) => {
 // Status badge color mapping
 const getStatusColor = (status: string): string => {
   switch (status) {
-    case 'active': return 'green';
-    case 'completed': return 'blue';
-    case 'draft': return 'yellow';
-    case 'revoked': return 'red';
-    default: return 'gray';
+    case 'active':
+      return 'green';
+    case 'completed':
+      return 'blue';
+    case 'draft':
+      return 'yellow';
+    case 'revoked':
+      return 'red';
+    default:
+      return 'gray';
   }
 };
 
@@ -63,15 +69,15 @@ export function CarePlanList() {
         // Fetch CarePlans from Medplum FHIR server
         const results = await medplum.searchResources('CarePlan', {
           _count: '100',
-          _sort: '-_lastUpdated'
+          _sort: '-_lastUpdated',
         });
 
         // Enhance with patient names
         const enhancedResults = await Promise.all(
           results.map(async (carePlan: CarePlan) => {
             let patientName = 'Unknown Patient';
-            if (carePlan.subject) {
-              patientName = await getPatientName(medplum, carePlan.subject);
+            if (carePlan.subject && carePlan.subject.reference?.includes('Patient')) {
+              patientName = await getPatientName(medplum, carePlan.subject as Reference<Patient>);
             }
             return { ...carePlan, patientName };
           })
@@ -88,11 +94,13 @@ export function CarePlanList() {
     void fetchCarePlans();
   }, [medplum]);
 
-  const filteredCarePlans = carePlans.filter(plan => {
+  const filteredCarePlans = carePlans.filter((plan) => {
     // Filter by search term (patient name or title)
     const matchesSearch =
-      (plan.patientName?.toLowerCase().includes(searchTerm.toLowerCase()) || false) ||
-      (plan.title?.toLowerCase().includes(searchTerm.toLowerCase()) || false);
+      plan.patientName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      false ||
+      plan.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      false;
 
     // Filter by status
     const matchesStatus = statusFilter === 'all' || plan.status === statusFilter;
@@ -106,12 +114,12 @@ export function CarePlanList() {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
   const handleCreateCarePlan = () => {
-    navigate('/care-plans/new');
+    void navigate('/care-plans/new');
   };
 
   return (
@@ -144,7 +152,7 @@ export function CarePlanList() {
                 { value: 'active', label: 'Active' },
                 { value: 'completed', label: 'Completed' },
                 { value: 'draft', label: 'Draft' },
-                { value: 'revoked', label: 'Revoked' }
+                { value: 'revoked', label: 'Revoked' },
               ]}
               style={{ width: 200 }}
             />
@@ -170,11 +178,11 @@ export function CarePlanList() {
               </Table.Thead>
               <Table.Tbody>
                 {filteredCarePlans.length > 0 ? (
-                  filteredCarePlans.map(plan => (
+                  filteredCarePlans.map((plan) => (
                     <Table.Tr
                       key={plan.id}
                       style={{ cursor: 'pointer' }}
-                      onClick={() => navigate(`/care-plans/${plan.id}`)}
+                      onClick={() => void navigate(`/care-plans/${plan.id}`)}
                     >
                       <Table.Td>
                         <Text fw={500}>{plan.patientName}</Text>
@@ -197,11 +205,7 @@ export function CarePlanList() {
                           {formatStatus(plan.status || 'unknown')}
                         </Badge>
                       </Table.Td>
-                      <Table.Td>
-                        {plan.meta?.lastUpdated
-                          ? formatDate(plan.meta.lastUpdated)
-                          : 'N/A'}
-                      </Table.Td>
+                      <Table.Td>{plan.meta?.lastUpdated ? formatDate(plan.meta.lastUpdated) : 'N/A'}</Table.Td>
                       <Table.Td>
                         {plan.period?.start && (
                           <Text size="sm">
