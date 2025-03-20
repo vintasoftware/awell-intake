@@ -1,6 +1,14 @@
 import { AppShell, Text } from '@mantine/core';
 import { ErrorBoundary, Loading, useMedplum, useMedplumProfile } from '@medplum/react';
-import { IconCalendar, IconFile, IconHome, IconLogout, IconStethoscope, IconUsers } from '@tabler/icons-react';
+import {
+  IconBook,
+  IconBook2,
+  IconCalendar,
+  IconHome,
+  IconLogout,
+  IconStethoscope,
+  IconUsers,
+} from '@tabler/icons-react';
 import { Suspense } from 'react';
 import { Route, BrowserRouter as Router, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { CarePlanCreateForm } from './components/CarePlanCreateForm';
@@ -25,10 +33,11 @@ function MainLayout({ children }: { children: React.ReactNode }) {
 
   const navItems = [
     { icon: IconHome, label: 'Home', path: '/' },
-    { icon: IconUsers, label: 'Patients', path: '/patients' },
-    { icon: IconStethoscope, label: 'Practitioners', path: '/practitioners' },
     { icon: IconCalendar, label: 'Calendar', path: '/calendar' },
-    { icon: IconFile, label: 'Protocols', path: '/care-plan-templates' },
+    { icon: IconUsers, label: 'Patients', path: '/patients' },
+    { icon: IconBook, label: 'Plans', path: '/care-plans' },
+    { icon: IconBook2, label: 'Protocols', path: '/care-plan-templates' },
+    { icon: IconStethoscope, label: 'Practitioners', path: '/practitioners' },
   ];
 
   return (
