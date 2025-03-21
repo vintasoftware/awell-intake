@@ -11,8 +11,8 @@
     "preview": "vite preview",
     "prepare": "husky",
     "clean": "rimraf dist",
-    "bots:build": "npm run clean && tsc && node --no-warnings src/bots/build-bots.mjs",
-    "bots:deploy": "node --loader ts-node/esm --trace-warnings src/bots/deploy-bots.ts"
+    "bots:build": "npm run clean && tsc && node src/bots/build-bots.mjs",
+    "bots:deploy": "node src/bots/deploy-bots.mjs"
   },
   "prettier": {
     "printWidth": 120,
