@@ -1,0 +1,21 @@
+name: Deploy Medplum Bots
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build site
+        run: npm ci && npm run bots:build
+
+      - name: Deploy Bots
+        env:
+          DEPLOY_MEDPLUM_CLIENT_ID: ${{ secrets.DEPLOY_MEDPLUM_CLIENT_ID }}
+          DEPLOY_MEDPLUM_CLIENT_SECRET: ${{ secrets.DEPLOY_MEDPLUM_CLIENT_SECRET }}
+        run: npm run bots:deploy
