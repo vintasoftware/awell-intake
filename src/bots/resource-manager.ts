@@ -2,7 +2,7 @@ import { BotEvent, MedplumClient } from '@medplum/core';
 import { Resource } from '@medplum/fhirtypes';
 
 // Whitelist of allowed resource types
-const ALLOWED_RESOURCE_TYPES: Resource['resourceType'][] = ['Appointment', 'Communication'];
+const ALLOWED_RESOURCE_TYPES: Resource['resourceType'][] = ['Appointment', 'Communication', 'Encounter'];
 
 interface ResourceOperation {
   type: 'create' | 'update' | 'delete';
