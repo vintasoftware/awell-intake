@@ -66,7 +66,7 @@ export function PatientDetail() {
         medplum.search('Media', { subject: ref, _count }),
         medplum.search('ServiceRequest', { subject: ref, _count }),
         medplum.search('Task', { subject: ref, _count }),
-        medplum.search('Encounter', { patient: ref, _count }),
+        medplum.search('Appointment', { patient: ref, _count }),
         medplum.search('DocumentReference', { patient: ref, _count }),
         medplum.search('ClinicalImpression', { patient: ref, _count }),
       ]);

@@ -31,12 +31,6 @@ interface GraphQLResponse<T> {
   errors?: { message: string; extensions?: { data: unknown } }[];
 }
 
-interface StartPathwayResponse {
-  startPathwayWithPatientIdentifier: {
-    pathway_id: string;
-  };
-}
-
 function cleanPhoneNumber(phone: string | undefined): string {
   if (!phone) return '';
   // Remove all non-numeric characters
@@ -133,15 +127,38 @@ export async function getAwellPatient(patientID: string, apiUrl: string, apiKey:
   return awellPatient;
 }
 
+export async function createAwellPatient(apiUrl: string, apiKey: string, phone: string): Promise<string | null> {
+  const createPatientQuery = `
+    mutation CreatePatient {
+      createPatient(input: {
+        phone: "${phone}",
+      }) {
+        patient {
+          id
+        }
+      }
+    }
+  `;
+  try {
+    const result = await executePathwayQuery<CreatePatientResponse>(createPatientQuery, apiUrl, apiKey);
+    return result.data?.createPatient?.patient?.id;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
+
 export async function startGenericPathway(
   apiUrl: string,
   apiKey: string,
+  patientId: string,
   pathwayDefinitionId: string,
   dataPoints: Record<string, string>[]
 ) {
   const startPathwayQuery = `
       mutation {
         startPathway(input: {
+          patient_id: "${patientId}",
           pathway_definition_id: "${pathwayDefinitionId}",
           data_points: [
             ${dataPoints
@@ -211,7 +228,7 @@ export async function ensureAwellPatientExists(patient: Patient, apiUrl: string,
   }
 }
 
-async function executePathwayQuery(query: string, apiUrl: string, apiKey: string) {
+async function executePathwayQuery<T>(query: string, apiUrl: string, apiKey: string) {
   const response = await fetch(apiUrl, {
     method: 'POST',
     headers: {
@@ -221,7 +238,7 @@ async function executePathwayQuery(query: string, apiUrl: string, apiKey: string
     body: JSON.stringify({ query }),
   });
 
-  const result = (await response.json()) as GraphQLResponse<StartPathwayResponse>;
+  const result = (await response.json()) as GraphQLResponse<T>;
   if (result.errors && result.errors.length > 0) {
     throw new Error(
       `Error on startCareFlow: ${result.errors[0].message}. DETAILS: ${JSON.stringify(
@@ -229,4 +246,5 @@ async function executePathwayQuery(query: string, apiUrl: string, apiKey: string
       )}`
     );
   }
+  return result;
 }

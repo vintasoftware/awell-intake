@@ -1,6 +1,6 @@
 import { BotEvent, MedplumClient } from '@medplum/core';
 import { Task } from '@medplum/fhirtypes';
-import { startGenericPathway } from './utils/awell';
+import { createAwellPatient, startGenericPathway } from './utils/awell';
 
 export async function handler(medplum: MedplumClient, event: BotEvent): Promise<void> {
   const task = event.input as Task;
@@ -28,7 +28,11 @@ export async function handler(medplum: MedplumClient, event: BotEvent): Promise<
   }
 
   const phone = task.input[0].valueContactPoint.value;
-  await startGenericPathway(apiUrl, apiKey, pathwayDefinitionId, [
+  const patientId = await createAwellPatient(apiUrl, apiKey, phone);
+  if (!patientId) {
+    throw new Error('Failed to create Awell patient');
+  }
+  await startGenericPathway(apiUrl, apiKey, patientId, pathwayDefinitionId, [
     {
       data_point_definition_id: dataPointDefinitionId,
       value: phone,
