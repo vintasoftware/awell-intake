@@ -75,6 +75,11 @@ const displayRules = {
     icon: 'IconFile',
     fields: ['subject', 'date', 'type', 'period', 'code', 'reasonCode'],
   },
+  Appointment: {
+    display: 'Appointment',
+    icon: 'IconFile',
+    fields: ['subject', 'date', 'type', 'start', 'end', 'code', 'reasonCode'],
+  },
   DocumentReference: {
     display: 'Document Reference',
     icon: 'IconFile',
@@ -396,10 +401,10 @@ function TimelineItemContent({ key, item, history }: { key: string; item: Resour
               const value = (item as any)[field];
               if (!value) return null;
 
-              if (field === 'date') {
+              if (field === 'date' || field === 'start' || field === 'end') {
                 return (
                   <Text key={field} size="sm">
-                    {dayjs(value).format('MMM D, YYYY')}
+                    {dayjs(value).format('MMM D, YYYY h:mm A')}
                   </Text>
                 );
               }
