@@ -130,8 +130,6 @@ async function uploadBots() {
     clientId: process.env.DEPLOY_MEDPLUM_CLIENT_ID,
   });
 
-  console.log(process.env);
-
   await medplum.startClientLogin(process.env.DEPLOY_MEDPLUM_CLIENT_ID, process.env.DEPLOY_MEDPLUM_CLIENT_SECRET);
 
   const projectId = medplum.getProject()?.id;
