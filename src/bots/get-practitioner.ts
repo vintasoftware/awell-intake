@@ -1,4 +1,4 @@
-import { BotEvent, createReference, MedplumClient } from '@medplum/core';
+import { BotEvent, MedplumClient } from '@medplum/core';
 
 /**
  * Input format for the bot
@@ -11,8 +11,7 @@ interface BotInput {
  * Output format for the bot
  */
 interface BotOutput {
-  reference: string;
-  display?: string;
+  data: string;
 }
 
 /**
@@ -22,7 +21,7 @@ interface BotOutput {
  * @param input - Input containing the cal.com username
  * @returns Practitioner reference or null if not found
  */
-export default async function getPractitioner(medplum: MedplumClient, event: BotEvent): Promise<BotOutput | null> {
+export async function handler(medplum: MedplumClient, event: BotEvent): Promise<BotOutput | null> {
   const input = event.input as BotInput;
   // Validate input
   if (!input['cal-com']) {
@@ -52,8 +51,7 @@ export default async function getPractitioner(medplum: MedplumClient, event: Bot
       throw new Error('No practitioner found');
     }
 
-    // Create and return the practitioner reference
-    return createReference(practitioner);
+    return { data: `Practitioner/${practitioner.id}` };
   } catch (error) {
     console.error('Error searching for practitioner:', error);
     throw error;
