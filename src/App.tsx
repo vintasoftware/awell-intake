@@ -1,18 +1,31 @@
 import { AppShell, Text } from '@mantine/core';
 import { ErrorBoundary, Loading, useMedplum, useMedplumProfile } from '@medplum/react';
-import { IconUsers, IconHome, IconLogout, IconStethoscope, IconCalendar } from '@tabler/icons-react';
+import {
+  IconBook,
+  IconBook2,
+  IconCalendar,
+  IconHome,
+  IconLogout,
+  IconStethoscope,
+  IconUsers,
+} from '@tabler/icons-react';
 import { Suspense } from 'react';
 import { Route, BrowserRouter as Router, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { CarePlanCreateForm } from './components/CarePlanCreateForm';
+import { CarePlanDetail } from './components/CarePlanDetail';
+import { CarePlanList } from './components/CarePlanList';
 import { PatientDetail } from './components/PatientDetail';
-import { PractitionerList } from './components/PractitionerList';
+import { PatientList } from './components/PatientList';
+import { PlanDefinitionCreateForm } from './components/PlanDefinitionCreateForm';
+import { PlanDefinitionDetail } from './components/PlanDefinitionDetail';
+import { PlanDefinitionList } from './components/PlanDefinitionList';
 import { PractitionerDetail } from './components/PractitionerDetail';
+import { PractitionerList } from './components/PractitionerList';
+import { AppointmentPage } from './pages/AppointmentPage';
+import { CalendarPage } from './pages/CalendarPage';
 import { HomePage } from './pages/HomePage';
 import { LandingPage } from './pages/LandingPage';
 import { SignInPage } from './pages/SignInPage';
-import { PatientList } from './components/PatientList';
-import { AppointmentPage } from './pages/AppointmentPage';
-import { CalendarPage } from './pages/CalendarPage';
-import '@mantine/notifications/styles.css';
 
 function MainLayout({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
@@ -20,9 +33,11 @@ function MainLayout({ children }: { children: React.ReactNode }) {
 
   const navItems = [
     { icon: IconHome, label: 'Home', path: '/' },
-    { icon: IconUsers, label: 'Patients', path: '/patients' },
-    { icon: IconStethoscope, label: 'Practitioners', path: '/practitioners' },
     { icon: IconCalendar, label: 'Calendar', path: '/calendar' },
+    { icon: IconUsers, label: 'Patients', path: '/patients' },
+    { icon: IconBook, label: 'Plans', path: '/care-plans' },
+    { icon: IconBook2, label: 'Protocols', path: '/care-plan-templates' },
+    { icon: IconStethoscope, label: 'Practitioners', path: '/practitioners' },
   ];
 
   return (
@@ -127,6 +142,12 @@ export function App(): JSX.Element | null {
                     <Route path="/practitioners/:id" element={<PractitionerDetail />} />
                     <Route path="/calendar" element={<CalendarPage />} />
                     <Route path="/appointment/:id" element={<AppointmentPage />} />
+                    <Route path="/care-plan-templates" element={<PlanDefinitionList />} />
+                    <Route path="/care-plan-templates/new" element={<PlanDefinitionCreateForm />} />
+                    <Route path="/care-plan-templates/:id" element={<PlanDefinitionDetail />} />
+                    <Route path="/care-plans" element={<CarePlanList />} />
+                    <Route path="/care-plans/new" element={<CarePlanCreateForm />} />
+                    <Route path="/care-plans/:id" element={<CarePlanDetail />} />
                   </Routes>
                 </MainLayout>
               }
