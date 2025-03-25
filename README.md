@@ -1,43 +1,20 @@
-# medplum-awell-intake
 
-A comprehensive patient intake and management system built with React, utilizing Medplum for healthcare data management. This application provides an interface for managing patients, practitioners, and healthcare resources.
+# Triage
 
-## Features
+## 📋 Table of Contents
 
-- Patient Management
-  - View and manage patient list
-  - Detailed patient profiles with medical history
-  - Create new patient records
-  - Track patient timeline and overview
-- Practitioner Management
-  - Browse practitioner directory
-  - View detailed practitioner information and availability
-- Resource Timeline
-  - Chronological view of patient-related events and resources
-  - Interactive timeline for tracking patient journey
-- Automated Workflows
-  - Triage automation via bots
-  - Resource management automation
+1. 🤔 [What is in this repository?](#what-is-in-this-repository)
+2. 📖 [Documentation](#documentation)
 
-## Technology Stack
+## <a name="what-is-in-this-repository">🤔 What is in this repository?</a>
 
-- React with TypeScript
-- Vite for build tooling
-- Medplum SDK for healthcare data integration
-- Awell as a care ops tool
+When Source Control for a care flow is set up in Awell Studio, the care flow is synced as code to this repository.
 
-### Getting Started
+## <a name="documentation">📖 Documentation</a>
 
-Install the dependencies
+You can find more information about Source Control, care flows, and more on our [Developer Hub](https://developers.awellhealth.com/awell-studio/docs/source-control/introduction). Here is list of relevant sections you might be interested in:
 
-```bash
-npm install
-```
-
-Then, run the app
-
-```bash
-npm run dev
-```
-
-This app should run on `http://localhost:3000/`
+- [Introduction to Source Control](https://developers.awellhealth.com/awell-studio/docs/source-control/introduction)
+- [How syncing to SCM works](https://developers.awellhealth.com/awell-studio/docs/source-control/concepts/syncing-to-scm)
+- [The components a care flow is made up of](https://developers.awellhealth.com/awell-studio/docs/source-control/concepts/components)
+    

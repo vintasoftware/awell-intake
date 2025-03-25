@@ -1,0 +1,23 @@
+[
+  {
+    "type": "trigger",
+    "trigger": {
+      "_key": "kaPhCX6grgly",
+      "definition_id": "kaPhCX6grgly",
+      "pathway_id": "b1IJieFiKohq",
+      "target_id": "WqbRJ3PnOEhx",
+      "target_type": "track",
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:06:07.974Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:06:08.014Z"
+      },
+      "settings": {
+        "type": "pathway_started"
+      }
+    }
+  }
+]

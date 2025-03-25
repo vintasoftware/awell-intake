@@ -1,0 +1,191 @@
+[
+  {
+    "type": "dynamic_variable",
+    "dynamic_variable": {
+      "_key": "xDr5n9Jz5Kuy",
+      "definition_id": "xDr5n9Jz5Kuy",
+      "transformations": [],
+      "data_point_definition_id": "euZQ6d1Eb5tX",
+      "data_point_property": "value",
+      "fallback": "",
+      "label": "specialization",
+      "is_hyperlink": false,
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T17:49:48.122Z"
+      },
+      "last_updated": {
+        "date": "2025-03-24T12:40:44.746Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "dynamic_variable",
+    "dynamic_variable": {
+      "_key": "oeBHzwrbPz0d",
+      "definition_id": "oeBHzwrbPz0d",
+      "transformations": [],
+      "data_point_definition_id": "6Xu9ZH8Z0WZF",
+      "data_point_property": "value",
+      "fallback": "",
+      "label": "status",
+      "is_hyperlink": false,
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:09:59.226Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:09:59.226Z"
+      }
+    }
+  },
+  {
+    "type": "dynamic_variable",
+    "dynamic_variable": {
+      "_key": "LPB9iOatFRJH",
+      "definition_id": "LPB9iOatFRJH",
+      "transformations": [],
+      "data_point_definition_id": "N9t3zTXMT1i7",
+      "data_point_property": "value",
+      "fallback": "",
+      "label": "description",
+      "is_hyperlink": false,
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:10:16.837Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:10:16.837Z"
+      }
+    }
+  },
+  {
+    "type": "dynamic_variable",
+    "dynamic_variable": {
+      "_key": "I3pGjpNAS3MN",
+      "definition_id": "I3pGjpNAS3MN",
+      "transformations": [],
+      "data_point_definition_id": "9t5ZokD0JXc1",
+      "data_point_property": "value",
+      "fallback": "",
+      "label": "startTime",
+      "is_hyperlink": false,
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:10:39.963Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:10:39.963Z"
+      }
+    }
+  },
+  {
+    "type": "dynamic_variable",
+    "dynamic_variable": {
+      "_key": "uyIK0C3YlQDP",
+      "definition_id": "uyIK0C3YlQDP",
+      "transformations": [],
+      "data_point_definition_id": "qwcinMboIgoU",
+      "data_point_property": "value",
+      "fallback": "",
+      "label": "endTime",
+      "is_hyperlink": false,
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:10:58.776Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:10:58.776Z"
+      }
+    }
+  },
+  {
+    "type": "dynamic_variable",
+    "dynamic_variable": {
+      "_key": "uAcbNYLv1Llv",
+      "definition_id": "uAcbNYLv1Llv",
+      "transformations": [],
+      "data_point_definition_id": "JwQyGUL4QiXI",
+      "data_point_property": "value",
+      "fallback": "",
+      "label": "firstAttendeeName",
+      "is_hyperlink": false,
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:12:17.932Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:12:17.932Z"
+      }
+    }
+  },
+  {
+    "type": "dynamic_variable",
+    "dynamic_variable": {
+      "_key": "8rElOrAjzQEj",
+      "definition_id": "8rElOrAjzQEj",
+      "transformations": [],
+      "data_point_definition_id": "qI9w2UPLQ91t",
+      "data_point_property": "value",
+      "fallback": "",
+      "label": "medplumId",
+      "is_hyperlink": false,
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:12:41.550Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:12:41.550Z"
+      }
+    }
+  },
+  {
+    "type": "dynamic_variable",
+    "dynamic_variable": {
+      "_key": "Q7VYoK84hgpS",
+      "definition_id": "Q7VYoK84hgpS",
+      "transformations": [],
+      "data_point_definition_id": "rg8ZaLaNjM4I",
+      "data_point_property": "value",
+      "fallback": "",
+      "label": "practitionerRef",
+      "is_hyperlink": false,
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:13:47.818Z"
+      },
+      "last_updated": {
+        "date": "2025-03-24T13:18:55.875Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "dynamic_variable",
+    "dynamic_variable": {
+      "_key": "zMZIgjl4qKHF",
+      "definition_id": "zMZIgjl4qKHF",
+      "transformations": [],
+      "data_point_definition_id": "6W06eGLEC5xP",
+      "data_point_property": "value",
+      "fallback": "",
+      "label": "practitionerEmail",
+      "is_hyperlink": false,
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-24T12:34:54.870Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-24T12:34:54.870Z"
+      }
+    }
+  }
+]

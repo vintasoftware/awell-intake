@@ -1,0 +1,210 @@
+[
+  {
+    "type": "step",
+    "step": {
+      "_key": "cDfMeGvP2f07",
+      "type": "step",
+      "definition_id": "cDfMeGvP2f07",
+      "title": "Patient onboarding",
+      "key": "Patientonboarding",
+      "label_definition_ids": [],
+      "action_definition_ids": [
+        "4hKVRnT2oE9c",
+        "kaQv5RjSHucd",
+        "wY74VnXNyWtH",
+        "ahYwKfs8RPMI",
+        "4B4cKbOuEmfa",
+        "OyHl1zL72jKX"
+      ],
+      "track_definition_id": "WqbRJ3PnOEhx",
+      "coordinates": {
+        "x": 608,
+        "y": -672
+      },
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:07:33.405Z"
+      },
+      "last_updated": {
+        "date": "2025-03-24T17:33:26.114Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "step",
+    "step": {
+      "_key": "TfMRFBSkGnHj",
+      "type": "step",
+      "definition_id": "TfMRFBSkGnHj",
+      "title": "Select specialization",
+      "key": "Selectspecialization",
+      "label_definition_ids": [],
+      "action_definition_ids": [
+        "7AiuiqVMVtkG"
+      ],
+      "track_definition_id": "WqbRJ3PnOEhx",
+      "coordinates": {
+        "x": 1072,
+        "y": -672
+      },
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:30:46.104Z"
+      },
+      "last_updated": {
+        "date": "2025-03-14T12:36:13.676Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      },
+      "documentation": {
+        "content": {
+          "en": "[{\"type\":\"p\",\"children\":[{\"text\":\"\"}]}]"
+        },
+        "format": "slate"
+      }
+    }
+  },
+  {
+    "type": "step",
+    "step": {
+      "_key": "akvH2hFIzC6C",
+      "type": "step",
+      "definition_id": "akvH2hFIzC6C",
+      "title": "General Health",
+      "key": "GeneralHealth",
+      "label_definition_ids": [],
+      "action_definition_ids": [
+        "duxyvg2HkW1k",
+        "pZ5DbqIEA4oT"
+      ],
+      "track_definition_id": "WqbRJ3PnOEhx",
+      "coordinates": {
+        "x": 1840,
+        "y": -1056
+      },
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:42:52.192Z"
+      },
+      "last_updated": {
+        "date": "2025-03-13T12:53:01.214Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "step",
+    "step": {
+      "_key": "OWf394H7iiDZ",
+      "type": "step",
+      "definition_id": "OWf394H7iiDZ",
+      "title": "Elderly Care",
+      "key": "ElderlyCare",
+      "label_definition_ids": [],
+      "action_definition_ids": [
+        "5xZSiUwJasvW",
+        "JglvD2qgVuMo"
+      ],
+      "track_definition_id": "WqbRJ3PnOEhx",
+      "coordinates": {
+        "x": 1856,
+        "y": -592
+      },
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:43:35.094Z"
+      },
+      "last_updated": {
+        "date": "2025-03-13T12:52:37.421Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "step",
+    "step": {
+      "_key": "gSOJCYWBwMKR",
+      "type": "step",
+      "definition_id": "gSOJCYWBwMKR",
+      "title": "Mental Health",
+      "key": "MentalHealth",
+      "label_definition_ids": [],
+      "action_definition_ids": [
+        "s70sbN0dSQ4c",
+        "AWxyeD0cMR4Q",
+        "J9Mrwh9SL6Kr",
+        "RuptRemTK3q0"
+      ],
+      "track_definition_id": "WqbRJ3PnOEhx",
+      "coordinates": {
+        "x": 1872,
+        "y": -288
+      },
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:44:17.575Z"
+      },
+      "last_updated": {
+        "date": "2025-03-13T12:55:41.238Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "step",
+    "step": {
+      "_key": "DZrxUr2970EZ",
+      "type": "step",
+      "definition_id": "DZrxUr2970EZ",
+      "title": "Pediatric Care",
+      "key": "PediatricCare",
+      "label_definition_ids": [],
+      "action_definition_ids": [
+        "akOX4hJMsHoL",
+        "GkkYXanP0L1l"
+      ],
+      "track_definition_id": "WqbRJ3PnOEhx",
+      "coordinates": {
+        "x": 1872,
+        "y": 336
+      },
+      "created": {
+        "user_id": "member-live-79441b72-7f80-4955-99a5-8eaba89bcba8",
+        "date": "2025-03-13T14:13:43.944Z"
+      },
+      "last_updated": {
+        "date": "2025-03-13T14:46:07.315Z",
+        "user_id": "member-live-79441b72-7f80-4955-99a5-8eaba89bcba8"
+      }
+    }
+  },
+  {
+    "type": "step",
+    "step": {
+      "_key": "nIV33v98OTDi",
+      "type": "step",
+      "definition_id": "nIV33v98OTDi",
+      "title": "Trigger Schedule",
+      "key": "TriggerSchedule",
+      "label_definition_ids": [],
+      "action_definition_ids": [
+        "spSAZsoTRjuk",
+        "lSVsd6yrykPa",
+        "yMGfqsOhXSu6"
+      ],
+      "track_definition_id": "WqbRJ3PnOEhx",
+      "coordinates": {
+        "x": 2416,
+        "y": -576
+      },
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T17:48:13.676Z"
+      },
+      "last_updated": {
+        "date": "2025-03-21T19:08:45.666Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  }
+]
