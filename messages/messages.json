@@ -1,0 +1,24 @@
+[
+  {
+    "type": "message",
+    "message": {
+      "_key": "DYyJD6j0HKld",
+      "definition_id": "DYyJD6j0HKld",
+      "body": "[{\"type\":\"p\",\"children\":[{\"text\":\"Welcome!\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]},{\"type\":\"ul\",\"children\":[{\"type\":\"li\",\"children\":[{\"type\":\"lic\",\"children\":[{\"text\":\"You are eligible for our clinic services, let's collect your information.\"}]}]}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"}]}]",
+      "dynamic_variable_definition_ids": [],
+      "html_body": "<p class=\"slate-p\">Welcome!</p><p class=\"slate-p\"></p><ul class=\"slate-ul\"><li class=\"slate-li\"><div style=\"position:relative\">You are eligible for our clinic services, let&#x27;s collect your information.</div></li></ul><p class=\"slate-p\"></p>",
+      "attachments": null,
+      "format": "html",
+      "subject": "Welcome!",
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:07:50.187Z"
+      },
+      "last_updated": {
+        "date": "2025-03-24T17:27:57.506Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      },
+      "constant_ids": []
+    }
+  }
+]

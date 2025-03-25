@@ -1,0 +1,229 @@
+[
+  {
+    "type": "rule",
+    "rule": {
+      "_key": "M0OKhA5OBU9b",
+      "definition_id": "M0OKhA5OBU9b",
+      "conditions": [],
+      "boolean_operator": "and",
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:39:20.695Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:39:20.695Z"
+      }
+    }
+  },
+  {
+    "type": "rule",
+    "rule": {
+      "_key": "Clo5gUOQsSGv",
+      "definition_id": "Clo5gUOQsSGv",
+      "conditions": [
+        {
+          "id": "D50BMxL9l8oo",
+          "operand": {
+            "type": "string",
+            "value": "rangel-vinta+rebeca-sarai-vuonef"
+          },
+          "operator": "is_equal_to",
+          "reference": "euZQ6d1Eb5tX"
+        }
+      ],
+      "boolean_operator": "and",
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:46:00.871Z"
+      },
+      "last_updated": {
+        "date": "2025-03-21T19:23:07.607Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "rule",
+    "rule": {
+      "_key": "FLv7csUL7stU",
+      "definition_id": "FLv7csUL7stU",
+      "conditions": [
+        {
+          "id": "NADjFrC5E9IB",
+          "operand": {
+            "type": "string",
+            "value": "rebeca-sarai-vuonef"
+          },
+          "operator": "is_equal_to",
+          "reference": "euZQ6d1Eb5tX"
+        }
+      ],
+      "boolean_operator": "and",
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:46:28.207Z"
+      },
+      "last_updated": {
+        "date": "2025-03-21T19:23:31.400Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "rule",
+    "rule": {
+      "_key": "Fcwsm8wEF6Zx",
+      "definition_id": "Fcwsm8wEF6Zx",
+      "conditions": [
+        {
+          "id": "BM43ko2apErP",
+          "operand": {
+            "type": "string",
+            "value": "rangel-vinta"
+          },
+          "operator": "is_equal_to",
+          "reference": "euZQ6d1Eb5tX"
+        }
+      ],
+      "boolean_operator": "and",
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:46:48.157Z"
+      },
+      "last_updated": {
+        "date": "2025-03-21T19:23:26.011Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "rule",
+    "rule": {
+      "_key": "ZSTk5fLMOihg",
+      "definition_id": "ZSTk5fLMOihg",
+      "conditions": [],
+      "boolean_operator": "and",
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T13:48:28.522Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T13:48:28.522Z"
+      }
+    }
+  },
+  {
+    "type": "rule",
+    "rule": {
+      "_key": "0ZjRjw2qqywz",
+      "definition_id": "0ZjRjw2qqywz",
+      "conditions": [],
+      "boolean_operator": "and",
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T13:56:17.657Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T13:56:17.657Z"
+      }
+    }
+  },
+  {
+    "type": "rule",
+    "rule": {
+      "_key": "06XlqR1z3LLL",
+      "definition_id": "06XlqR1z3LLL",
+      "conditions": [],
+      "boolean_operator": "and",
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T13:56:24.741Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T13:56:24.741Z"
+      }
+    }
+  },
+  {
+    "type": "rule",
+    "rule": {
+      "_key": "mhhd7Jzmx1sA",
+      "definition_id": "mhhd7Jzmx1sA",
+      "conditions": [],
+      "boolean_operator": "and",
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T13:56:37.805Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T13:56:37.805Z"
+      }
+    }
+  },
+  {
+    "type": "rule",
+    "rule": {
+      "_key": "R03iUL2gfTOu",
+      "definition_id": "R03iUL2gfTOu",
+      "conditions": [
+        {
+          "id": "AKudpi58pTG0",
+          "operand": {
+            "type": "string",
+            "value": "rebeca-sarai-vuonef+rangel-vinta"
+          },
+          "operator": "is_equal_to",
+          "reference": "euZQ6d1Eb5tX"
+        }
+      ],
+      "boolean_operator": "and",
+      "created": {
+        "user_id": "member-live-79441b72-7f80-4955-99a5-8eaba89bcba8",
+        "date": "2025-03-13T14:13:04.805Z"
+      },
+      "last_updated": {
+        "date": "2025-03-21T19:23:16.889Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "rule",
+    "rule": {
+      "_key": "Zvme0gTlItMm",
+      "definition_id": "Zvme0gTlItMm",
+      "conditions": [],
+      "boolean_operator": "and",
+      "created": {
+        "user_id": "member-live-79441b72-7f80-4955-99a5-8eaba89bcba8",
+        "date": "2025-03-13T14:14:12.862Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-79441b72-7f80-4955-99a5-8eaba89bcba8",
+        "date": "2025-03-13T14:14:12.862Z"
+      }
+    }
+  },
+  {
+    "type": "rule",
+    "rule": {
+      "_key": "PSG18EpYCUBa",
+      "definition_id": "PSG18EpYCUBa",
+      "conditions": [],
+      "boolean_operator": "and",
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T17:50:24.580Z"
+      },
+      "last_updated": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T17:50:24.580Z"
+      }
+    }
+  }
+]

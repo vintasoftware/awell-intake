@@ -1,0 +1,89 @@
+[
+  {
+    "type": "settings",
+    "pathway_settings": {
+      "_key": "b1IJieFiKohq",
+      "definition_id": "b1IJieFiKohq",
+      "reminders": {
+        "amount": 0,
+        "delay": {
+          "amount": 1,
+          "unit": "day"
+        }
+      },
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:06:07.847Z"
+      },
+      "last_updated": {
+        "date": "2025-03-25T12:51:43.385Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      },
+      "plugins": {
+        "awell": {},
+        "calDotCom": {
+          "apiKey": {
+            "id": "rdaj7Hu1ZPYS",
+            "label": "API Key",
+            "obfuscated": true,
+            "value": "U2FsdGVkX19QMu/A4M9Fl5TQv6aJ/SzSDXzf4PzryAcySk78yiaZaI47m/0s3mBzoffp6gsWKChyTn40ArU+Dw=="
+          }
+        },
+        "medplum": {
+          "clientId": {
+            "id": "y5kXDiBeulPw",
+            "label": "Client ID",
+            "obfuscated": true,
+            "value": "U2FsdGVkX19TjqjznWtc7v0MvbA5/dIV+JdtiVgV2RVCtfp3ZvI6skpOGUOjSxkN3ou+eoZxI9iKwVeQRQcamw=="
+          },
+          "clientSecret": {
+            "id": "AniKrrKbCwqF",
+            "label": "Client secret",
+            "obfuscated": true,
+            "value": "U2FsdGVkX1821jgJqNr0cAXcCG4HYkTbiDINPN/gDB0eSAwyTiKwZ5GTBtJ9AvLHOA8InSMvOPVA0kXAjYeU4woQbNVs5HQFcNJUZQh+T4v1ErO5KdeE3vIXpv7gMxyb"
+          }
+        },
+        "sendgrid-extension": {
+          "apiKey": {
+            "id": "RkLQdgoDLdQE",
+            "label": "API Key",
+            "obfuscated": true,
+            "value": "U2FsdGVkX18d7+b7nCyt9Ev5nru7g26lkPjHR/cBVdvausiaw7/8mMc5zB5MC9hPvme7lDM/fHpqP68Y9Id+TRsfTNh0Xo6mO/F8PIxB5OCtXwJmKu+gDfr2zQ7jjj7R"
+          },
+          "fromEmail": {
+            "id": "KZB9VhSQ74AS",
+            "label": "From email",
+            "obfuscated": false,
+            "value": "rebeca@vinta.com.br"
+          },
+          "fromName": {
+            "id": "pJSsFUcKluXc",
+            "label": "From name",
+            "obfuscated": false,
+            "value": "Support"
+          }
+        },
+        "twilio": {
+          "accountSid": {
+            "id": "9TKT2N0sLsnW",
+            "label": "Account SID",
+            "obfuscated": true,
+            "value": "U2FsdGVkX183O/Rz8CpjomDt1Yq7CKSmK2UNe9egvbXhf9kS6BYCV/MbQYfpn2/QtolVbMEXG/59GcnPh9IERA=="
+          },
+          "authToken": {
+            "id": "vzy448R4uF6h",
+            "label": "Auth token",
+            "obfuscated": true,
+            "value": "U2FsdGVkX1/7RbGKzwKCFpTZ6MxZ6ViEbo8vNylzFRo3BRl+Gpkemzp6u3c9bg2JX9DezzP4wyBqLtQHTR7ozQ=="
+          },
+          "fromNumber": {
+            "id": "Gne7rL7pB1ML",
+            "label": "\"From\" number",
+            "obfuscated": false,
+            "value": "+16513863484"
+          }
+        }
+      }
+    }
+  }
+]

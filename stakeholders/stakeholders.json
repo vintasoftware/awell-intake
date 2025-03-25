@@ -1,0 +1,13 @@
+[
+  {
+    "type": "stakeholder",
+    "stakeholder": {
+      "_key": "7f0KSxNUtMu_",
+      "clinical_app_role": "Patient",
+      "definition_id": "7f0KSxNUtMu_",
+      "label": {
+        "en": "Patient"
+      }
+    }
+  }
+]

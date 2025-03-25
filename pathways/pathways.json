@@ -1,0 +1,18 @@
+[
+  {
+    "type": "pathway",
+    "pathway": {
+      "_key": "b1IJieFiKohq",
+      "definition_id": "b1IJieFiKohq",
+      "title": "Triage",
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:06:07.847Z"
+      },
+      "last_updated": {
+        "date": "2025-03-25T12:51:43.385Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  }
+]

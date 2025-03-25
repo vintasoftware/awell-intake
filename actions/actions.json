@@ -1,0 +1,1206 @@
+[
+  {
+    "type": "action",
+    "action": {
+      "_key": "kaQv5RjSHucd",
+      "definition_id": "kaQv5RjSHucd",
+      "title": "Message",
+      "step_definition_id": "cDfMeGvP2f07",
+      "stakeholder_definition_ids": [
+        "7f0KSxNUtMu_"
+      ],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:07:50.060Z"
+      },
+      "type": "message",
+      "last_updated": {
+        "date": "2025-03-13T12:07:54.588Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      },
+      "message_definition_id": "DYyJD6j0HKld"
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "wY74VnXNyWtH",
+      "definition_id": "wY74VnXNyWtH",
+      "title": "Intake Form",
+      "step_definition_id": "cDfMeGvP2f07",
+      "stakeholder_definition_ids": [
+        "7f0KSxNUtMu_"
+      ],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:08:40.585Z"
+      },
+      "type": "form",
+      "last_updated": {
+        "date": "2025-03-13T12:22:05.359Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      },
+      "form_display_mode": "conversational",
+      "form_definition_id": "ewFx9scWqyAA"
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "ahYwKfs8RPMI",
+      "definition_id": "ahYwKfs8RPMI",
+      "title": "Create patient",
+      "step_definition_id": "cDfMeGvP2f07",
+      "stakeholder_definition_ids": [],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:23:10.973Z"
+      },
+      "type": "plugin",
+      "plugin_key": "medplum",
+      "plugin_action_key": "createPatient",
+      "plugin_fields": [
+        {
+          "description": "",
+          "id": "firstName",
+          "label": "First name",
+          "required": false,
+          "type": "string",
+          "value": "{{data_point:EWisA8cp4JS3}}",
+          "options": {
+            "data_point_definition_ids": [
+              "EWisA8cp4JS3"
+            ]
+          }
+        },
+        {
+          "description": "",
+          "id": "lastName",
+          "label": "Last name",
+          "required": false,
+          "type": "string",
+          "value": "{{data_point:TqsYKrA5UJFe}}",
+          "options": {
+            "data_point_definition_ids": [
+              "TqsYKrA5UJFe"
+            ]
+          }
+        },
+        {
+          "description": "",
+          "id": "mobilePhone",
+          "label": "Mobile phone",
+          "required": false,
+          "stringType": "phone",
+          "type": "string",
+          "value": "{{data_point:1jPi6sXy9YfB}}",
+          "options": {
+            "data_point_definition_ids": [
+              "1jPi6sXy9YfB"
+            ]
+          }
+        },
+        {
+          "description": "",
+          "id": "email",
+          "label": "Email",
+          "required": false,
+          "type": "string",
+          "value": "{{data_point:xjMxamDrykCB}}",
+          "options": {
+            "data_point_definition_ids": [
+              "xjMxamDrykCB"
+            ]
+          }
+        },
+        {
+          "description": "",
+          "id": "birthDate",
+          "label": "Birth date",
+          "required": false,
+          "type": "date",
+          "value": "{{data_point:YYNUgv4gaHaZ}}",
+          "options": {
+            "data_point_definition_ids": [
+              "YYNUgv4gaHaZ"
+            ]
+          }
+        },
+        {
+          "id": "gender",
+          "label": "Gender",
+          "description": "Valid values are \"male\", \"female\", \"other\", \"unknown\"",
+          "type": "string",
+          "required": false
+        },
+        {
+          "description": "",
+          "id": "address",
+          "label": "Address",
+          "required": false,
+          "type": "string",
+          "value": "{{data_point:qjQIamvpRdya}}",
+          "options": {
+            "data_point_definition_ids": [
+              "qjQIamvpRdya"
+            ]
+          }
+        },
+        {
+          "description": "",
+          "id": "city",
+          "label": "City",
+          "required": false,
+          "type": "string",
+          "value": "{{data_point:vYQPiMRuH0xj}}",
+          "options": {
+            "data_point_definition_ids": [
+              "vYQPiMRuH0xj"
+            ]
+          }
+        },
+        {
+          "description": "",
+          "id": "state",
+          "label": "State",
+          "required": false,
+          "type": "string",
+          "value": "{{data_point:jLL1V84lLhya}}",
+          "options": {
+            "data_point_definition_ids": [
+              "jLL1V84lLhya"
+            ]
+          }
+        },
+        {
+          "id": "country",
+          "label": "Country",
+          "description": "",
+          "type": "string",
+          "required": false
+        },
+        {
+          "description": "",
+          "id": "postalCode",
+          "label": "Postal code",
+          "required": false,
+          "type": "string",
+          "value": "{{data_point:fZzqj31JmNn1}}",
+          "options": {
+            "data_point_definition_ids": [
+              "fZzqj31JmNn1"
+            ]
+          }
+        }
+      ],
+      "extension_data_points": [
+        {
+          "key": "patientId",
+          "valueType": "string"
+        }
+      ],
+      "extension_data_point_mappings": [
+        {
+          "extension_data_point_key": "patientId",
+          "id": "p0vbHcla6eHg",
+          "data_point_definition_id": "qI9w2UPLQ91t"
+        }
+      ],
+      "last_updated": {
+        "date": "2025-03-13T12:27:49.520Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "4B4cKbOuEmfa",
+      "definition_id": "4B4cKbOuEmfa",
+      "title": "Add identifier to patient",
+      "step_definition_id": "cDfMeGvP2f07",
+      "stakeholder_definition_ids": [],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:29:32.390Z"
+      },
+      "type": "plugin",
+      "plugin_key": "awell",
+      "plugin_action_key": "addIdentifierToPatient",
+      "plugin_fields": [
+        {
+          "description": "The namespace for the identifier value",
+          "id": "system",
+          "label": "System",
+          "options": {
+            "data_point_definition_ids": []
+          },
+          "required": true,
+          "type": "string",
+          "value": "https://www.medplum.com/docs/api/fhir/resources/patient"
+        },
+        {
+          "description": "The value of the identifier",
+          "id": "value",
+          "label": "Identifier value",
+          "required": true,
+          "type": "string",
+          "value": "{{data_point:qI9w2UPLQ91t}}",
+          "options": {
+            "data_point_definition_ids": [
+              "qI9w2UPLQ91t"
+            ]
+          }
+        }
+      ],
+      "extension_data_points": [],
+      "extension_data_point_mappings": [],
+      "last_updated": {
+        "date": "2025-03-13T15:40:41.534Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "OyHl1zL72jKX",
+      "definition_id": "OyHl1zL72jKX",
+      "title": "Update patient",
+      "step_definition_id": "cDfMeGvP2f07",
+      "stakeholder_definition_ids": [],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T15:23:47.244Z"
+      },
+      "type": "plugin",
+      "plugin_key": "awell",
+      "plugin_action_key": "updatePatient",
+      "plugin_fields": [
+        {
+          "id": "patientCode",
+          "label": "Patient code",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "firstName",
+          "label": "First name",
+          "required": false,
+          "type": "string",
+          "value": "{{data_point:EWisA8cp4JS3}}",
+          "options": {
+            "data_point_definition_ids": [
+              "EWisA8cp4JS3"
+            ]
+          }
+        },
+        {
+          "id": "lastName",
+          "label": "Last name",
+          "required": false,
+          "type": "string",
+          "value": "{{data_point:TqsYKrA5UJFe}}",
+          "options": {
+            "data_point_definition_ids": [
+              "TqsYKrA5UJFe"
+            ]
+          }
+        },
+        {
+          "id": "email",
+          "label": "Email",
+          "required": false,
+          "type": "string",
+          "value": "{{data_point:xjMxamDrykCB}}",
+          "options": {
+            "data_point_definition_ids": [
+              "xjMxamDrykCB"
+            ]
+          }
+        },
+        {
+          "id": "birthDate",
+          "label": "Birth date",
+          "required": false,
+          "type": "date",
+          "value": "{{data_point:YYNUgv4gaHaZ}}",
+          "options": {
+            "data_point_definition_ids": [
+              "YYNUgv4gaHaZ"
+            ]
+          }
+        },
+        {
+          "id": "mobilePhone",
+          "label": "Mobile phone",
+          "required": false,
+          "stringType": "phone",
+          "type": "string",
+          "value": "{{data_point:1jPi6sXy9YfB}}",
+          "options": {
+            "data_point_definition_ids": [
+              "1jPi6sXy9YfB"
+            ]
+          }
+        },
+        {
+          "id": "phone",
+          "label": "Phone",
+          "required": false,
+          "stringType": "phone",
+          "type": "string",
+          "value": "{{data_point:1jPi6sXy9YfB}}",
+          "options": {
+            "data_point_definition_ids": [
+              "1jPi6sXy9YfB"
+            ]
+          }
+        },
+        {
+          "id": "preferredLanguage",
+          "label": "Preferred language",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "sex",
+          "label": "Sex",
+          "description": "Sex code as defined by ISO standard IEC_5218",
+          "type": "string",
+          "required": false,
+          "options": {
+            "dropdownOptions": [
+              {
+                "label": "FEMALE",
+                "value": "FEMALE"
+              },
+              {
+                "label": "MALE",
+                "value": "MALE"
+              },
+              {
+                "label": "NOT_KNOWN",
+                "value": "NOT_KNOWN"
+              }
+            ]
+          }
+        },
+        {
+          "id": "city",
+          "label": "City",
+          "required": false,
+          "type": "string",
+          "value": "{{data_point:vYQPiMRuH0xj}}",
+          "options": {
+            "data_point_definition_ids": [
+              "vYQPiMRuH0xj"
+            ]
+          }
+        },
+        {
+          "id": "country",
+          "label": "Country",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "state",
+          "label": "State",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "street",
+          "label": "Street",
+          "required": false,
+          "type": "string",
+          "value": "{{data_point:qjQIamvpRdya}}",
+          "options": {
+            "data_point_definition_ids": [
+              "qjQIamvpRdya"
+            ]
+          }
+        },
+        {
+          "id": "zip",
+          "label": "ZIP",
+          "required": false,
+          "type": "string",
+          "value": "{{data_point:fZzqj31JmNn1}}",
+          "options": {
+            "data_point_definition_ids": [
+              "fZzqj31JmNn1"
+            ]
+          }
+        },
+        {
+          "id": "nationalRegistryNumber",
+          "label": "National registry number",
+          "type": "string",
+          "required": false
+        },
+        {
+          "id": "patientTimzone",
+          "label": "Patient timezone",
+          "type": "string",
+          "required": false,
+          "options": {
+            "dropdownOptions": [
+              {
+                "label": "UTC",
+                "value": "UTC"
+              }
+            ]
+          }
+        }
+      ],
+      "extension_data_points": [],
+      "extension_data_point_mappings": [],
+      "last_updated": {
+        "date": "2025-03-13T15:25:27.445Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "4hKVRnT2oE9c",
+      "definition_id": "4hKVRnT2oE9c",
+      "title": "Send SMS (with from number)",
+      "step_definition_id": "cDfMeGvP2f07",
+      "stakeholder_definition_ids": [],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-24T17:33:26.066Z"
+      },
+      "type": "plugin",
+      "plugin_key": "twilio",
+      "plugin_action_key": "sendSms",
+      "plugin_fields": [
+        {
+          "label": "\"From\" number",
+          "id": "from",
+          "type": "string",
+          "stringType": "phone",
+          "required": false,
+          "description": "The phone number that will send the text messages, it must be a Twilio phone number that you own. When left blank, the \"From\" number from the extension settings will be used."
+        },
+        {
+          "description": "The phone number you would like to send the text message to.",
+          "id": "recipient",
+          "label": "\"To\" phone number",
+          "required": true,
+          "stringType": "phone",
+          "type": "string",
+          "value": "{{data_point:JUIl2ZLyz0KQ}}",
+          "options": {
+            "data_point_definition_ids": [
+              "JUIl2ZLyz0KQ"
+            ]
+          }
+        },
+        {
+          "description": "The message you would like to send.",
+          "id": "message",
+          "label": "Message",
+          "options": {
+            "slate": "[{\"type\":\"p\",\"children\":[{\"text\":\"Complete your registration:\"}]},{\"type\":\"p\",\"children\":[{\"text\":\"\"},{\"type\":\"hosted-pages-link\",\"stakeholderId\":\"7f0KSxNUtMu_\",\"children\":[{\"text\":\"{{{hosted_pages_link:7f0KSxNUtMu_}}}\"}]},{\"text\":\"\"}]}]",
+            "stakeholder_ids": [
+              "7f0KSxNUtMu_"
+            ],
+            "dynamic_variable_ids": [],
+            "constant_ids": []
+          },
+          "required": true,
+          "type": "text",
+          "value": "Complete your registration:\n{{{hosted_pages_link:7f0KSxNUtMu_}}}"
+        }
+      ],
+      "extension_data_points": [
+        {
+          "key": "messageSid",
+          "valueType": "string"
+        }
+      ],
+      "extension_data_point_mappings": [],
+      "last_updated": {
+        "date": "2025-03-24T17:33:58.915Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "7AiuiqVMVtkG",
+      "definition_id": "7AiuiqVMVtkG",
+      "title": "Form",
+      "step_definition_id": "TfMRFBSkGnHj",
+      "stakeholder_definition_ids": [
+        "7f0KSxNUtMu_"
+      ],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:32:27.420Z"
+      },
+      "type": "form",
+      "last_updated": {
+        "date": "2025-03-13T12:36:50.528Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      },
+      "form_display_mode": "conversational",
+      "form_definition_id": "nx87bKwym6ew"
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "duxyvg2HkW1k",
+      "definition_id": "duxyvg2HkW1k",
+      "title": "General Health",
+      "step_definition_id": "akvH2hFIzC6C",
+      "stakeholder_definition_ids": [
+        "7f0KSxNUtMu_"
+      ],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:42:57.563Z"
+      },
+      "type": "form",
+      "last_updated": {
+        "date": "2025-03-13T12:43:17.897Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      },
+      "form_definition_id": "KsYdd5wcWctz",
+      "form_display_mode": "conversational"
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "pZ5DbqIEA4oT",
+      "definition_id": "pZ5DbqIEA4oT",
+      "title": "Submit questionnaire response",
+      "step_definition_id": "akvH2hFIzC6C",
+      "stakeholder_definition_ids": [],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:53:01.178Z"
+      },
+      "type": "plugin",
+      "plugin_key": "medplum",
+      "plugin_action_key": "submitQuestionnaireResponse",
+      "plugin_fields": [
+        {
+          "description": "The identifier of the patient in Medplum to assign the response to",
+          "id": "patientId",
+          "label": "Patient ID",
+          "required": true,
+          "type": "string",
+          "value": "{{data_point:75YkrzwkZv5f}}",
+          "options": {
+            "data_point_definition_ids": [
+              "75YkrzwkZv5f"
+            ]
+          }
+        }
+      ],
+      "extension_data_points": [
+        {
+          "key": "questionnnaireResponseId",
+          "valueType": "string"
+        }
+      ],
+      "extension_data_point_mappings": [],
+      "last_updated": {
+        "date": "2025-03-13T12:53:08.317Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "5xZSiUwJasvW",
+      "definition_id": "5xZSiUwJasvW",
+      "title": "Elderly Care",
+      "step_definition_id": "OWf394H7iiDZ",
+      "stakeholder_definition_ids": [
+        "7f0KSxNUtMu_"
+      ],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:43:41.436Z"
+      },
+      "type": "form",
+      "last_updated": {
+        "date": "2025-03-13T12:43:57.600Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      },
+      "form_display_mode": "conversational",
+      "form_definition_id": "39hlSi93HDtH"
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "JglvD2qgVuMo",
+      "definition_id": "JglvD2qgVuMo",
+      "title": "Submit questionnaire response",
+      "step_definition_id": "OWf394H7iiDZ",
+      "stakeholder_definition_ids": [],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:52:37.377Z"
+      },
+      "type": "plugin",
+      "plugin_key": "medplum",
+      "plugin_action_key": "submitQuestionnaireResponse",
+      "plugin_fields": [
+        {
+          "description": "The identifier of the patient in Medplum to assign the response to",
+          "id": "patientId",
+          "label": "Patient ID",
+          "required": true,
+          "type": "string",
+          "value": "{{data_point:75YkrzwkZv5f}}",
+          "options": {
+            "data_point_definition_ids": [
+              "75YkrzwkZv5f"
+            ]
+          }
+        }
+      ],
+      "extension_data_points": [
+        {
+          "key": "questionnnaireResponseId",
+          "valueType": "string"
+        }
+      ],
+      "extension_data_point_mappings": [],
+      "last_updated": {
+        "date": "2025-03-13T12:52:51.110Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "s70sbN0dSQ4c",
+      "definition_id": "s70sbN0dSQ4c",
+      "title": "PHQ2",
+      "step_definition_id": "gSOJCYWBwMKR",
+      "stakeholder_definition_ids": [
+        "7f0KSxNUtMu_"
+      ],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:44:23.647Z"
+      },
+      "type": "form",
+      "last_updated": {
+        "date": "2025-03-13T12:55:14.426Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      },
+      "form_display_mode": "conversational",
+      "form_definition_id": "PRkQeMVsLbab"
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "AWxyeD0cMR4Q",
+      "definition_id": "AWxyeD0cMR4Q",
+      "title": "PHQ2 Calculation",
+      "step_definition_id": "gSOJCYWBwMKR",
+      "stakeholder_definition_ids": [],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:54:22.762Z"
+      },
+      "type": "calculation",
+      "calculation_inputs": [
+        {
+          "calculation_input_id": "PHQ2_Q01",
+          "data_point_definition_id": "5Jk2T2v8oYGy"
+        },
+        {
+          "calculation_input_id": "PHQ2_Q02",
+          "data_point_definition_id": "muhVECce5Ubx"
+        }
+      ],
+      "last_updated": {
+        "date": "2025-03-13T12:55:03.037Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      },
+      "calculation_definition_id": "phq_2"
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "J9Mrwh9SL6Kr",
+      "definition_id": "J9Mrwh9SL6Kr",
+      "title": "Submit questionnaire response",
+      "step_definition_id": "gSOJCYWBwMKR",
+      "stakeholder_definition_ids": [],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:55:23.417Z"
+      },
+      "type": "plugin",
+      "plugin_key": "medplum",
+      "plugin_action_key": "submitQuestionnaireResponse",
+      "plugin_fields": [
+        {
+          "description": "The identifier of the patient in Medplum to assign the response to",
+          "id": "patientId",
+          "label": "Patient ID",
+          "required": true,
+          "type": "string",
+          "value": "{{data_point:75YkrzwkZv5f}}",
+          "options": {
+            "data_point_definition_ids": [
+              "75YkrzwkZv5f"
+            ]
+          }
+        }
+      ],
+      "extension_data_points": [
+        {
+          "key": "questionnnaireResponseId",
+          "valueType": "string"
+        }
+      ],
+      "extension_data_point_mappings": [
+        {
+          "extension_data_point_key": "questionnnaireResponseId",
+          "id": "tv2IXBjwSKix",
+          "data_point_definition_id": "xNLotC4SN5em"
+        }
+      ],
+      "last_updated": {
+        "date": "2025-03-13T12:56:03.856Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "RuptRemTK3q0",
+      "definition_id": "RuptRemTK3q0",
+      "title": "Create calculation observation",
+      "step_definition_id": "gSOJCYWBwMKR",
+      "stakeholder_definition_ids": [],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:55:41.196Z"
+      },
+      "type": "plugin",
+      "plugin_key": "medplum",
+      "plugin_action_key": "createCalculationObservation",
+      "plugin_fields": [
+        {
+          "description": "The identifier of the patient in Medplum to assign the response to",
+          "id": "patientId",
+          "label": "Patient ID",
+          "required": true,
+          "type": "string",
+          "value": "{{data_point:75YkrzwkZv5f}}",
+          "options": {
+            "data_point_definition_ids": [
+              "75YkrzwkZv5f"
+            ]
+          }
+        },
+        {
+          "description": "The identifier of the questionnaire response you want to link the calculation result to",
+          "id": "questionnaireResponseId",
+          "label": "Questionnaire response ID",
+          "required": false,
+          "type": "string",
+          "value": "{{data_point:xNLotC4SN5em}}",
+          "options": {
+            "data_point_definition_ids": [
+              "xNLotC4SN5em"
+            ]
+          }
+        }
+      ],
+      "extension_data_points": [
+        {
+          "key": "observationId",
+          "valueType": "string"
+        }
+      ],
+      "extension_data_point_mappings": [],
+      "last_updated": {
+        "date": "2025-03-13T12:56:18.277Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "akOX4hJMsHoL",
+      "definition_id": "akOX4hJMsHoL",
+      "title": "YP-CORE",
+      "step_definition_id": "DZrxUr2970EZ",
+      "stakeholder_definition_ids": [
+        "7f0KSxNUtMu_"
+      ],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-79441b72-7f80-4955-99a5-8eaba89bcba8",
+        "date": "2025-03-13T14:42:22.933Z"
+      },
+      "type": "form",
+      "last_updated": {
+        "date": "2025-03-13T14:45:57.541Z",
+        "user_id": "member-live-79441b72-7f80-4955-99a5-8eaba89bcba8"
+      },
+      "form_display_mode": "conversational",
+      "form_definition_id": "VAJIKkIfdJ6y"
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "GkkYXanP0L1l",
+      "definition_id": "GkkYXanP0L1l",
+      "title": "Submit questionnaire response",
+      "step_definition_id": "DZrxUr2970EZ",
+      "stakeholder_definition_ids": [],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-79441b72-7f80-4955-99a5-8eaba89bcba8",
+        "date": "2025-03-13T14:46:07.275Z"
+      },
+      "type": "plugin",
+      "plugin_key": "medplum",
+      "plugin_action_key": "submitQuestionnaireResponse",
+      "plugin_fields": [
+        {
+          "description": "The identifier of the patient in Medplum to assign the response to",
+          "id": "patientId",
+          "label": "Patient ID",
+          "options": {
+            "data_point_definition_ids": [
+              "75YkrzwkZv5f"
+            ]
+          },
+          "required": true,
+          "type": "string",
+          "value": "{{data_point:75YkrzwkZv5f}}"
+        }
+      ],
+      "extension_data_points": [
+        {
+          "key": "questionnnaireResponseId",
+          "valueType": "string"
+        }
+      ],
+      "extension_data_point_mappings": [],
+      "last_updated": {
+        "date": "2025-03-13T14:46:42.287Z",
+        "user_id": "member-live-79441b72-7f80-4955-99a5-8eaba89bcba8"
+      }
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "spSAZsoTRjuk",
+      "definition_id": "spSAZsoTRjuk",
+      "title": "Book appointment",
+      "step_definition_id": "nIV33v98OTDi",
+      "stakeholder_definition_ids": [
+        "7f0KSxNUtMu_"
+      ],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:02:43.286Z"
+      },
+      "type": "plugin",
+      "plugin_key": "calDotCom",
+      "plugin_action_key": "bookAppointment",
+      "plugin_fields": [
+        {
+          "description": "The Cal Link that you want to embed e.g. \"john\". Just give the username. No need to give the full URL https://cal.com/john.",
+          "id": "calLink",
+          "label": "Cal Link",
+          "required": true,
+          "type": "string",
+          "value": "{{data_point:euZQ6d1Eb5tX}}",
+          "options": {
+            "data_point_definition_ids": [
+              "euZQ6d1Eb5tX"
+            ]
+          }
+        }
+      ],
+      "plugin_action_options": {
+        "stakeholders": {
+          "label": "Stakeholder",
+          "mode": "single"
+        }
+      },
+      "extension_data_points": [
+        {
+          "key": "bookingId",
+          "valueType": "string"
+        }
+      ],
+      "extension_data_point_mappings": [
+        {
+          "extension_data_point_key": "bookingId",
+          "id": "9CemRFTIgr3u",
+          "data_point_definition_id": "weHUSgAvimrG"
+        }
+      ],
+      "last_updated": {
+        "date": "2025-03-21T19:03:17.162Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "lSVsd6yrykPa",
+      "definition_id": "lSVsd6yrykPa",
+      "title": "Get booking",
+      "step_definition_id": "nIV33v98OTDi",
+      "stakeholder_definition_ids": [],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:03:26.969Z"
+      },
+      "type": "plugin",
+      "plugin_key": "calDotCom",
+      "plugin_action_key": "getBooking",
+      "plugin_fields": [
+        {
+          "id": "bookingId",
+          "label": "Booking ID",
+          "required": true,
+          "type": "string",
+          "value": "{{data_point:weHUSgAvimrG}}",
+          "options": {
+            "data_point_definition_ids": [
+              "weHUSgAvimrG"
+            ]
+          }
+        }
+      ],
+      "extension_data_points": [
+        {
+          "key": "eventTypeId",
+          "valueType": "string"
+        },
+        {
+          "key": "title",
+          "valueType": "string"
+        },
+        {
+          "key": "description",
+          "valueType": "string"
+        },
+        {
+          "key": "startTime",
+          "valueType": "date"
+        },
+        {
+          "key": "endTime",
+          "valueType": "date"
+        },
+        {
+          "key": "status",
+          "valueType": "string"
+        },
+        {
+          "key": "cancelUrl",
+          "valueType": "string"
+        },
+        {
+          "key": "rescheduleUrl",
+          "valueType": "string"
+        },
+        {
+          "key": "firstAttendeeEmail",
+          "valueType": "string"
+        },
+        {
+          "key": "firstAttendeeTimezone",
+          "valueType": "string"
+        },
+        {
+          "key": "firstAttendeeName",
+          "valueType": "string"
+        },
+        {
+          "key": "userEmail",
+          "valueType": "string"
+        },
+        {
+          "key": "location",
+          "valueType": "string"
+        },
+        {
+          "key": "videoCallUrl",
+          "valueType": "string"
+        }
+      ],
+      "extension_data_point_mappings": [
+        {
+          "extension_data_point_key": "eventTypeId",
+          "id": "E0thJaRSjf69",
+          "data_point_definition_id": "5wogQWxV7Im1"
+        },
+        {
+          "extension_data_point_key": "title",
+          "id": "t5wwTexYi9JX",
+          "data_point_definition_id": "6OQhypP1C4zK"
+        },
+        {
+          "extension_data_point_key": "description",
+          "id": "B0qTp27E19y5",
+          "data_point_definition_id": "N9t3zTXMT1i7"
+        },
+        {
+          "extension_data_point_key": "startTime",
+          "id": "4KdhRzdmX9NQ",
+          "data_point_definition_id": "9t5ZokD0JXc1"
+        },
+        {
+          "extension_data_point_key": "endTime",
+          "id": "IYxXSA1aeerI",
+          "data_point_definition_id": "qwcinMboIgoU"
+        },
+        {
+          "extension_data_point_key": "status",
+          "id": "jbbR1NVhRlcI",
+          "data_point_definition_id": "6Xu9ZH8Z0WZF"
+        },
+        {
+          "extension_data_point_key": "cancelUrl",
+          "id": "ke3ZjAuYxg1h",
+          "data_point_definition_id": "Q3g5f0CT1Wo9"
+        },
+        {
+          "extension_data_point_key": "rescheduleUrl",
+          "id": "8XvvnSonUpYH",
+          "data_point_definition_id": "BHkKbYTSeGR0"
+        },
+        {
+          "extension_data_point_key": "firstAttendeeEmail",
+          "id": "r1LRsjliTfr8",
+          "data_point_definition_id": "DQm0GUEKG916"
+        },
+        {
+          "extension_data_point_key": "firstAttendeeTimezone",
+          "id": "9H1fHwu6TpHf",
+          "data_point_definition_id": "EAEnqZxe2R7z"
+        },
+        {
+          "extension_data_point_key": "firstAttendeeName",
+          "id": "7G7SDCGh58K9",
+          "data_point_definition_id": "JwQyGUL4QiXI"
+        },
+        {
+          "extension_data_point_key": "userEmail",
+          "id": "lz2clxvb90vw",
+          "data_point_definition_id": "6W06eGLEC5xP"
+        }
+      ],
+      "last_updated": {
+        "date": "2025-03-21T19:07:23.340Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  },
+  {
+    "type": "action",
+    "action": {
+      "_key": "yMGfqsOhXSu6",
+      "definition_id": "yMGfqsOhXSu6",
+      "title": "Bot Create Appointment",
+      "step_definition_id": "nIV33v98OTDi",
+      "stakeholder_definition_ids": [],
+      "location_definition_ids": [],
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-21T19:08:45.618Z"
+      },
+      "type": "plugin",
+      "plugin_key": "medplum",
+      "plugin_action_key": "executeBot",
+      "plugin_fields": [
+        {
+          "description": "You can find the id of your Bot by clicking on the Details tab of the Bot resource in the Medplum app",
+          "id": "botId",
+          "label": "Bot ID",
+          "required": true,
+          "type": "string",
+          "value": "0195b8d0-c74b-7492-8868-063e6ccdb77e",
+          "options": {
+            "data_point_definition_ids": []
+          }
+        },
+        {
+          "description": "Data in JSON format you would like to pass to the Bot",
+          "id": "body",
+          "label": "Body",
+          "options": {
+            "slate": "[{\"type\":\"code_block\",\"lang\":\"json\",\"children\":[{\"type\":\"code_line\",\"children\":[{\"text\":\"{\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"  \\\"type\\\": \\\"create\\\",\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"  \\\"resourceType\\\": \\\"Appointment\\\",\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"  \\\"resource\\\": {\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"    \\\"resourceType\\\": \\\"Appointment\\\",\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"    \\\"status\\\": \\\"booked\\\",\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"    \\\"description\\\": \\\"\"},{\"type\":\"dynamic-variable\",\"variableId\":\"LPB9iOatFRJH\",\"value\":\"description\",\"children\":[{\"text\":\"{{{dynamic_variable:LPB9iOatFRJH}}}\"}],\"status\":\"VALID\"},{\"text\":\"\\\",\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"    \\\"start\\\": \\\"\"},{\"type\":\"dynamic-variable\",\"variableId\":\"I3pGjpNAS3MN\",\"value\":\"startTime\",\"children\":[{\"text\":\"{{{dynamic_variable:I3pGjpNAS3MN}}}\"}],\"status\":\"VALID\"},{\"text\":\"\\\",\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"    \\\"end\\\": \\\"\"},{\"type\":\"dynamic-variable\",\"variableId\":\"uyIK0C3YlQDP\",\"value\":\"endTime\",\"children\":[{\"text\":\"{{{dynamic_variable:uyIK0C3YlQDP}}}\"}],\"status\":\"VALID\"},{\"text\":\"\\\",\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"    \\\"participant\\\": [\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"      {\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"        \\\"actor\\\": {\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"          \\\"display\\\": \\\"\"},{\"type\":\"dynamic-variable\",\"variableId\":\"uAcbNYLv1Llv\",\"value\":\"firstAttendeeName\",\"children\":[{\"text\":\"{{{dynamic_variable:uAcbNYLv1Llv}}}\"}],\"status\":\"VALID\"},{\"text\":\"\\\",\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"          \\\"reference\\\": \\\"Patient/\"},{\"type\":\"dynamic-variable\",\"variableId\":\"8rElOrAjzQEj\",\"value\":\"medplumId\",\"children\":[{\"text\":\"{{{dynamic_variable:8rElOrAjzQEj}}}\"}],\"status\":\"VALID\"},{\"text\":\"\\\"\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"        },\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"        \\\"status\\\": \\\"accepted\\\"\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"      },\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"      {\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"        \\\"actor\\\": {\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"          \\\"reference\\\": \\\"Practitioner/019585f9-0d56-75a9-9526-c9992cc85eb8\\\", \"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"          \\\"display\\\": \\\"Rebeca Sarai\\\"\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"        },\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"        \\\"status\\\": \\\"accepted\\\"\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"      }\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"    ]\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"  }\"}]},{\"type\":\"code_line\",\"children\":[{\"text\":\"}\"}]}]}]",
+            "stakeholder_ids": [],
+            "dynamic_variable_ids": [
+              "LPB9iOatFRJH",
+              "I3pGjpNAS3MN",
+              "uyIK0C3YlQDP",
+              "uAcbNYLv1Llv",
+              "8rElOrAjzQEj"
+            ],
+            "constant_ids": []
+          },
+          "required": false,
+          "type": "json",
+          "value": "{  \"type\": \"create\",  \"resourceType\": \"Appointment\",  \"resource\": {    \"resourceType\": \"Appointment\",    \"status\": \"booked\",    \"description\": \"{{{dynamic_variable:LPB9iOatFRJH}}}\",    \"start\": \"{{{dynamic_variable:I3pGjpNAS3MN}}}\",    \"end\": \"{{{dynamic_variable:uyIK0C3YlQDP}}}\",    \"participant\": [      {        \"actor\": {          \"display\": \"{{{dynamic_variable:uAcbNYLv1Llv}}}\",          \"reference\": \"Patient/{{{dynamic_variable:8rElOrAjzQEj}}}\"        },        \"status\": \"accepted\"      },      {        \"actor\": {          \"reference\": \"Practitioner/019585f9-0d56-75a9-9526-c9992cc85eb8\",           \"display\": \"Rebeca Sarai\"        },        \"status\": \"accepted\"      }    ]  }}"
+        }
+      ],
+      "extension_data_points": [
+        {
+          "key": "data",
+          "valueType": "string"
+        }
+      ],
+      "extension_data_point_mappings": [],
+      "last_updated": {
+        "date": "2025-03-24T15:49:18.817Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  }
+]

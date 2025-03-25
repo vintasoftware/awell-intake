@@ -1,0 +1,27 @@
+[
+  {
+    "type": "track",
+    "track": {
+      "_key": "WqbRJ3PnOEhx",
+      "definition_id": "WqbRJ3PnOEhx",
+      "title": "Default track",
+      "key": "Defaulttrack",
+      "start_coordinates": {
+        "x": 282,
+        "y": -518
+      },
+      "end_coordinates": {
+        "x": 2960,
+        "y": -502
+      },
+      "created": {
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc",
+        "date": "2025-03-13T12:06:07.920Z"
+      },
+      "last_updated": {
+        "date": "2025-03-24T15:50:10.243Z",
+        "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
+      }
+    }
+  }
+]
