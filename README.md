@@ -59,3 +59,21 @@ npm run dev
 ```
 
 This app should run on `http://localhost:3000/`
+
+## Project Structure
+
+- `/src` - Main source code directory
+- `/bots` - Automation bots for triage and resource management
+- `/components` - Reusable UI components for patient and practitioner management
+- `/pages` - Application pages using React components
+- `/utils` - Utility functions and helper methods
+
+## License
+
+This project is licensed under the MIT License - see the `LICENSE.txt` file for details.
+
+## Commercial Support
+
+[![alt text](https://avatars2.githubusercontent.com/u/5529080?s=80&v=4 'Vinta Logo')](https://www.vintasoftware.com/)
+
+This is an open-source project maintained by [Vinta Software](https://www.vinta.com.br/). We are always looking for exciting work! If you need any commercial support, feel free to get in touch: contact@vinta.com.br
