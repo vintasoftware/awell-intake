@@ -2,6 +2,10 @@
 
 A comprehensive patient intake and management system built with React, utilizing Medplum for healthcare data management. This application provides an interface for managing patients, practitioners, and healthcare resources.
 
+## Demo
+
+- Coming soon
+
 ## Features
 
 - Patient Management
@@ -18,6 +22,20 @@ A comprehensive patient intake and management system built with React, utilizing
 - Automated Workflows
   - Triage automation via bots
   - Resource management automation
+
+## Care Flow Process
+
+We are using awell as our care ops orchestration tool.
+
+- Patient onboarding through initial intake forms
+- Specialization selection based on patient needs
+- Questionnaire and assessment completion
+- Care pathway activation based on specialization
+- Care schedule management
+
+[![careflow](images/triage-care-flow.png)]
+
+\*To check details of the awell workflow check the `awell-triage-test` branch.
 
 ## Technology Stack
 
