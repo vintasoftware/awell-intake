@@ -486,12 +486,16 @@
       "plugin_action_key": "sendSms",
       "plugin_fields": [
         {
-          "label": "\"From\" number",
+          "description": "The phone number that will send the text messages, it must be a Twilio phone number that you own. When left blank, the \"From\" number from the extension settings will be used.",
           "id": "from",
-          "type": "string",
-          "stringType": "phone",
+          "label": "\"From\" number",
+          "options": {
+            "data_point_definition_ids": []
+          },
           "required": false,
-          "description": "The phone number that will send the text messages, it must be a Twilio phone number that you own. When left blank, the \"From\" number from the extension settings will be used."
+          "stringType": "phone",
+          "type": "string",
+          "value": "+16513863484"
         },
         {
           "description": "The phone number you would like to send the text message to.",
@@ -532,7 +536,7 @@
       ],
       "extension_data_point_mappings": [],
       "last_updated": {
-        "date": "2025-03-24T17:33:58.915Z",
+        "date": "2025-04-01T12:10:26.467Z",
         "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
       }
     }
@@ -554,7 +558,7 @@
       },
       "type": "form",
       "last_updated": {
-        "date": "2025-03-13T12:36:50.528Z",
+        "date": "2025-03-26T12:16:08.516Z",
         "user_id": "member-live-78c00139-e07d-4b8e-9d17-b5ec365ef7cc"
       },
       "form_display_mode": "conversational",
