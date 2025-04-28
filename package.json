@@ -57,7 +57,7 @@
     "@mantine/hooks": "^7.17.2",
     "@mantine/notifications": "^7.17.2",
     "@medplum/core": "4.0.3",
-    "@medplum/react": "4.0.3",
+    "@medplum/react": "4.1.1",
     "@tabler/icons-react": "3.17.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
