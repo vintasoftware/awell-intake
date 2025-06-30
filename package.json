@@ -31,7 +31,7 @@
   "devDependencies": {
     "@eslint/js": "^9.22.0",
     "@medplum/bot-layer": "^4.0.3",
-    "@medplum/fhirtypes": "4.0.3",
+    "@medplum/fhirtypes": "4.2.4",
     "@types/moment": "^2.11.29",
     "@types/node": "20.17.22",
     "@types/react": "18.3.18",
