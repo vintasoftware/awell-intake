@@ -33,7 +33,7 @@ We are using awell as our care ops orchestration tool.
 - Care pathway activation based on specialization
 - Care schedule management
 
-[![careflow](images/triage-care-flow.png)]
+![careflow](images/triage-care-flow.png)
 
 \*To check details of the awell workflow check the `awell-triage-test` branch.
 
