@@ -4,7 +4,7 @@ A comprehensive patient intake and management system built with React, utilizing
 
 ## Demo
 
-- Coming soon
+[![Awell and Medplum integration demo: building automated healthcare workflows](http://img.youtube.com/vi/2TKH6SzY8cw/0.jpg)](http://www.youtube.com/watch?v=2TKH6SzY8cw "Awell and Medplum integration demo: building automated healthcare workflows")
 
 ## Features
 
