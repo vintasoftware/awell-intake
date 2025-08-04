@@ -9,23 +9,23 @@ export function PractitionerList(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    void loadPractitioners();
-  }, []);
-
-  async function loadPractitioners(): Promise<void> {
-    try {
-      setLoading(true);
-      const response = await medplum.search('Practitioner', {
-        _count: 100,
-        _sort: 'name',
-      });
-      setPractitioners((response.entry || []).map((entry) => entry.resource as Practitioner));
-    } catch (error) {
-      console.error('Error loading practitioners', error);
-    } finally {
-      setLoading(false);
+    async function loadPractitioners(): Promise<void> {
+      try {
+        setLoading(true);
+        const response = await medplum.search('Practitioner', {
+          _count: 100,
+          _sort: 'name',
+        });
+        setPractitioners((response.entry || []).map((entry) => entry.resource as Practitioner));
+      } catch (error) {
+        console.error('Error loading practitioners', error);
+      } finally {
+        setLoading(false);
+      }
     }
-  }
+
+    void loadPractitioners();
+  }, [medplum]);
 
   const rows = practitioners.map((practitioner) => {
     const name = practitioner.name?.[0];

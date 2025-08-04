@@ -11,6 +11,7 @@ import { App } from './App';
 
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
+import '@mantine/notifications/styles.css';
 import '@medplum/react/styles.css';
 
 // Set up dayjs plugins
